@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript: Bikin Web Jadi Hidup</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --bg-soft: #11151f;
+            --panel: #161b26;
+            --line: #232a38;
+            --text: #eef1f7;
+            --text-dim: #8b93a7;
+            --js-yellow: #f7df1e;
+            --js-yellow-dim: #7a6f13;
+            --dom-cyan: #5eead4;
+            --dom-cyan-dim: #1f4d47;
+            --danger: #ff6b6b;
+            --radius: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Space Grotesk', system-ui, sans-serif;
+            overflow: hidden;
+        }
+
+        #deck {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6vh 8vw;
+            animation: rise .45s ease both;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* section badge */
+        .badge {
+            position: absolute;
+            top: 5vh;
+            left: 8vw;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .75rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            padding: .35em .8em;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            color: var(--text-dim);
+        }
+
+        .badge.basic {
+            color: var(--js-yellow);
+            border-color: var(--js-yellow-dim);
+            background: rgba(247, 223, 30, .06);
+        }
+
+        .badge.dom {
+            color: var(--dom-cyan);
+            border-color: var(--dom-cyan-dim);
+            background: rgba(94, 234, 212, .06);
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+            line-height: 1.05;
+            margin: 0 0 .3em;
+            font-weight: 700;
+            letter-spacing: -.01em;
+        }
+
+        h2 {
+            font-size: clamp(1.6rem, 4vw, 2.6rem);
+            margin: 0 0 .5em;
+            font-weight: 600;
+        }
+
+        p.lead {
+            font-size: clamp(1.05rem, 2vw, 1.4rem);
+            color: var(--text-dim);
+            max-width: 46em;
+            line-height: 1.5;
+        }
+
+        .accent-y {
+            color: var(--js-yellow);
+        }
+
+        .accent-c {
+            color: var(--dom-cyan);
+        }
+
+        code,
+        .code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        pre {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 1.1em 1.4em;
+            font-size: clamp(.85rem, 1.4vw, 1.15rem);
+            line-height: 1.65;
+            overflow: auto;
+            max-width: 56em;
+            color: #d7ddf0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        pre[contenteditable] {
+            cursor: text;
+        }
+
+        pre[contenteditable]:focus {
+            outline: 2px solid var(--js-yellow);
+            outline-offset: 2px;
+            background: #1a2130;
+        }
+
+        .edit-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .7rem;
+            color: var(--text-dim);
+            margin: .4em 0 .6em;
+            letter-spacing: .05em;
+        }
+
+        .edit-tag::before {
+            content: "✎ ";
+            color: var(--js-yellow);
+        }
+
+        .row {
+            display: flex;
+            gap: 2.5vw;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .col {
+            flex: 1 1 320px;
+            min-width: 0;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 1.4em 1.6em;
+        }
+
+        .card h3 {
+            margin: 0 0 .4em;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        .card p {
+            margin: 0;
+            color: var(--text-dim);
+            font-size: .95rem;
+            line-height: 1.5;
+        }
+
+        .demo {
+            margin-top: 1.2em;
+            background: var(--bg-soft);
+            border: 1px dashed var(--line);
+            border-radius: var(--radius);
+            padding: 1.3em 1.5em;
+        }
+
+        .demo-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .72rem;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: .7em;
+            display: flex;
+            align-items: center;
+            gap: .5em;
+        }
+
+        .demo-label::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--dom-cyan);
+            box-shadow: 0 0 8px var(--dom-cyan);
+        }
+
+        button.try {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: .7em 1.4em;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: var(--js-yellow);
+            color: #141414;
+            transition: transform .15s ease;
+        }
+
+        button.try:hover {
+            transform: translateY(-2px);
+        }
+
+        button.try:active {
+            transform: translateY(0);
+        }
+
+        button.try.cyan {
+            background: var(--dom-cyan);
+        }
+
+        #playbox,
+        #playbox2,
+        #playbox3,
+        #playboxQS,
+        .box {
+            margin-top: 1em;
+            padding: 1.4em;
+            border-radius: 10px;
+            background: #fff;
+            color: #111;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            text-align: center;
+            transition: background .3s ease, color .3s ease;
+        }
+
+        #counterVal {
+            font-size: 2.4rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        ol.steps {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: .6em;
+        }
+
+        ol.steps li {
+            display: flex;
+            gap: .9em;
+            align-items: flex-start;
+            font-size: 1.05rem;
+            color: var(--text-dim);
+        }
+
+        ol.steps li b {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        ol.steps .n {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--bg);
+            background: var(--js-yellow);
+            width: 1.6em;
+            height: 1.6em;
+            min-width: 1.6em;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 700;
+        }
+
+        /* nav */
+        #nav {
+            position: absolute;
+            bottom: 4vh;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: .5em;
+            z-index: 20;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--line);
+            cursor: pointer;
+            transition: background .2s, transform .2s;
+        }
+
+        .dot.active {
+            background: var(--js-yellow);
+            transform: scale(1.3);
+        }
+
+        #arrows {
+            position: absolute;
+            bottom: 3.6vh;
+            right: 8vw;
+            display: flex;
+            gap: .6em;
+            z-index: 20;
+        }
+
+        .arrow-btn {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            color: var(--text-dim);
+            width: 2.6em;
+            height: 2.6em;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .arrow-btn:hover {
+            color: var(--text);
+            border-color: var(--text-dim);
+        }
+
+        #counter {
+            position: absolute;
+            top: 5vh;
+            right: 8vw;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-dim);
+            font-size: .85rem;
+        }
+
+        .tree {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(.85rem, 1.6vw, 1.15rem);
+            color: var(--text-dim);
+            line-height: 2;
+            white-space: pre;
+        }
+
+        .tree .hl {
+            color: var(--dom-cyan);
+            font-weight: 600;
+        }
+
+        .footer-note {
+            margin-top: 1.4em;
+            font-size: .85rem;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        ::selection {
+            background: var(--js-yellow);
+            color: #141414;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="deck">
+
+        <!-- 0. TITLE -->
+        <section class="slide active">
+            <div class="badge basic">Web Technology · JavaScript</div>
+            <h1>JavaScript:<br><span class="accent-y">Bikin Web Jadi Hidup.</span></h1>
+            <p class="lead">HTML itu tulang. CSS itu baju. <b style="color:var(--text)">JavaScript itu otot &amp;
+                    saraf</b> — yang bikin halaman web bisa gerak, respon, dan mikir.</p>
+            <p class="footer-note">→ tekan panah kanan / klik area kosong / spasi untuk lanjut · kotak kode bisa diklik
+                &amp; diedit langsung ✎</p>
+        </section>
+
+        <!-- 0b. TEORI SINGKAT -->
+        <section class="slide">
+            <div class="badge basic">Pengantar</div>
+            <h2>JavaScript itu apa, singkatnya?</h2>
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <h3>Bahasa pemrograman</h3>
+                        <p>yang jalan <b style="color:var(--text)">di dalam browser</b> — beda dari bahasa lain yang
+                            butuh di-install/compile dulu.</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <h3>Kerja bareng HTML &amp; CSS</h3>
+                        <p>HTML = struktur, CSS = tampilan, JS = <b style="color:var(--text)">perilaku &amp;
+                                interaksi</b>.</p>
+                    </div>
+                </div>
+            </div>
+            <p class="lead" style="margin-top:1em">Itu aja dulu yang perlu diinget. Sisanya kita pelajari sambil praktik
+                langsung.</p>
+        </section>
+
+        <!-- 0c. HUBUNGKAN JS KE HTML -->
+        <section class="slide">
+            <div class="badge basic">Pengantar</div>
+            <h2>Cara <span class="accent-y">menghubungkan</span> JS ke HTML.</h2>
+            <div class="row">
+                <div class="col">
+                    <div class="edit-tag">cara 1 — inline (langsung nulis di HTML)</div>
+                    <pre contenteditable="true" spellcheck="false">&lt;body&gt;
+  ...konten halaman...
+
+  &lt;script&gt;
+    alert("Halo!");
+  &lt;/script&gt;
+&lt;/body&gt;</pre>
+                </div>
+                <div class="col">
+                    <div class="edit-tag">cara 2 — file terpisah (lebih rapi)</div>
+                    <pre contenteditable="true" spellcheck="false">&lt;body&gt;
+  ...konten halaman...
+
+  &lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</pre>
+                </div>
+            </div>
+            <p class="footer-note">taruh &lt;script&gt; sebelum &lt;/body&gt; — biar HTML-nya sudah ada duluan sebelum
+                JS mulai jalan &amp; nyari elemen</p>
+        </section>
+
+        <!-- 1. DEMO ALERT -->
+        <section class="slide">
+            <div class="badge basic">Basic · 01</div>
+            <h2>Kita mulai dari yang <span class="accent-y">langsung keliatan</span>.</h2>
+            <p class="lead">Bukan teori dulu. Ubah teks di bawah lalu jalankan kodenya!</p>
+            <div class="edit-tag">klik & edit kode di bawah ini</div>
+            <pre contenteditable="true" spellcheck="false">alert("Halo, dunia web!");</pre>
+            <div class="demo">
+                <div class="demo-label">live demo</div>
+                <button class="try" onclick="runSlideCode(this)">▶ Jalankan kode di atas</button>
+            </div>
+        </section>
+
+        <!-- 2. VARIABEL -->
+        <section class="slide">
+            <div class="badge basic">Basic · 02</div>
+            <h2>Variabel = <span class="accent-y">kotak penyimpanan</span>.</h2>
+            <div class="row">
+                <div class="col">
+                    <div class="edit-tag">klik & edit variabel di bawah</div>
+                    <pre contenteditable="true" spellcheck="false">let nama = "Budi";
+let umur = 17;
+alert("Nama: " + nama + ", Umur: " + umur);</pre>
+                    <div class="demo">
+                        <button class="try" onclick="runSlideCode(this)">▶ Jalankan kode di atas</button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <h3>string</h3>
+                        <p>teks — selalu diapit tanda kutip <code>"..."</code></p>
+                    </div>
+                    <div class="card" style="margin-top:.8em;">
+                        <h3>number</h3>
+                        <p>angka — tanpa tanda kutip</p>
+                    </div>
+                    <div class="card" style="margin-top:.8em;">
+                        <h3>boolean</h3>
+                        <p>cuma dua kemungkinan: <code>true</code> / <code>false</code></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. OPERATOR & KONDISI -->
+        <section class="slide">
+            <div class="badge basic">Basic · 03</div>
+            <h2>Program yang bisa <span class="accent-y">mengambil keputusan</span>.</h2>
+            <div class="edit-tag">coba ganti angka nilainya (misal jadi 60)</div>
+            <pre contenteditable="true" spellcheck="false">let nilai = 75;
+
+if (nilai >= 70) {
+  alert("Lulus dengan nilai: " + nilai);
+} else {
+  alert("Belum lulus, nilai kamu: " + nilai);
+}</pre>
+            <div class="demo">
+                <div class="demo-label">live demo — ganti angka di atas lalu klik jalankan</div>
+                <button class="try" onclick="runSlideCode(this)">▶ Jalankan kode di atas</button>
+            </div>
+        </section>
+
+        <!-- 4. LOOP -->
+        <section class="slide">
+            <div class="badge basic">Basic · 04</div>
+            <h2>Ngerjain hal <span class="accent-y">berulang</span>, tanpa nulis ulang.</h2>
+            <div class="edit-tag">coba ubah batas i &lt;= 5 jadi 3 atau 10</div>
+            <pre contenteditable="true" spellcheck="false">let hasil = "";
+for (let i = 1; i <= 5; i++) {
+  hasil += "Absen ke-" + i + "\n";
+}
+alert(hasil);</pre>
+            <div class="demo">
+                <button class="try" onclick="runSlideCode(this)">▶ Jalankan kode di atas</button>
+            </div>
+        </section>
+
+        <!-- 5. FUNCTION -->
+        <section class="slide">
+            <div class="badge basic">Basic · 05</div>
+            <h2>Bungkus logika jadi <span class="accent-y">alat pakai ulang</span>.</h2>
+            <div class="edit-tag">ubah nama di dalam pemanggilan sapa(...)</div>
+            <pre contenteditable="true" spellcheck="false">function sapa(nama) {
+  alert("Halo, " + nama + "!");
+}
+
+sapa("Ani");
+sapa("Budi");</pre>
+            <div class="demo">
+                <div class="demo-label">live demo</div>
+                <button class="try" onclick="runSlideCode(this)">▶ Jalankan kode di atas</button>
+            </div>
+        </section>
+
+        <!-- 6. BRIDGE -->
+        <section class="slide">
+            <div class="badge basic">Transisi</div>
+            <h1>Otak-nya udah siap.<br><span class="accent-c">Sekarang saatnya ngobrol ke halaman web.</span></h1>
+            <p class="lead">Semua yang tadi (variabel, kondisi, fungsi) itu cuma logika di kepala. Sekarang kita pakai
+                buat <b style="color:var(--text)">ngubah tampilan web beneran</b> — lewat sesuatu namanya <span
+                    class="accent-c">DOM</span>.</p>
+        </section>
+
+        <!-- 7. APA ITU DOM -->
+        <section class="slide">
+            <div class="badge dom">DOM · 01</div>
+            <h2>DOM = <span class="accent-c">peta dari halaman HTML</span> yang bisa diutak-atik JS.</h2>
+            <div class="row">
+                <div class="col">
+                    <pre contenteditable="true" spellcheck="false">&lt;body&gt;
+  &lt;h1 id="judul"&gt;Halo&lt;/h1&gt;
+  &lt;button&gt;Klik&lt;/button&gt;
+&lt;/body&gt;</pre>
+                </div>
+                <div class="col">
+                    <div class="tree">body
+                        ├── h1 <span class="hl">#judul</span>
+                        └── button</div>
+                    <p class="footer-note">setiap tag HTML = satu "node" yang bisa dipanggil dari JS</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. GET ELEMENT + UBAH TEKS -->
+        <section class="slide">
+            <div class="badge dom">DOM · 02</div>
+            <h2>Ambil elemen, lalu <span class="accent-c">ubah isinya</span>.</h2>
+            <div class="edit-tag">edit teks di dalam tanda kutip "..." di bawah</div>
+            <pre contenteditable="true"
+                spellcheck="false">document.getElementById("playbox").innerText = "halo saya";</pre>
+            <div class="demo">
+                <div class="demo-label">live sandbox — target: #playbox</div>
+                <div id="playbox">Halo, saya teks biasa</div>
+                <button class="try cyan" style="margin-top:1em" onclick="runSlideCode(this)">▶ Jalankan kode di
+                    atas</button>
+            </div>
+        </section>
+
+        <!-- 8b. QUERYSELECTOR -->
+        <section class="slide">
+            <div class="badge dom">DOM · 03</div>
+            <h2><span style="color:var(--dom-cyan)">querySelector</span> — Ambil elemen pakai CSS Selector.</h2>
+            <p class="lead">Lebih fleksibel dari getElementById. Bisa pakai ID (<code>#box</code>), Class
+                (<code>.box</code>), atau Tag.</p>
+            <div class="edit-tag">edit kode di bawah untuk mengubah elemen .box</div>
+            <pre contenteditable="true"
+                spellcheck="false">document.querySelector(".box").innerText = "Ketemu lewat querySelector! 🔍";</pre>
+            <div class="demo">
+                <div class="demo-label">live sandbox — target: .box</div>
+                <div id="playboxQS" class="box">Cari saya lewat class-nya (.box)</div>
+                <button class="try cyan" style="margin-top:1em" onclick="runSlideCode(this)">▶ Jalankan kode di
+                    atas</button>
+            </div>
+        </section>
+
+        <!-- 9. UBAH STYLE -->
+        <section class="slide">
+            <div class="badge dom">DOM · 04</div>
+            <h2>Bukan cuma teks — <span class="accent-c">tampilannya</span> juga bisa.</h2>
+            <div class="edit-tag">coba ganti warna background & text-nya (misal: "red", "yellow", "blue")</div>
+            <pre contenteditable="true" spellcheck="false">let box = document.getElementById("playbox2");
+box.style.background = "#111";
+box.style.color = "#5eead4";
+box.innerText = "Sekarang tampilannya berubah! 🌙";</pre>
+            <div class="demo">
+                <div class="demo-label">live sandbox — target: #playbox2</div>
+                <div id="playbox2">Kotak ini nunggu diubah warnanya</div>
+                <button class="try cyan" style="margin-top:1em" onclick="runSlideCode(this)">▶ Jalankan kode di
+                    atas</button>
+            </div>
+        </section>
+
+        <!-- 9b. INPUT VALUE -->
+        <section class="slide">
+            <div class="badge dom">DOM · 05</div>
+            <h2>Baca input user lewat <span style="color:var(--dom-cyan)">.value</span>.</h2>
+            <div class="edit-tag">edit logika sapaan di bawah</div>
+            <pre contenteditable="true" spellcheck="false">let teksInput = document.getElementById("kotakNama").value;
+if (teksInput === "") {
+  alert("Isi nama kamu dulu di kotak input!");
+} else {
+  alert("Halo, " + teksInput + "! Selamat belajar JS!");
+}</pre>
+            <div class="demo">
+                <div class="demo-label">live sandbox — ketik sesuatu di input box dulu</div>
+                <input id="kotakNama" type="text" placeholder="Ketik nama di sini..."
+                    style="font-family:'Space Grotesk',sans-serif; font-size:1rem; padding:.7em 1em; border-radius:8px; border:1px solid var(--line); background:var(--bg-soft); color:var(--text); width:100%; max-width:22em;">
+                <br>
+                <button class="try cyan" style="margin-top:1em" onclick="runSlideCode(this)">▶ Jalankan kode di
+                    atas</button>
+            </div>
+            <p class="footer-note"><code>.innerText</code> buat elemen teks (div, h1, p) · <code>.value</code> khusus
+                buat tag &lt;input&gt;</p>
+        </section>
+
+        <!-- 10. EVENT -->
+        <section class="slide">
+            <div class="badge dom">DOM · 06</div>
+            <h2>Respon <span class="accent-c">aksi pengguna</span> (EventListener).</h2>
+            <div class="edit-tag">edit logika penambahan angkanya di bawah</div>
+            <pre contenteditable="true" spellcheck="false">let counterEl = document.getElementById("counterVal");
+let angkaSekarang = Number(counterEl.innerText);
+counterEl.innerText = angkaSekarang + 1;</pre>
+            <div class="demo">
+                <div class="demo-label">live sandbox — target: #counterVal</div>
+                <div id="playbox3">Klik berapa kali? <span id="counterVal">0</span></div>
+                <button class="try cyan" style="margin-top:1em" onclick="runSlideCode(this)">▶ Jalankan kode di
+                    atas</button>
+            </div>
+        </section>
+
+        <!-- 11. CHALLENGE -->
+        <section class="slide">
+            <div class="badge dom">Tantangan</div>
+            <h2>Sekarang <span class="accent-c">giliran kalian</span>. Pilih satu:</h2>
+            <ol class="steps">
+                <li><span class="n">1</span>
+                    <div><b>Pengubah Warna</b> — tombol yang ganti warna background halaman tiap diklik.</div>
+                </li>
+                <li><span class="n">2</span>
+                    <div><b>Penghitung Klik</b> — kayak demo tadi, tapi tambah tombol "reset ke 0".</div>
+                </li>
+                <li><span class="n">3</span>
+                    <div><b>Kotak Salam</b> — input nama, tombol "Sapa", teks di bawahnya berubah jadi "Halo, [nama]!".
+                    </div>
+                </li>
+            </ol>
+            <p class="footer-note">bergantian device — satu ngetik, yang lain lihat &amp; kasih ide</p>
+        </section>
+
+        <!-- 12. CLOSING -->
+        <section class="slide">
+            <div class="badge basic">Selesai</div>
+            <h1>Itu aja <span class="accent-y">JS dasar + DOM</span> hari ini.</h1>
+            <p class="lead">Variabel, kondisi, function → itu <b style="color:var(--text)">otaknya</b>. getElementById /
+                querySelector, innerText, .value, addEventListener → itu <b style="color:var(--text)">tangannya</b> buat
+                nyentuh halaman web. Minggu depan kita gabungin jadi satu mini-project utuh.</p>
+        </section>
+
+    </div>
+
+    <div id="counter"><span id="curSlide">1</span> / <span id="totalSlide"></span></div>
+    <div id="nav"></div>
+    <div id="arrows">
+        <div class="arrow-btn" id="prevBtn">←</div>
+        <div class="arrow-btn" id="nextBtn">→</div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const navEl = document.getElementById('nav');
+        let idx = 0;
+
+        slides.forEach((_, i) => {
+            const d = document.createElement('div');
+            d.className = 'dot' + (i === 0 ? ' active' : '');
+            d.addEventListener('click', () => go(i));
+            navEl.appendChild(d);
+        });
+        const dots = document.querySelectorAll('.dot');
+        document.getElementById('totalSlide').innerText = slides.length;
+
+        function go(n) {
+            if (n < 0 || n >= slides.length) return;
+            slides[idx].classList.remove('active');
+            dots[idx].classList.remove('active');
+            idx = n;
+            slides[idx].classList.add('active');
+            dots[idx].classList.add('active');
+            document.getElementById('curSlide').innerText = idx + 1;
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => go(idx + 1));
+        document.getElementById('prevBtn').addEventListener('click', () => go(idx - 1));
+
+        // --- CEK EDIT MODE Supaya Panah/Spasi Tidak Pindah Slide ---
+        function isEditing() {
+            const activeEl = document.activeElement;
+            return activeEl && (
+                activeEl.tagName === 'INPUT' ||
+                activeEl.tagName === 'TEXTAREA' ||
+                activeEl.isContentEditable
+            );
+        }
+
+        document.addEventListener('keydown', (e) => {
+            // Jika user sedang fokus mengetik kode/input, jangan ganti slide!
+            if (isEditing()) {
+                return;
+            }
+
+            if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(e.key)) {e.preventDefault(); go(idx + 1);}
+            if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) {e.preventDefault(); go(idx - 1);}
+        });
+
+        document.getElementById('deck').addEventListener('click', (e) => {
+            // Klik tombol / input / pre kode tidak akan pindah slide
+            if (e.target.closest('button, .arrow-btn, .dot, a, pre, input, .demo')) return;
+            go(idx + 1);
+        });
+
+        // --- RUNNER KODE DINAMIS SLIDE ---
+        function runSlideCode(btnEl) {
+            const currentSlide = btnEl.closest('.slide');
+            const preCode = currentSlide.querySelector('pre[contenteditable]');
+
+            if (!preCode) return;
+
+            const codeText = preCode.innerText;
+
+            try {
+                // Eksekusi kode yang diketik pengguna di dalam pre
+                const runner = new Function(codeText);
+                runner();
+            } catch (err) {
+                alert("⚠️ Terjadi Error pada Kode:\n\n" + err.message);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,77 +1,136 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Portfolio</title>
-    </head>
-    <body>
-        <h1 align="center">Get In Touch With Me</h1>
 
-        <img
-            src="images/profile.png"
-            alt="Foto profil"
-            height="150px"
-            width="auto"
-            border="3"
-        />
-        <h2>Fahmi Ilham Bagaskara</h2>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio - Fahmi Ilham Bagaskara</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css" />
+</head>
 
-        <br />
-        <h3>PROFIL</h3>
-        <p>
-            Mahasiswa PENS program studi Teknologi Rekayasa Internet mendalami
-            keamanan siber dalam 3 tahun ini, memiliki pengetahuan dan semangat
-            belajar tinggi mengenai perkembangan teknologi terbaru.
-        </p>
+<body>
+    <header id="header">
+        <nav class="navbar">
+            <div class="navbar-container container">
+                <div class="logo">FailDeGaskar</div>
+                <div class="navbar-content">
+                    <a href="#profil-section" class="nav-link active">About</a>
+                    <a href="#education-section" class="nav-link">Resume</a>
+                    <a href="#contact-section" class="nav-link">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-        <br />
-        <h3>HOBY</h3>
-        <ol>
-            <li>Menonton Anime</li>
-            <li>Scrolling</li>
-            <li>Membaca Komik</li>
-        </ol>
+    <main class="container" id="main-content">
+        <!-- Hero Section -->
+        <section id="hero-section" class="hero-card card">
+            <h1 class="page-title">Get In Touch With Me</h1>
+            <div class="profile-header">
+                <img src="images/profile.png" alt="Foto profil" class="profile-img" />
+                <h2 class="profile-name">Fahmi Ilham Bagaskara</h2>
+                <p class="profile-subtitle">Cyber Security & Networking Student</p>
+            </div>
+        </section>
 
-        <br />
-        <h3>SKILL</h3>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Cyber Security</th>
-                    <th>DevOps</th>
-                    <th>Programming</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Advanced</td>
-                    <td>Intermediate</td>
-                    <td>Beginer</td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- Profil Section -->
+        <section id="profil-section" class="section-card card">
+            <h3 class="section-title">PROFIL</h3>
+            <p class="profile-description">
+                Mahasiswa PENS program studi Teknologi Rekayasa Internet mendalami
+                keamanan siber dalam 3 tahun ini, memiliki pengetahuan dan semangat
+                belajar tinggi mengenai perkembangan teknologi terbaru.
+            </p>
+        </section>
 
-        <br />
-        <h3>RIWAYATA PENDIDIKAN</h3>
-        <ul type="square">
-            <li>POLITEKNIK ELEKTRONIKA NEGERI SURABAYA | 2025 - Sekarang</li>
-            <p>Teknologi Rekayasa Internet</p>
-            <li>SMK SORE TULUNGAGUNG | 2022 - 2025</li>
-            <p>Teknik Komputer Jaringan</p>
-        </ul>
+        <!-- Grid Container for Hoby & Skill -->
+        <div class="grid-2-col">
+            <!-- Hoby Section -->
+            <section id="hoby-section" class="section-card card">
+                <h3 class="section-title">HOBY</h3>
+                <ol class="hoby-list">
+                    <li>Menonton Anime</li>
+                    <li>Scrolling</li>
+                    <li>Membaca Komik</li>
+                </ol>
+            </section>
 
-        <br />
-        <h3>KONTAK</h3>
-        <p>Email : fahmiilham029@iet.student.pens.ac.id</p>
-        <p>WhatsApp : +62 87860407004</p>
+            <!-- Skill Section -->
+            <section id="skill-section" class="section-card card">
+                <h3 class="section-title">SKILL</h3>
+                <div class="table-wrapper">
+                    <table class="skill-table">
+                        <thead>
+                            <tr>
+                                <th>Cyber Security</th>
+                                <th>DevOps</th>
+                                <th>Programming</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge badge-advanced">Advanced</span></td>
+                                <td><span class="badge badge-intermediate">Intermediate</span></td>
+                                <td><span class="badge badge-beginner">Beginner</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
 
-        <br />
-        <h3>SOCIAL MEDIA</h3>
-        <a href="https://www.instagram.com/err.log/">Instagram</a>
-        <a href="https://github.com/FahmiYoshikage">GitHub</a>
-        <a href="https://www.linkedin.com/in/fahmi-ilham-bagaskara-65a197305/"
-            >LinkedIn</a
-        >
-    </body>
+        <!-- Education Section -->
+        <section id="education-section" class="section-card card">
+            <h3 class="section-title">RIWAYAT PENDIDIKAN</h3>
+            <ul class="education-list">
+                <li class="edu-item">
+                    <div class="edu-header">
+                        <strong class="edu-school">POLITEKNIK ELEKTRONIKA NEGERI SURABAYA</strong>
+                        <span class="edu-year">2025 - Sekarang</span>
+                    </div>
+                    <p class="edu-dept">Teknologi Rekayasa Internet</p>
+                </li>
+                <li class="edu-item">
+                    <div class="edu-header">
+                        <strong class="edu-school">SMK SORE TULUNGAGUNG</strong>
+                        <span class="edu-year">2022 - 2025</span>
+                    </div>
+                    <p class="edu-dept">Teknik Komputer Jaringan</p>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact-section" class="section-card card">
+            <h3 class="section-title">KONTAK</h3>
+            <div class="contact-details">
+                <div class="contact-item">
+                    <span class="contact-label">Email:</span>
+                    <a href="mailto:fahmiilham029@iet.student.pens.ac.id" class="contact-link">fahmiilham029@iet.student.pens.ac.id</a>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">WhatsApp:</span>
+                    <a href="https://wa.me/6287860407004" target="_blank" class="contact-link">+62 87860407004</a>
+                </div>
+            </div>
+
+            <h3 class="section-title social-title">SOCIAL MEDIA</h3>
+            <div class="social-links">
+                <a href="https://www.instagram.com/err.log/" target="_blank" class="social-btn instagram">Instagram</a>
+                <a href="https://github.com/FahmiYoshikage" target="_blank" class="social-btn github">GitHub</a>
+                <a href="https://www.linkedin.com/in/fahmi-ilham-bagaskara-65a197305/" target="_blank" class="social-btn linkedin">LinkedIn</a>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer">
+        <p>&copy; 2026 Fahmi Ilham Bagaskara (FailDeGaskar). All rights reserved.</p>
+    </footer>
+</body>
+
 </html>

@@ -1,0 +1,280 @@
+#######
+
+#html
+<h1>TV Search</h1>
+
+<button id="load">Load Show</button>
+
+<div id="result"></div>
+
+#JS
+const button = document.querySelector("#load");
+const result = document.querySelector("#result");
+
+button.addEventListener("click", async () => {
+    const response = await fetch(
+        "https://api.tvmaze.com/shows/1"
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+
+
+
+
+#########
+#HTML
+<h1>Search TV Show</h1>
+
+<input id="search" placeholder="Contoh: Breaking Bad">
+
+<button id="button">
+    Search
+</button>
+
+<div id="results"></div>
+
+#JS
+const input = document.querySelector("#search");
+const button = document.querySelector("#button");
+const results = document.querySelector("#results");
+
+button.addEventListener("click", async () => {
+
+    const keyword = input.value;
+
+    const response = await fetch(
+        `https://api.tvmaze.com/search/shows?q=${keyword}`
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+
+    results.innerHTML = "";
+
+    data.forEach(item => {
+
+        const show = item.show;
+
+        results.innerHTML += `
+            <article>
+                <h2>${show.name}</h2>
+                <p>${show.type}</p>
+
+                ${
+                    show.image
+                    ? `<img src="${show.image.medium}">`
+                    : ""
+                }
+
+            </article>
+        `;
+    });
+});
+
+
+
+##### TAMBAHAN LOADING
+
+#HTML
+<p id="status"></p>
+
+#JS
+button.addEventListener("click", async () => {
+
+    status.textContent = "Loading...";
+
+    const keyword = input.value;
+
+    const response = await fetch(
+        `https://api.tvmaze.com/search/shows?q=${keyword}`
+    );
+
+    const data = await response.json();
+
+    status.textContent = `${data.length} hasil ditemukan`;
+
+    // render...
+});
+
+
+
+
+##### TAMBAHAN EROR HANDLING
+
+# JS
+button.addEventListener("click", async () => {
+
+    status.textContent = "Loading...";
+
+    try {
+
+        const keyword = input.value;
+
+        const response = await fetch(
+            `https://api.tvmaze.com/search/shows?q=${keyword}`
+        );
+
+        if (!response.ok) {
+            throw new Error("Request gagal");
+        }
+
+        const data = await response.json();
+
+        status.textContent =
+            `${data.length} hasil ditemukan`;
+
+        // render data
+
+    } catch (error) {
+
+        status.textContent =
+            "Gagal mengambil data.";
+
+        console.error(error);
+    }
+});
+
+
+#### MOVIE APP
+const response = await fetch(
+    `https://api.tvmaze.com/search/shows?q=${keyword}`
+);
+
+const data = await response.json();
+
+results.innerHTML = data.map(item => {
+
+    const show = item.show;
+
+    return `
+        <div class="card">
+
+            <img
+                src="${show.image?.medium || ""}"
+            >
+
+            <h2>
+                ${show.name}
+            </h2>
+
+            <p>
+                ${show.type}
+            </p>
+
+            <p>
+                ⭐ ${show.rating?.average || "N/A"}
+            </p>
+
+        </div>
+    `;
+
+}).join("");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###SOAL###
+1.
+
+document.getElementById('status').innerText = '1. Memulai Fetch';
+setTimeout(() => {
+  document.getElementById('status').innerText = '2. Data Berhasil Diambil';
+}, 0);
+document.getElementById('status').innerText = '3. Selesai';
+
+
+2.
+
+try {
+  const response = await fetch('https://api.example.com/user/tidak-ada');
+  alert('Berhasil terhubung ke API!');
+} catch (error) {
+  alert('Terjadi kesalahan jaringan!');
+}
+
+
+3.
+
+async function tampilkanJudul() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/todos/1');
+  const data = res.json();
+  alert(data.title);
+}
+tampilkanJudul();
+
+
+4.
+
+const dataTeks = '{ nama: "Budi", kelas: "XII RPL" }';
+const user = JSON.parse(dataTeks);
+document.getElementById('nama').innerText = user.nama;
+
+
+5.
+
+// Fungsi A
+function ambilAngkaA() {
+  return 100;
+}
+
+// Fungsi B
+async function ambilAngkaB() {
+  return 100;
+}
+
+
+
+6.
+
+try {
+  const response = await fetch('https://api.example.com/server-rusak');
+  const data = await response.json();
+  document.getElementById('info').innerText = "Data Sukses Dimuat";
+} catch (err) {
+  document.getElementById('info').innerText = "Koneksi Gagal";
+}
+
+
+7.
+
+const daftarId = [1, 2, 3];
+const hasil = daftarId.map(async (id) => {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
+  return await res.json();
+});
+
+document.getElementById('output').innerText = hasil;
+
+
+15.
+
+const dataUsers = await res.json(); // Berisi 100 data user
+dataUsers.forEach(user => {
+  document.getElementById('container').innerHTML += `<div>${user.name}</div>`;
+});
+
+
+
+18.
+
+
+const nama = "Ahmad";
+document.getElementById('user').innerHTML = "<li>${nama}</li>";
+
+
+

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ITSENJA — Modern JavaScript + Async + Fetch API</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f6f8fc;color:#172033;font-family:Inter,Arial,sans-serif;overflow:hidden}
+#deck{width:100vw;height:100vh;position:relative}
+.slide{display:none;position:absolute;inset:0;padding:7vh 8vw 10vh;overflow:auto;justify-content:center;flex-direction:column}
+.slide.active{display:flex}
+.badge{position:absolute;top:3.5vh;left:8vw;background:white;border:1px solid #dbe2ec;border-radius:99px;padding:9px 14px;color:#2563eb;font:800 13px monospace}
+.counter{position:absolute;top:3.8vh;right:8vw;color:#667085;font:800 13px monospace}
+.kicker{color:#2563eb;font:800 14px monospace;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+h1{font-size:clamp(3.2rem,6.5vw,6rem);line-height:1.02;letter-spacing:-.05em;margin:0 0 20px}
+h2{font-size:clamp(2.5rem,5vw,4.6rem);line-height:1.05;letter-spacing:-.04em;margin:0 0 22px}
+p,li{font-size:clamp(1.05rem,1.45vw,1.3rem);line-height:1.65}
+.lead{max-width:1050px;color:#5f6b7d;font-size:clamp(1.2rem,1.8vw,1.5rem)}
+.blue{color:#2563eb}
+code{background:#eef2f7;color:#2563eb;padding:2px 6px;border-radius:6px;font-size:.92em}
+.card{background:#fff;border:1px solid #dbe2ec;border-radius:18px;padding:25px;box-shadow:0 14px 40px rgba(26,39,67,.08);margin-top:18px}
+.callout{background:#dbeafe;border-left:5px solid #2563eb;border-radius:0 12px 12px 0;padding:18px 20px;margin-top:20px;font-size:clamp(1rem,1.35vw,1.2rem);line-height:1.6}
+.flow{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;margin:28px 0}
+.flow span{background:#fff;border:1px solid #dbe2ec;border-radius:12px;padding:14px 18px;font-weight:800;box-shadow:0 8px 25px rgba(26,39,67,.06)}
+.arrow{color:#2563eb}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tag{font:800 12px monospace;color:#667085;letter-spacing:.1em;margin:14px 0 7px}
+.code{background:#111827;color:#e5e7eb;border-radius:14px;padding:18px;overflow:auto;font:14px/1.55 monospace;white-space:pre-wrap}
+.playground{display:grid;grid-template-columns:1fr 1fr;gap:18px;min-height:430px;margin-top:18px}
+.editor{display:flex;flex-direction:column;min-width:0}
+textarea{width:100%;min-height:88px;resize:vertical;background:#111827;color:#e5e7eb;border:1px solid #293548;border-radius:10px;padding:12px;font:13px/1.45 monospace}
+.run{align-self:flex-start;margin-top:10px;border:0;background:#2563eb;color:white;padding:11px 17px;border-radius:10px;font-weight:800;cursor:pointer}
+.output{background:white;border:1px solid #dbe2ec;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.outhead{padding:10px 14px;background:#eef2f7;font:800 11px monospace;color:#667085}
+.output iframe{width:100%;flex:1;border:0}
+.check{font-size:1.1rem;margin:8px 0}
+.check:before{content:"☐ ";color:#2563eb;font-weight:900}
+.footer{position:absolute;bottom:3vh;left:8vw;color:#667085;font:700 11px monospace}
+.nav{position:absolute;bottom:3vh;width:46px;height:46px;border-radius:50%;border:1px solid #dbe2ec;background:#fff;box-shadow:0 8px 25px rgba(26,39,67,.08);font-weight:900;cursor:pointer}
+.prev{right:calc(8vw + 54px)}.next{right:8vw}
+.progress{position:absolute;bottom:0;left:0;height:4px;background:#2563eb;transition:width .25s ease}
+.visual-api{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:18px 0}
+.node{background:#fff;border:2px solid #cbd5e1;border-radius:14px;padding:14px 18px;text-align:center;min-width:130px;box-shadow:0 8px 24px rgba(26,39,67,.07)}
+.node b{display:block;font-size:1rem}.node small{display:block;color:#667085;margin-top:4px}
+.node.client{border-color:#60a5fa}.node.api{border-color:#818cf8}.node.server{border-color:#34d399}.node.data{border-color:#f59e0b}
+.flow-arrow{font-size:.95rem;font-weight:800;color:#2563eb}
+.step-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+.step{background:#fff;border:1px solid #dbe2ec;border-radius:14px;padding:16px}
+.step strong{display:block;color:#2563eb;margin-bottom:6px}.step p{font-size:.95rem!important;margin:0}
+.status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.status{border-radius:14px;padding:18px;text-align:center;font-weight:800;border:2px solid}
+.status b{display:block;font-size:1.15rem;margin-bottom:6px}.status small{font-weight:600;color:#475569}
+.status.ok{background:#ecfdf5;border-color:#34d399;color:#047857}
+.status.warn{background:#fff7ed;border-color:#f59e0b;color:#b45309}
+.status.err{background:#fef2f2;border-color:#f87171;color:#b91c1c}
+.devtools{margin-top:18px;background:#0f172a;border-radius:14px;overflow:hidden;font:13px/1.5 monospace;color:#cbd5e1}
+.dt-tabs{display:flex;gap:2px;background:#1e293b;padding:6px 10px}
+.dt-tab{padding:6px 14px;border-radius:8px 8px 0 0;color:#94a3b8}
+.dt-tab.active{background:#0f172a;color:#60a5fa;font-weight:800}
+.dt-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 14px;border-top:1px solid #1e293b}
+.dt-head{color:#64748b;font-weight:800;text-transform:uppercase;font-size:11px}
+.dt-ok{color:#34d399;font-weight:800}.dt-err{color:#f87171;font-weight:800}
+@media(max-width:900px){.grid2,.grid3,.playground,.step-grid,.status-grid{grid-template-columns:1fr}.dt-row{grid-template-columns:2fr 1fr}.slide{padding:9vh 6vw 12vh}.badge,.footer{left:6vw}.counter{right:6vw}.prev{right:calc(6vw + 54px)}.next{right:6vw}}
+
+</style></head><body>
+<div id="deck">
+<section class="slide active">
+<div class="badge">ITSENJA · WEB TECHNOLOGIES</div>
+<div class="kicker">Modern JavaScript · Async · Fetch API</div>
+<h1>Modern JavaScript<br><span class='blue'>+ Async + Fetch API</span></h1>
+<p class="lead">Dari website interaktif menuju website yang dapat mengambil dan mengolah data dari luar halaman.</p>
+<div class="callout"><b>Target sesi:</b> memahami API, JSON, Promise, async/await, Fetch API, error handling, dan merender data API ke DOM.</div>
+<div class="footer">SPRINT · MODERN JAVASCRIPT + ASYNC + FETCH API</div>
+</section><section class="slide ">
+<div class="badge">RECAP</div>
+<h2>JavaScript kita sudah bisa <span class='blue'>merespons.</span></h2>
+<p class="lead">Sebelumnya kita belajar DOM, event, form, validation, dan mengubah tampilan melalui JavaScript.</p>
+<div class="card"><p>Sekarang pertanyaannya: bagaimana jika data tidak ditulis langsung di HTML? Misalnya daftar project, produk, berita, atau user.</p></div>
+</section><section class="slide ">
+<div class="badge">PROBLEM</div>
+<h2>Website modern bekerja dengan <span class='blue'>data.</span></h2>
+<p class="lead">Contoh data yang ditemui frontend: produk, berita, profile, repository GitHub, cuaca, dan daftar project.</p>
+<div class="card"><p>Daripada menulis semua data satu per satu di HTML, aplikasi dapat mengambil data saat dibutuhkan lalu merendernya ke halaman.</p></div>
+</section><section class="slide ">
+<div class="badge">API</div>
+<h2>Apa itu <span class='blue'>API?</span></h2>
+<p class="lead">API (Application Programming Interface) adalah antarmuka yang memungkinkan software berkomunikasi dengan software atau layanan lain melalui aturan tertentu.</p>
+<div class="card"><p>Analogi restoran: <b>Client</b> = pelanggan yang lapar, <b>API</b> = pelayan yang mencatat & mengantar pesanan, <b>Server</b> = dapur yang benar-benar memasak datanya.</p><div class="visual-api">
+<div class="node client"><b>🧑 Client</b><small>Pelanggan</small></div>
+<div class="flow-arrow">→ minta menu →</div>
+<div class="node api"><b>🔌 API</b><small>Pelayan</small></div>
+<div class="flow-arrow">→ teruskan pesanan →</div>
+<div class="node server"><b>🖥️ Server</b><small>Dapur</small></div>
+</div>
+<div class="visual-api">
+<div class="node client" style="visibility:hidden"><b>x</b></div>
+<div class="flow-arrow">← antar makanan ←</div>
+<div class="node api"><b>🔌 API</b><small>Pelayan</small></div>
+<div class="flow-arrow">← makanan jadi ←</div>
+<div class="node data"><b>📦 Data</b><small>Hasil masakan</small></div>
+</div></div>
+</section><section class="slide ">
+<div class="badge">API FLOW</div>
+<h2>Alur komunikasi <span class='blue'>Client ↔ Server</span></h2>
+<p class="lead">Browser mengirim HTTP request ke endpoint API. Server memproses request dan mengembalikan HTTP response.</p>
+<div class="card"><p>Client → Request → API/Server → Response → Client. Untuk sprint ini fokus utama kita adalah GET, yaitu mengambil data.</p><div class="flow">
+<span>Browser</span><span class="arrow">→ Request →</span><span>API / Server</span><span class="arrow">→ Response →</span><span>Browser</span>
+</div></div>
+</section><section class="slide ">
+<div class="badge">API ANATOMY</div>
+<h2>Kenali bagian-bagian <span class='blue'>API.</span></h2>
+<p class="lead">Endpoint adalah alamat resource. HTTP method menjelaskan operasi. Request adalah informasi yang dikirim client. Response adalah hasil dari server.</p>
+<div class="card"><div class="step-grid">
+<div class="step"><strong>Endpoint</strong><p>Alamat resource. Contoh: https://api.example.com/users</p></div>
+<div class="step"><strong>Method</strong><p>GET = ambil, POST = buat, PUT/PATCH = ubah, DELETE = hapus</p></div>
+<div class="step"><strong>Request</strong><p>Informasi yang dikirim client (header, body, params)</p></div>
+<div class="step"><strong>Response</strong><p>Hasil balasan dari server (status + data)</p></div>
+</div></div>
+</section><section class="slide ">
+<div class="badge">HTTP</div>
+<h2>Response punya <span class='blue'>status.</span></h2>
+<p class="lead">HTTP status membantu kita mengetahui hasil request.</p>
+<div class="card"><p>Jangan menganggap semua request pasti berhasil — status code adalah hal pertama yang harus dicek.</p><div class="status-grid">
+<div class="status ok"><b>200 OK</b><small>Berhasil</small></div>
+<div class="status warn"><b>404 Not Found</b><small>Resource tidak ditemukan</small></div>
+<div class="status err"><b>500 Server Error</b><small>Masalah di server</small></div>
+</div></div>
+</section><section class="slide ">
+<div class="badge">JSON</div>
+<h2>Data API sering dikirim sebagai <span class='blue'>JSON.</span></h2>
+<p class="lead">JSON (JavaScript Object Notation) adalah format pertukaran data berbasis teks yang mudah dibaca manusia dan diproses program.</p>
+<div class="card"><p>JSON adalah <b>format data</b> (teks), bukan pengganti JavaScript. <code>JSON.parse()</code> mengubah teks JSON menjadi object JS.</p></div><div class="playground">
+<div class="editor">
+<div class="tag">HTML</div><textarea class="html" spellcheck="false">&lt;pre id="output"&gt;Klik Run untuk mem-parsing JSON...&lt;/pre&gt;</textarea>
+<div class="tag">CSS</div><textarea class="css" spellcheck="false">body{font-family:Arial;padding:18px;color:#172033}
+pre{background:#f1f5f9;padding:14px;border-radius:10px;white-space:pre-wrap}</textarea>
+<div class="tag">JAVASCRIPT</div><textarea class="js" spellcheck="false">const teksJSON = '{"name":"Fahmi","role":"Student","skills":["HTML","CSS","JS"]}';
+
+// String JSON diubah menjadi object JavaScript
+const dataObject = JSON.parse(teksJSON);
+
+document.getElementById('output').textContent =
+  'Nama   : ' + dataObject.name + '\n' +
+  'Role   : ' + dataObject.role + '\n' +
+  'Skills : ' + dataObject.skills.join(', ');</textarea>
+<button class="run">▶ Run</button>
+</div>
+<div class="output"><div class="outhead">OUTPUT</div><iframe style="min-height:220px"></iframe></div>
+</div>
+</section><section class="slide ">
+<div class="badge">FETCH</div>
+<h2>Fetch API: membuat <span class='blue'>HTTP request</span></h2>
+<p class="lead">Fetch API adalah API browser yang digunakan JavaScript untuk melakukan network request.</p>
+<div class="card"><p>Fetch mengembalikan <b>Promise</b>. Coba jalankan demo di kanan — datanya benar-benar diambil dari API sungguhan.</p></div><div class="playground">
+<div class="editor">
+<div class="tag">HTML</div><textarea class="html" spellcheck="false">&lt;div id="output"&gt;Klik "Run" untuk mengambil data user pertama dari API...&lt;/div&gt;</textarea>
+<div class="tag">CSS</div><textarea class="css" spellcheck="false">body{font-family:Arial;padding:18px;color:#172033}
+#output{padding:14px;background:#f1f5f9;border-radius:10px;line-height:1.6}</textarea>
+<div class="tag">JAVASCRIPT</div><textarea class="js" spellcheck="false">fetch('https://jsonplaceholder.typicode.com/users/1')
+  .then(response =&gt; response.json())
+  .then(data =&gt; {
+    document.getElementById('output').innerHTML =
+      '&lt;b&gt;' + data.name + '&lt;/b&gt;&lt;br&gt;' + data.email + '&lt;br&gt;' + data.company.name;
+  })
+  .catch(error =&gt; {
+    document.getElementById('output').textContent = 'Gagal mengambil data: ' + error;
+  });</textarea>
+<button class="run">▶ Run</button>
+</div>
+<div class="output"><div class="outhead">OUTPUT</div><iframe style="min-height:240px"></iframe></div>
+</div>
+</section><section class="slide ">
+<div class="badge">PROMISE</div>
+<h2>Kenapa muncul <span class='blue'>Promise?</span></h2>
+<p class="lead">Network request membutuhkan waktu. Hasilnya tidak selalu tersedia pada saat baris kode dijalankan.</p>
+<div class="card"><p>Keadaan Promise: <b>Pending → Fulfilled</b> atau <b>Rejected</b>. Perhatikan status berubah setelah 1.5 detik pada demo ini.</p></div><div class="playground">
+<div class="editor">
+<div class="tag">HTML</div><textarea class="html" spellcheck="false">&lt;div id="log"&gt;Status: &lt;span id="status"&gt;belum dijalankan&lt;/span&gt;&lt;/div&gt;</textarea>
+<div class="tag">CSS</div><textarea class="css" spellcheck="false">body{font-family:Arial;padding:18px}
+#log{padding:14px;background:#f1f5f9;border-radius:10px;font-weight:700}</textarea>
+<div class="tag">JAVASCRIPT</div><textarea class="js" spellcheck="false">const ambilData = new Promise((resolve, reject) =&gt; {
+  console.log('Promise dibuat: status pending...');
+  setTimeout(() =&gt; {
+    const berhasil = true;
+    if (berhasil) resolve('✅ Data berhasil diambil!');
+    else reject('❌ Gagal mengambil data');
+  }, 1500);
+});
+
+document.getElementById('status').textContent = 'pending...';
+
+ambilData
+  .then(hasil =&gt; {
+    document.getElementById('status').textContent = hasil;
+    document.getElementById('status').style.color = 'green';
+  })
+  .catch(error =&gt; {
+    document.getElementById('status').textContent = error;
+    document.getElementById('status').style.color = 'red';
+  });</textarea>
+<button class="run">▶ Run</button>
+</div>
+<div class="output"><div class="outhead">OUTPUT</div><iframe style="min-height:200px"></iframe></div>
+</div>
+</section><section class="slide ">
+<div class="badge">ASYNC AWAIT</div>
+<h2>Tuliskan asynchronous code dengan <span class='blue'>lebih nyaman.</span></h2>
+<p class="lead">async menandai function sebagai asynchronous. await menunggu hasil Promise di dalam function tersebut.</p>
+<div class="card"><p>async/await bukan membuat network request menjadi synchronous; ia hanya membuat penulisannya lebih mudah dibaca dibanding <code>.then()</code> berantai.</p></div><div class="playground">
+<div class="editor">
+<div class="tag">HTML</div><textarea class="html" spellcheck="false">&lt;div id="output"&gt;Klik "Run"...&lt;/div&gt;</textarea>
+<div class="tag">CSS</div><textarea class="css" spellcheck="false">body{font-family:Arial;padding:18px}
+#output{padding:14px;background:#f1f5f9;border-radius:10px}</textarea>
+<div class="tag">JAVASCRIPT</div><textarea class="js" spellcheck="false">async function ambilUser() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/users/2');
+  const data = await response.json();
+  document.getElementById('output').innerHTML =
+    '&lt;b&gt;' + data.name + '&lt;/b&gt;&lt;br&gt;Perusahaan: ' + data.company.name;
+}
+
+ambilUser();</textarea>
+<button class="run">▶ Run</button>
+</div>
+<div class="output"><div class="outhead">OUTPUT</div><iframe style="min-height:200px"></iframe></div>
+</div>
+</section><section class="slide ">
+<div class="badge">FETCH FULL</div>
+<h2>HTML + CSS + JS: <span class='blue'>Fetch pertama.</span></h2>
+<p class="lead">Kita tidak hanya melihat potongan JS. Lihat struktur lengkapnya: HTML menyediakan target, CSS mengatur tampilan, JavaScript mengambil data dan mengubah DOM.</p>
+<div class="card"><p>Coba jalankan demo di sebelah kanan. Setelah berhasil, ubah <code>_limit</code>, selector, atau endpoint lalu jalankan lagi.</p></div><div class="playground">
+<div class="editor">
+<div class="tag">HTML</div><textarea class="html" spellcheck="false">&lt;h3&gt;Daftar User&lt;/h3&gt;&lt;div id="users"&gt;Loading...&lt;/div&gt;</textarea>
+<div class="tag">CSS</div><textarea class="css" spellcheck="false">body{font-family:Arial;padding:18px;color:#172033}
+.user-card{background:#f1f5f9;border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.user-card b{display:block;color:#2563eb}</textarea>
+<div class="tag">JAVASCRIPT</div><textarea class="js" spellcheck="false">async function ambilUsers() {
+  const container = document.getElementById('users');
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users?_limit=5');
+    const users = await response.json();
+    container.innerHTML = '';
+    users.forEach(user =&gt; {
+      const card = document.createElement('div');
+      card.className = 'user-card';
+      card.innerHTML = '&lt;b&gt;' + user.name + '&lt;/b&gt;' + user.email;
+      container.appendChild(card);
+    });
+  } catch (error) {
+    container.textContent = 'Terjadi kesalahan saat mengambil data.';
+  }
+}
+
+ambilUsers();</textarea>
+<button class="run">▶ Run</button>
+</div>
+<div class="output"><div class="outhead">OUTPUT</div><iframe style="min-height:320px"></iframe></div>
+</div>
+</section><section class="slide ">
+<div class="badge">BREAKDOWN</div>
+<h2>Pahami alur <span class='blue'>data.</span></h2>
+<p class="lead">fetch(url) → Response → response.json() → JavaScript data → proses data → DOM.</p>
+<div class="card"><p>fetch() mengambil response. response.json() membaca body JSON secara asynchronous. Setelah menjadi data JavaScript, kita dapat melakukan forEach/map/filter lalu merender hasilnya.</p><div class="flow">
+<span>fetch(url)</span><span class="arrow">→</span><span>Response</span><span class="arrow">→</span><span>.json()</span><span class="arrow">→</span><span>data JS</span><span class="arrow">→</span><span>proses</span><span class="arrow">→</span><span>DOM</span>
+</div></div>
+</section><section class="slide ">
+<div class="badge">RESPONSE</div>
+<h2>Response bukan langsung <span class='blue'>data.</span></h2>
+<p class="lead">Object yang diterima dari fetch adalah Response. Kita perlu memeriksa status sebelum membaca body.</p>
+<div class="card"><p>Selalu cek <code>response.ok</code> sebelum memanggil <code>response.json()</code>. Demo ini sengaja memakai endpoint yang tidak ada.</p></div><div class="playground">
+<div class="editor">
+<div class="tag">HTML</div><textarea class="html" spellcheck="false">&lt;div id="output"&gt;Klik "Run"...&lt;/div&gt;</textarea>
+<div class="tag">CSS</div><textarea class="css" spellcheck="false">body{font-family:Arial;padding:18px}
+#output{padding:14px;background:#f1f5f9;border-radius:10px;font-weight:700}</textarea>
+<div class="tag">JAVASCRIPT</div><textarea class="js" spellcheck="false">async function cekResponse() {
+  const output = document.getElementById('output');
+  // sengaja pakai id yang tidak ada untuk melihat status gagal
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts/9999');
+
+  if (!response.ok) {
+    output.textContent = 'Status: ' + response.status + ' — Data tidak ditemukan';
+    output.style.color = 'red';
+    return;
+  }
+
+  const data = await response.json();
+  output.textContent = JSON.stringify(data);
+}
+
+cekResponse();</textarea>
+<button class="run">▶ Run</button>
+</div>
+<div class="output"><div class="outhead">OUTPUT</div><iframe style="min-height:200px"></iframe></div>
+</div>
+</section><section class="slide ">
+<div class="badge">ERROR</div>
+<h2>Request bisa gagal. Gunakan <span class='blue'>try/catch.</span></h2>
+<p class="lead">Aplikasi harus memikirkan kondisi gagal, bukan hanya kondisi sukses.</p>
+<div class="card"><p>Gunakan <code>response.ok</code> untuk memeriksa status HTTP dan <code>try/catch</code> untuk menangkap error jaringan. Tampilkan feedback yang jelas kepada pengguna.</p></div><div class="playground">
+<div class="editor">
+<div class="tag">HTML</div><textarea class="html" spellcheck="false">&lt;div id="status"&gt;Klik "Run"...&lt;/div&gt;</textarea>
+<div class="tag">CSS</div><textarea class="css" spellcheck="false">body{font-family:Arial;padding:18px}
+#status{padding:14px;background:#f1f5f9;border-radius:10px;font-weight:700}</textarea>
+<div class="tag">JAVASCRIPT</div><textarea class="js" spellcheck="false">async function ambilDataAman() {
+  const status = document.getElementById('status');
+  status.textContent = 'Loading...';
+  status.style.color = '#2563eb';
+  try {
+    // domain sengaja tidak valid, untuk memicu error
+    const response = await fetch('https://domain-tidak-ada-xyz123.example/data');
+    if (!response.ok) throw new Error('Request gagal dengan status ' + response.status);
+    const data = await response.json();
+    status.textContent = JSON.stringify(data);
+  } catch (error) {
+    status.textContent = '❌ Terjadi error: ' + error.message;
+    status.style.color = 'red';
+  }
+}
+
+ambilDataAman();</textarea>
+<button class="run">▶ Run</button>
+</div>
+<div class="output"><div class="outhead">OUTPUT</div><iframe style="min-height:200px"></iframe></div>
+</div>
+</section><section class="slide ">
+<div class="badge">UI STATES</div>
+<h2>API membutuhkan <span class='blue'>state.</span></h2>
+<p class="lead">Minimal kenali tiga keadaan: Loading, Success, dan Error.</p>
+<div class="card"><p>Ini adalah bagian dari UX, bukan sekadar tambahan. Klik tombol pada demo untuk melihat ketiga state secara berurutan.</p></div><div class="playground">
+<div class="editor">
+<div class="tag">HTML</div><textarea class="html" spellcheck="false">&lt;button id="btnLoad"&gt;Ambil Data&lt;/button&gt;
+&lt;div id="state"&gt;Klik tombol untuk mulai&lt;/div&gt;</textarea>
+<div class="tag">CSS</div><textarea class="css" spellcheck="false">body{font-family:Arial;padding:18px}
+#btnLoad{border:0;background:#2563eb;color:#fff;padding:10px 16px;border-radius:8px;font-weight:800;cursor:pointer;margin-bottom:14px}
+#state{padding:14px;background:#f1f5f9;border-radius:10px;font-weight:700}</textarea>
+<div class="tag">JAVASCRIPT</div><textarea class="js" spellcheck="false">document.getElementById('btnLoad').onclick = async () =&gt; {
+  const state = document.getElementById('state');
+  state.textContent = '⏳ Loading...';
+  state.style.color = '#2563eb';
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users/3');
+    if (!response.ok) throw new Error('Gagal mengambil data');
+    const data = await response.json();
+    state.textContent = '✅ Berhasil: ' + data.name;
+    state.style.color = 'green';
+  } catch (error) {
+    state.textContent = '❌ Error: ' + error.message;
+    state.style.color = 'red';
+  }
+};</textarea>
+<button class="run">▶ Run</button>
+</div>
+<div class="output"><div class="outhead">OUTPUT</div><iframe style="min-height:220px"></iframe></div>
+</div>
+</section><section class="slide ">
+<div class="badge">ARRAY</div>
+<h2>API biasanya mengembalikan <span class='blue'>banyak object.</span></h2>
+<p class="lead">Karena response sering berupa array, kita perlu memproses kumpulan data.</p>
+<div class="card"><p>Gunakan <code>forEach()</code> untuk melakukan aksi pada tiap item, <code>map()</code> untuk menghasilkan array baru, dan <code>filter()</code> untuk menyaring data.</p></div><div class="playground">
+<div class="editor">
+<div class="tag">HTML</div><textarea class="html" spellcheck="false">&lt;div id="output"&gt;Klik "Run"...&lt;/div&gt;</textarea>
+<div class="tag">CSS</div><textarea class="css" spellcheck="false">body{font-family:Arial;padding:18px}
+#output{padding:14px;background:#f1f5f9;border-radius:10px;line-height:1.7}</textarea>
+<div class="tag">JAVASCRIPT</div><textarea class="js" spellcheck="false">async function prosesData() {
+  const response = await fetch('https://jsonplaceholder.typicode.com/users');
+  const users = await response.json();
+
+  const namaSaja = users.map(u =&gt; u.name);
+  const namaPanjang = users.filter(u =&gt; u.name.length &gt; 12);
+
+  let html = '&lt;b&gt;map() → semua nama:&lt;/b&gt;&lt;br&gt;' + namaSaja.join(', ');
+  html += '&lt;br&gt;&lt;br&gt;&lt;b&gt;filter() → nama &gt; 12 karakter:&lt;/b&gt;&lt;br&gt;';
+  namaPanjang.forEach(u =&gt; { html += '• ' + u.name + '&lt;br&gt;'; });
+
+  document.getElementById('output').innerHTML = html;
+}
+
+prosesData();</textarea>
+<button class="run">▶ Run</button>
+</div>
+<div class="output"><div class="outhead">OUTPUT</div><iframe style="min-height:260px"></iframe></div>
+</div>
+</section><section class="slide ">
+<div class="badge">RENDER</div>
+<h2>Dari data menjadi <span class='blue'>UI.</span></h2>
+<p class="lead">Data yang sudah diterima belum otomatis tampil di halaman. JavaScript harus menghubungkan data dengan DOM.</p>
+<div class="card"><p>Pola umum: buat elemen dengan <code>createElement</code>, isi kontennya, lalu <code>appendChild</code> ke container.</p></div><div class="playground">
+<div class="editor">
+<div class="tag">HTML</div><textarea class="html" spellcheck="false">&lt;div id="container"&gt;Loading...&lt;/div&gt;</textarea>
+<div class="tag">CSS</div><textarea class="css" spellcheck="false">body{font-family:Arial;padding:18px}
+.post{background:#f1f5f9;border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.post h4{margin:0 0 6px;color:#2563eb}
+.post p{margin:0;font-size:.95rem;color:#475569}</textarea>
+<div class="tag">JAVASCRIPT</div><textarea class="js" spellcheck="false">async function renderPosts() {
+  const container = document.getElementById('container');
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=3');
+  const posts = await response.json();
+
+  container.innerHTML = '';
+  posts.forEach(post =&gt; {
+    const card = document.createElement('article');
+    card.className = 'post';
+    card.innerHTML = '&lt;h4&gt;' + post.title + '&lt;/h4&gt;&lt;p&gt;' + post.body + '&lt;/p&gt;';
+    container.appendChild(card);
+  });
+}
+
+renderPosts();</textarea>
+<button class="run">▶ Run</button>
+</div>
+<div class="output"><div class="outhead">OUTPUT</div><iframe style="min-height:300px"></iframe></div>
+</div>
+</section><section class="slide ">
+<div class="badge">DEVTOOLS</div>
+<h2>Belajar API dengan <span class='blue'>Network &amp; Console.</span></h2>
+<p class="lead">DevTools adalah alat utama untuk memahami apa yang sebenarnya terjadi.</p>
+<div class="card"><p>Tab <b>Network</b>: lihat URL, method, status, response, dan timing. Tab <b>Console</b>: cek data dan error. Alur cek: request benar? status benar? response benar? parsing benar? data benar? DOM benar?</p><div class="devtools">
+<div class="dt-tabs"><span class="dt-tab active">Network</span><span class="dt-tab">Console</span><span class="dt-tab">Elements</span></div>
+<div class="dt-row dt-head"><span>Name</span><span>Status</span><span>Type</span><span>Time</span></div>
+<div class="dt-row"><span>users</span><span class="dt-ok">200</span><span>fetch</span><span>124ms</span></div>
+<div class="dt-row"><span>posts?_limit=3</span><span class="dt-ok">200</span><span>fetch</span><span>98ms</span></div>
+<div class="dt-row"><span>posts/9999</span><span class="dt-err">404</span><span>fetch</span><span>85ms</span></div>
+</div></div>
+</section><section class="slide ">
+<div class="badge">CHALLENGE 01</div>
+<h2>User Directory</h2>
+<p class="lead">Buat halaman yang mengambil daftar user dari API dan menampilkannya sebagai card.</p>
+<div class="card"><p><b>Wajib:</b> fetch, async/await, response.json(), nama + email, loading state, dan try/catch. Hint: tampilkan data di Console terlebih dahulu sebelum mengurus UI.</p></div><div class="playground">
+<div class="editor">
+<div class="tag">HTML</div><textarea class="html" spellcheck="false">&lt;div id="users"&gt;Belum ada data&lt;/div&gt;</textarea>
+<div class="tag">CSS</div><textarea class="css" spellcheck="false">body{font-family:Arial;padding:18px}
+.user-card{background:#f1f5f9;border-radius:10px;padding:10px 12px;margin-bottom:8px}</textarea>
+<div class="tag">JAVASCRIPT</div><textarea class="js" spellcheck="false">// TODO: lengkapi kode berikut
+
+async function ambilUsers() {
+  // 1. fetch data dari https://jsonplaceholder.typicode.com/users
+  // 2. ubah response menjadi JSON dengan response.json()
+  // 3. tampilkan nama &amp; email tiap user ke dalam #users
+  // 4. tambahkan loading state sebelum data datang
+  // 5. bungkus dengan try/catch untuk menangani error
+}
+
+ambilUsers();</textarea>
+<button class="run">▶ Run</button>
+</div>
+<div class="output"><div class="outhead">OUTPUT</div><iframe style="min-height:220px"></iframe></div>
+</div>
+</section><section class="slide ">
+<div class="badge">CHALLENGE 02</div>
+<h2>Dynamic Portfolio</h2>
+<p class="lead">Upgrade portfolio Sprint sebelumnya. Data project tidak lagi ditulis satu per satu di HTML.</p>
+<div class="card"><p>Ambil data project dari JSON/API, tampilkan title, description, technology, dan link. Target utamanya adalah memahami alur API → data → DOM.</p></div><div class="playground">
+<div class="editor">
+<div class="tag">HTML</div><textarea class="html" spellcheck="false">&lt;div id="projects"&gt;Belum ada data&lt;/div&gt;</textarea>
+<div class="tag">CSS</div><textarea class="css" spellcheck="false">body{font-family:Arial;padding:18px}
+.project-card{background:#f1f5f9;border-radius:10px;padding:10px 12px;margin-bottom:8px}</textarea>
+<div class="tag">JAVASCRIPT</div><textarea class="js" spellcheck="false">// Data ini mensimulasikan hasil dari sebuah API
+const projectData = [
+  { title: 'Portfolio v1', description: 'Landing page pertama', tech: 'HTML, CSS' },
+  { title: 'Form Validator', description: 'Validasi form dengan JS', tech: 'JavaScript' }
+];
+
+// TODO:
+// 1. render setiap project ke dalam #projects sebagai card
+// 2. tampilkan title, description, dan tech tiap project
+// 3. (opsional) tambahkan link jika project punya url</textarea>
+<button class="run">▶ Run</button>
+</div>
+<div class="output"><div class="outhead">OUTPUT</div><iframe style="min-height:220px"></iframe></div>
+</div>
+</section><section class="slide ">
+<div class="badge">PATTERN</div>
+<h2>Pattern aplikasi API yang perlu <span class='blue'>dikuasai.</span></h2>
+<p class="lead">Urutan kerja yang perlu dibiasakan: Loading → Request → Check response → Parse JSON → Process data → Render → Success/Error.</p>
+<div class="card"><p>Jangan menghafal satu endpoint. Pahami pattern-nya karena endpoint dan bentuk data dapat berubah.</p><div class="flow">
+<span>Loading</span><span class="arrow">→</span><span>Request</span><span class="arrow">→</span><span>Check response</span><span class="arrow">→</span><span>Parse JSON</span><span class="arrow">→</span><span>Process data</span><span class="arrow">→</span><span>Render</span><span class="arrow">→</span><span>Success/Error</span>
+</div></div>
+</section><section class="slide ">
+<div class="badge">PROJECT</div>
+<h2>Project: <span class='blue'>Dynamic Portfolio</span></h2>
+<p class="lead">Upgrade portfolio menjadi website yang mengambil data secara dinamis.</p>
+<div class="card">
+<p class="check">Vanilla JS (tanpa framework)</p>
+<p class="check">GET request ke API/JSON</p>
+<p class="check">async/await</p>
+<p class="check">Render data ke DOM</p>
+<p class="check">Loading state</p>
+<p class="check">Error handling (try/catch)</p>
+<p class="check">Kode dapat dijelaskan sendiri oleh peserta</p>
+</div>
+</section><section class="slide ">
+<div class="badge">REVIEW</div>
+<h2>Bisa jalan belum tentu <span class='blue'>paham.</span></h2>
+<p class="lead">Mentor check: apa fungsi API? Apa bedanya endpoint dan response? Apa yang dikembalikan fetch()? Mengapa response.json()? Mengapa async/await? Apa yang terjadi saat 404?</p>
+<div class="card"><p>Peserta harus mampu menjelaskan alur request → response → JSON → JavaScript data → DOM dengan kata-kata sendiri.</p></div>
+</section><section class="slide ">
+<div class="badge">NEXT</div>
+<h2>Next: <span class='blue'>Version Control.</span></h2>
+<p class="lead">Project sudah mulai menjadi aplikasi. Sekarang kita perlu workflow development yang lebih profesional.</p>
+<div class="card"><p>Materi berikutnya: Git &amp; GitHub — repository, commit, branch, remote, push/pull, README, dan deployment dengan GitHub Pages.</p></div>
+</section>
+<div class="counter" id="counter">01 / 25</div>
+<button class="nav prev" id="prev">←</button>
+<button class="nav next" id="next">→</button>
+<div class="progress" id="progress"></div>
+</div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];let cur=0;
+function show(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach((s,n)=>s.classList.toggle('active',n===cur));
+  document.getElementById('counter').textContent=String(cur+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+  document.getElementById('progress').style.width=((cur+1)/slides.length*100)+'%';
+}
+document.getElementById('next').onclick=()=>show(cur+1);
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{
+  if(['TEXTAREA','INPUT'].includes(document.activeElement?.tagName))return;
+  if(['ArrowRight',' ','PageDown'].includes(e.key)){e.preventDefault();show(cur+1)}
+  if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(cur-1)}
+});
+document.querySelectorAll('.playground').forEach(box=>{
+  const run=()=>{
+    const h=box.querySelector('.html').value;
+    const c=box.querySelector('.css').value;
+    const j=box.querySelector('.js').value;
+    const doc='<!doctype html><html><head><style>'+c+'</style></head><body>'+h+
+      '<script>'+j.replace(/<\/script>/gi,'<\\/script>')+'<\/script></body></html>';
+    box.querySelector('iframe').srcdoc=doc;
+  };
+  box.querySelector('.run').onclick=run;
+  run();
+});
+show(0);
+
+</script>
+</body></html>
