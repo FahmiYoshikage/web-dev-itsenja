@@ -643,6 +643,23 @@
       gap: 12px;
     }
 
+    .nav-hub-link {
+      color: var(--primary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      transition: background 0.15s;
+    }
+
+    .nav-hub-link:hover {
+      background: #dbeafe;
+    }
+
     .nav-shortcuts {
       color: #94a3b8;
       font-size: 10px;
@@ -1864,8 +1881,9 @@ loadMovies('avengers');</textarea>
   <!-- NAVIGATION BAR -->
   <div class="navigation-bar">
     <div class="nav-info">
-      <span>ITSENJA SPRINT 04 · MODERN JAVASCRIPT & FETCH API</span>
-      <span class="nav-shortcuts">Gunakan tombol panah [←] [→] keyboard untuk navigasi</span>
+      <a href="../index.html" class="nav-hub-link"><i class="fa-solid fa-house"></i> Pusat Belajar</a>
+      <span>SPRINT 04 · MODERN JAVASCRIPT & FETCH API</span>
+      <span class="nav-shortcuts">[←] [→] Navigasi Slide</span>
     </div>
     <div class="nav-buttons">
       <button class="nav-btn" id="prev-btn" title="Slide Sebelumnya (Left Arrow)"><i class="fa-solid fa-chevron-left"></i></button>
