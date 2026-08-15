@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITSENJA — Sprint 01: Fundamental HTML5 & Semantic Web Structure</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* 1. RESET & DESIGN TOKENS */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --primary-border: #bfdbfe;
+      --accent: #0284c7;
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --success-border: #a7f3d0;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --warning-border: #fde68a;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --danger-border: #fecaca;
+      --bg-canvas: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-sub: #64748b;
+      --border: #e2e8f0;
+      --border-dark: #cbd5e1;
+      --code-bg: #0f172a;
+      --code-header: #1e293b;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #presentation-viewport {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background-color: var(--bg-canvas);
+    }
+
+    .slide-deck {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 60px);
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 32px 48px 84px;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow-y: auto;
+      background-color: var(--bg-canvas);
+    }
+
+    .slide.active {
+      display: flex;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* HEADER & BADGES */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-shrink: 0;
+    }
+
+    .badge-tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      background: var(--bg-card);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    /* TYPOGRAPHY */
+    .kicker {
+      color: var(--primary);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      font-size: 34px;
+      line-height: 1.2;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 26px;
+      line-height: 1.25;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+
+    p.lead {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      max-width: 1150px;
+    }
+
+    .blue { color: var(--primary); }
+    .green { color: var(--success); }
+    .orange { color: var(--warning); }
+    .red { color: var(--danger); }
+
+    code {
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      font-weight: 600;
+    }
+
+    /* CARDS & GRIDS */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .callout {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #1e3a8a;
+      margin-top: 14px;
+    }
+
+    .callout strong {
+      color: var(--primary-hover);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      width: 100%;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    /* DIAGRAMS */
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 14px 0;
+      flex-wrap: wrap;
+    }
+
+    .flow-node {
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 12px 16px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 13px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      min-width: 130px;
+    }
+
+    .flow-node small {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-sub);
+      margin-top: 3px;
+    }
+
+    .flow-node.client { border-color: #93c5fd; background: #eff6ff; color: #1e40af; }
+    .flow-node.api { border-color: #cbd5e1; background: #f8fafc; color: #0f172a; }
+    .flow-node.server { border-color: #a7f3d0; background: #ecfdf5; color: #065f46; }
+    .flow-node.data { border-color: #fde68a; background: #fffbeb; color: #92400e; }
+
+    .arrow-connector {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* PLAYGROUND */
+    .playground-container {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 16px;
+      margin-top: 10px;
+      height: 390px;
+      flex-shrink: 0;
+    }
+
+    .editor-section {
+      display: flex;
+      flex-direction: column;
+      background: var(--code-bg);
+      border-radius: 10px;
+      border: 1px solid #1e293b;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .editor-tabs {
+      display: flex;
+      background: var(--code-header);
+      border-bottom: 1px solid #334155;
+    }
+
+    .editor-tab-btn {
+      padding: 8px 16px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .editor-tab-btn:hover {
+      color: #f8fafc;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .editor-tab-btn.active {
+      color: #38bdf8;
+      background: var(--code-bg);
+      border-bottom-color: #38bdf8;
+    }
+
+    .editor-body {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .code-input {
+      display: none;
+      width: 100%;
+      height: 100%;
+      background: var(--code-bg);
+      color: #f8fafc;
+      border: none;
+      padding: 14px 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.55;
+      resize: none;
+      outline: none;
+      white-space: pre;
+    }
+
+    .code-input.active {
+      display: block;
+    }
+
+    .editor-footer {
+      padding: 8px 14px;
+      background: var(--code-header);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #334155;
+    }
+
+    .editor-tip {
+      color: #94a3b8;
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+
+    .btn-run {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 7px 18px;
+      border-radius: 6px;
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+
+    .btn-run:hover {
+      background: var(--primary-hover);
+    }
+
+    .preview-section {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .preview-header {
+      background: #f1f5f9;
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preview-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      display: inline-block;
+    }
+
+    .preview-iframe {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #ffffff;
+    }
+
+    /* CHECKLIST */
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+      border-radius: 8px;
+    }
+
+    .check-item i {
+      color: var(--primary);
+      font-size: 16px;
+      margin-top: 2px;
+    }
+
+    /* NAVIGATION */
+    .navigation-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 32px;
+      z-index: 100;
+    }
+
+    .nav-info {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-hub-link {
+      color: var(--primary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      transition: background 0.15s;
+    }
+
+    .nav-hub-link:hover {
+      background: #dbeafe;
+    }
+
+    .nav-shortcuts {
+      color: #94a3b8;
+      font-size: 10px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-main);
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary-border);
+    }
+
+    .progress-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--primary);
+      transition: width 0.25s ease;
+    }
+  </style>
+</head>
+<body>
+
+<div id="presentation-viewport">
+  <div class="slide-deck">
+
+    <!-- SLIDE 1: TITLE -->
+    <section class="slide active">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-code"></i> ITSENJA · SPRINT 01</div>
+        <div class="slide-counter">01 / 18</div>
+      </div>
+      <div style="margin-top: 10px;">
+        <div class="kicker">Sprint 01 · Web Development Fundamentals</div>
+        <h1>Fundamental HTML5 <span class="blue">& Semantic Web Structure</span></h1>
+        <p class="lead">Fondasi terpenting pengembangan web modern: memahami cara kerja browser, menyusun dokumen HTML5 yang valid, menggunakan tag semantik, mengelola teks, tabel, form, dan membangun halaman web pertamamu.</p>
+
+        <div class="grid-2" style="margin-top: 18px;">
+          <div class="card" style="border-left: 4px solid var(--primary);">
+            <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-bullseye blue"></i> Capaian Pembelajaran</h3>
+            <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.8; padding-left: 18px;">
+              <li>Memahami peran HTML sebagai pondasi struktur konten di web.</li>
+              <li>Menguasai anatomi tag, atribut, heading, paragraf, list, dan tabel.</li>
+              <li>Mampu membuat formulir interaktif dengan berbagai jenis input.</li>
+              <li>Menerapkan Semantic HTML5 untuk standar SEO & Aksesibilitas (a11y).</li>
+            </ul>
+          </div>
+
+          <div class="card" style="border-left: 4px solid var(--accent);">
+            <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-laptop-code" style="color: var(--accent);"></i> Hands-on Coding Playground</h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+              Setiap topik dilengkapi live editor HTML, CSS, dan JavaScript. Kamu dapat mengedit kode secara langsung dan melihat hasil tampilannya secara instan di layar!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: BAGAIMANA WEB BEKERJA? -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-globe"></i> 01. Cara Kerja Web</div>
+        <div class="slide-counter">02 / 18</div>
+      </div>
+      <h2>Bagaimana <span class="blue">Browser Merender Web?</span></h2>
+      <p class="lead">Ketika kamu mengetik alamat URL di browser, serangkaian proses cepat terjadi di balik layar sebelum halaman dapat dibaca oleh pengguna.</p>
+
+      <div class="flow-diagram">
+        <div class="flow-node client"><b>1. Browser User</b><small>Ketik URL & Enter</small></div>
+        <div class="arrow-connector"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="flow-node api"><b>2. DNS Lookup</b><small>Cari IP Address Server</small></div>
+        <div class="arrow-connector"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="flow-node server"><b>3. Web Server</b><small>Kirim File HTML/CSS/JS</small></div>
+        <div class="arrow-connector"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="flow-node data"><b>4. DOM Tree</b><small>Browser Render Halaman</small></div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 16px;">
+        <div class="card">
+          <strong style="color: var(--primary); display:block; margin-bottom: 6px;">HTML (Structure)</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Sebagai kerangka dan tulang punggung konten (teks, gambar, tombol, link).</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--accent); display:block; margin-bottom: 6px;">CSS (Presentation)</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Sebagai pakaian dan riasan visual (warna, ukuran, tata letak, animasi responsif).</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--warning); display:block; margin-bottom: 6px;">JavaScript (Behavior)</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Sebagai otak interaksi dinamis (event klik, validasi, pengambilan data API).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: ANATOMI DOKUMEN HTML5 -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-file-lines"></i> 02. Dokumen HTML5</div>
+        <div class="slide-counter">03 / 18</div>
+      </div>
+      <h2>Anatomi Baku <span class="blue">Dokumen HTML5</span></h2>
+      <p class="lead">Setiap file HTML valid wajib mengikuti struktur dasar standar W3C berikut:</p>
+
+      <div class="grid-2">
+        <div class="card" style="background: var(--code-bg); color: #f8fafc; font-family: var(--font-mono); font-size: 12px; line-height: 1.7;">
+          <span style="color: #94a3b8;">&lt;!DOCTYPE html&gt;</span><br>
+          <span style="color: #38bdf8;">&lt;html <span style="color: #fde68a;">lang="id"</span>&gt;</span><br>
+          &nbsp;&nbsp;<span style="color: #38bdf8;">&lt;head&gt;</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&lt;meta charset="UTF-8"&gt;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Judul Website&lt;/title&gt;<br>
+          &nbsp;&nbsp;<span style="color: #38bdf8;">&lt;/head&gt;</span><br>
+          &nbsp;&nbsp;<span style="color: #38bdf8;">&lt;body&gt;</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;Konten Terlihat di Layar&lt;/h1&gt;<br>
+          &nbsp;&nbsp;<span style="color: #38bdf8;">&lt;/body&gt;</span><br>
+          <span style="color: #38bdf8;">&lt;/html&gt;</span>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 14px; margin-bottom: 8px; color: var(--primary);">Penjelasan Elemen Kunci:</h4>
+          <ul style="font-size: 12px; color: var(--text-muted); line-height: 1.8; padding-left: 18px;">
+            <li><code>&lt;!DOCTYPE html&gt;</code>: Mendeklarasikan standar dokumen HTML5 ke browser.</li>
+            <li><code>&lt;html lang="id"&gt;</code>: Root elemen utama dan bahasa konten.</li>
+            <li><code>&lt;head&gt;</code>: Metadata, link stylesheet font, dan judul tab.</li>
+            <li><code>&lt;meta name="viewport" ...&gt;</code>: Menjamin tampilan skala responsif di smartphone.</li>
+            <li><code>&lt;body&gt;</code>: Seluruh konten visual yang ditampilkan ke user.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: HEADING & FORMATTING -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-heading"></i> 03. Tipografi & Teks</div>
+        <div class="slide-counter">04 / 18</div>
+      </div>
+      <h2>Heading, Paragraf <span class="blue">& Format Teks</span></h2>
+      <p class="lead">Heading (<code>&lt;h1&gt;</code> hingga <code>&lt;h6&gt;</code>) menyusun struktur hierarki informasi penting, sedangkan <code>&lt;p&gt;</code> digunakan untuk blok teks bacaan.</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <strong style="color: var(--primary);">Heading Hierarchy</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">
+            Hanya boleh ada <b>1 tag &lt;h1&gt;</b> per halaman untuk judul utama topik. Sub-topik menggunakan &lt;h2&gt;, dan rincian bagian menggunakan &lt;h3&gt;.
+          </p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--success);">Formatting Tag</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">
+            • <code>&lt;strong&gt;</code>: Teks penting (tebal)<br>
+            • <code>&lt;em&gt;</code>: Penekanan makna (miring)<br>
+            • <code>&lt;code&gt;</code>: Cuplikan baris kode<br>
+            • <code>&lt;mark&gt;</code>: Sorotan kuning teks
+          </p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--warning);">Line Break & Divider</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">
+            • <code>&lt;br&gt;</code>: Ganti baris tunggal (self-closing)<br>
+            • <code>&lt;hr&gt;</code>: Garis horizontal pemisah tema konten
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: PLAYGROUND 1 -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-play"></i> 04. Live Playground</div>
+        <div class="slide-counter">05 / 18</div>
+      </div>
+      <h2>Playground: <span class="blue">Hierarki Teks & Format Dokumen</span></h2>
+      <p class="lead">Uji coba penataan heading dan pemformatan teks di bawah ini secara langsung:</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 'sp1-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 'sp1-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 'sp1-js')"><i class="fa-brands fa-js"></i> JS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="sp1-html" spellcheck="false"><h1>Profil Pengembang Web</h1>
+<p class="lead">Halo! Saya sedang mempelajari <strong>HTML5 Modern</strong> di ITSENJA.</p>
+<hr>
+<h2>Tentang Saya</h2>
+<p>
+  Fokus utama saya adalah membangun aplikasi web yang <em>cepat</em>, 
+  <strong>aksesibel</strong>, dan terstruktur rapi.
+</p>
+<p>Motto: <mark>Learn by building real projects!</mark></p></textarea>
+<textarea class="code-input" id="sp1-css" spellcheck="false">h1 { color: #1e293b; margin-bottom: 4px; font-size: 20px; }
+.lead { color: #2563eb; font-weight: 500; font-size: 14px; }
+hr { border: none; border-top: 1px solid #e2e8f0; margin: 12px 0; }
+h2 { color: #0f172a; font-size: 16px; margin-bottom: 6px; }
+p { color: #475569; font-size: 13px; line-height: 1.6; }
+mark { background: #fef08a; padding: 2px 6px; border-radius: 4px; }</textarea>
+<textarea class="code-input" id="sp1-js" spellcheck="false">// Opsional: JavaScript logic
+console.log("HTML & CSS ter-render dengan sempurna!");</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Ubah tag lalu klik Run Code</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: HYPERLINK & NAVIGASI -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-link"></i> 05. Hyperlink</div>
+        <div class="slide-counter">06 / 18</div>
+      </div>
+      <h2>Hyperlink: <span class="blue">Menghubungkan Halaman Web</span></h2>
+      <p class="lead">Tag anchor <code>&lt;a href="..."&gt;</code> membuat web saling terhubung (World Wide Web).</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <strong style="color: var(--primary);">1. Absolute URL</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Menuju website eksternal di internet.</p>
+          <code style="display:block; margin-top:6px;">&lt;a href="https://github.com" target="_blank"&gt;GitHub&lt;/a&gt;</code>
+        </div>
+        <div class="card">
+          <strong style="color: var(--success);">2. Relative URL</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Menuju file halaman internal project.</p>
+          <code style="display:block; margin-top:6px;">&lt;a href="about.html"&gt;Tentang Kami&lt;/a&gt;</code>
+        </div>
+        <div class="card">
+          <strong style="color: var(--warning);">3. Anchor ID & Email</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Melompat ke bagian tertentu atau kontak.</p>
+          <code style="display:block; margin-top:6px;">&lt;a href="#kontak"&gt;Kontak&lt;/a&gt;<br>&lt;a href="mailto:me@mail.com"&gt;Email&lt;/a&gt;</code>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Best Practice Keamanan:</strong> Saat menggunakan <code>target="_blank"</code> untuk membuka tab baru, selalu tambahkan atribut <code>rel="noopener noreferrer"</code> demi alasan keamanan.
+      </div>
+    </section>
+
+    <!-- SLIDE 7: MEDIA & GAMBAR -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-image"></i> 06. Media Konten</div>
+        <div class="slide-counter">07 / 18</div>
+      </div>
+      <h2>Media Gambar: <span class="blue">Tag &lt;img&gt; & Aksesibilitas</span></h2>
+      <p class="lead">Tag <code>&lt;img&gt;</code> adalah elemen self-closing untuk menampilkan gambar di halaman web.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h4 style="font-size: 14px; margin-bottom: 8px; color: var(--primary);">Atribut Wajib & Esensial:</h4>
+          <ul style="font-size: 12px; color: var(--text-muted); line-height: 1.8; padding-left: 18px;">
+            <li><code>src="..."</code>: Lokasi sumber path gambar (lokal atau URL online).</li>
+            <li><code>alt="..."</code>: Deskripsi teks alternatif gambar (sangat krusial untuk screen-reader tuna netra & saat gambar gagal dimuat).</li>
+            <li><code>width</code> & <code>height</code>: Menentukan dimensi aspek rasio untuk mencegah pergeseran layout (CLS).</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: 14px; margin-bottom: 8px; color: var(--success);">Elemen &lt;figure&gt; & &lt;figcaption&gt;:</h4>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+            Gunakan pembungkus semantik untuk gambar yang memiliki keterangan teks di bawahnya:
+          </p>
+          <div style="background: var(--code-bg); color: #fff; padding: 8px 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; margin-top: 8px;">
+            &lt;figure&gt;<br>
+            &nbsp;&nbsp;&lt;img src="foto.jpg" alt="Foto Profil"&gt;<br>
+            &nbsp;&nbsp;&lt;figcaption&gt;Foto Profil Pengembang&lt;/figcaption&gt;<br>
+            &lt;/figure&gt;
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: PLAYGROUND 2 -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-play"></i> 07. Live Playground</div>
+        <div class="slide-counter">08 / 18</div>
+      </div>
+      <h2>Playground: <span class="blue">Kartu Profil dengan Gambar & Link</span></h2>
+      <p class="lead">Kombinasi tag gambar, heading, teks, dan hyperlink ke media sosial:</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 'sp2-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 'sp2-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 'sp2-js')"><i class="fa-brands fa-js"></i> JS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="sp2-html" spellcheck="false"><div class="profile-card">
+  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Foto Profil Pengembang" class="avatar">
+  <div class="profile-details">
+    <h3>Fahmi Ilham Bagaskara</h3>
+    <p class="title">Mahasiswa Rekayasa Internet · PENS</p>
+    <div class="social-links">
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</div></textarea>
+<textarea class="code-input" id="sp2-css" spellcheck="false">.profile-card {
+  display: flex;
+  gap: 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px;
+  align-items: center;
+}
+.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #2563eb;
+}
+.profile-details h3 { margin: 0 0 4px 0; color: #0f172a; font-size: 15px; }
+.title { margin: 0 0 8px 0; color: #64748b; font-size: 12px; }
+.social-links a {
+  display: inline-block;
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  margin-right: 6px;
+}</textarea>
+<textarea class="code-input" id="sp2-js" spellcheck="false">// Interaksi tambahan
+console.log("Card profile berhasil dimuat!");</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Ubah foto atau tautan lalu klik Run</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: LISTS -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-list-ul"></i> 08. Pengelompokan List</div>
+        <div class="slide-counter">09 / 18</div>
+      </div>
+      <h2>Lists: <span class="blue">Unordered & Ordered List</span></h2>
+      <p class="lead">HTML menyediakan 2 jenis list utama untuk mengorganisir daftar data atau langkah berurutan.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <strong style="color: var(--primary); font-size: 14px;"><i class="fa-solid fa-list"></i> Unordered List (&lt;ul&gt;)</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0;">Daftar tanpa urutan numerik (menggunakan bullet point).</p>
+          <div style="background: var(--code-bg); color: #fff; padding: 8px 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 11px;">
+            &lt;ul&gt;<br>
+            &nbsp;&nbsp;&lt;li&gt;HTML5&lt;/li&gt;<br>
+            &nbsp;&nbsp;&lt;li&gt;CSS3&lt;/li&gt;<br>
+            &nbsp;&nbsp;&lt;li&gt;JavaScript&lt;/li&gt;<br>
+            &lt;/ul&gt;
+          </div>
+        </div>
+
+        <div class="card">
+          <strong style="color: var(--success); font-size: 14px;"><i class="fa-solid fa-list-ol"></i> Ordered List (&lt;ol&gt;)</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0;">Daftar dengan urutan nomor/huruf yang runtut.</p>
+          <div style="background: var(--code-bg); color: #fff; padding: 8px 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 11px;">
+            &lt;ol&gt;<br>
+            &nbsp;&nbsp;&lt;li&gt;Tahap Analisis Desain&lt;/li&gt;<br>
+            &nbsp;&nbsp;&lt;li&gt;Menulis Kerangka HTML&lt;/li&gt;<br>
+            &nbsp;&nbsp;&lt;li&gt;Styling dengan CSS&lt;/li&gt;<br>
+            &lt;/ol&gt;
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: TABEL DATA -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-table"></i> 09. Tabel Data</div>
+        <div class="slide-counter">10 / 18</div>
+      </div>
+      <h2>Struktur <span class="blue">Tabel Data Terstruktur (&lt;table&gt;)</span></h2>
+      <p class="lead">Tabel digunakan untuk menampilkan kumpulan data baris dan kolom yang terukur.</p>
+
+      <div class="grid-4">
+        <div class="card">
+          <strong style="color: var(--primary);">1. &lt;table&gt;</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Elemen wadah pembungkus tabel.</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--primary);">2. &lt;thead&gt; & &lt;tbody&gt;</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Pemisah header tabel dan data body.</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--primary);">3. &lt;tr&gt;</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Table Row (mendefinisikan satu baris horizontal).</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--primary);">4. &lt;th&gt; & &lt;td&gt;</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">&lt;th&gt; = Header Kolom, &lt;td&gt; = Data Sel.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Penting:</strong> Jangan gunakan tag <code>&lt;table&gt;</code> untuk membuat layout website! Gunakan CSS Flexbox/Grid untuk tata letak, dan gunakan tabel khusus untuk data tabular.
+      </div>
+    </section>
+
+    <!-- SLIDE 11: PLAYGROUND 3 -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-play"></i> 10. Live Playground</div>
+        <div class="slide-counter">11 / 18</div>
+      </div>
+      <h2>Playground: <span class="blue">Tabel Skill & Tingkat Kemahiran</span></h2>
+      <p class="lead">Contoh tabel data teknis mahasiswa lengkap dengan badge status:</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 'sp3-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 'sp3-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 'sp3-js')"><i class="fa-brands fa-js"></i> JS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="sp3-html" spellcheck="false"><table class="skill-table">
+  <thead>
+    <tr>
+      <th>Bidang Keahlian</th>
+      <th>Level</th>
+      <th>Pengalaman</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cyber Security</td>
+      <td><span class="badge advanced">Advanced</span></td>
+      <td>3 Tahun</td>
+    </tr>
+    <tr>
+      <td>DevOps & Cloud</td>
+      <td><span class="badge intermediate">Intermediate</span></td>
+      <td>1.5 Tahun</td>
+    </tr>
+    <tr>
+      <td>Web Frontend</td>
+      <td><span class="badge beginner">Beginner</span></td>
+      <td>Sedang Belajar</td>
+    </tr>
+  </tbody>
+</table></textarea>
+<textarea class="code-input" id="sp3-css" spellcheck="false">.skill-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: inherit;
+}
+.skill-table th, .skill-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 12px;
+}
+.skill-table th { background: #f8fafc; color: #475569; font-weight: 700; }
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.badge.advanced { background: #dcfce7; color: #15803d; }
+.badge.intermediate { background: #dbeafe; color: #1d4ed8; }
+.badge.beginner { background: #fef3c7; color: #b45309; }</textarea>
+<textarea class="code-input" id="sp3-js" spellcheck="false">console.log("Tabel data berhasil di-render!");</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Tambahkan baris <tr> baru lalu Run</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 12: FORM & INPUT -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-rectangle-list"></i> 11. Form & Input</div>
+        <div class="slide-counter">12 / 18</div>
+      </div>
+      <h2>Formulir & <span class="blue">Input Interaktif (&lt;form&gt;)</span></h2>
+      <p class="lead">Formulir memungkinkan pengguna mengirimkan data ke sistem melalui beragam jenis elemen kontrol input.</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <strong style="color: var(--primary);">Tipe Input Teks</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            • <code>type="text"</code>: Teks umum<br>
+            • <code>type="email"</code>: Validasi email<br>
+            • <code>type="password"</code>: Karakter sensor
+          </p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--success);">Tipe Pilihan</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            • <code>type="checkbox"</code>: Multi-opsi<br>
+            • <code>type="radio"</code>: Pilihan tunggal<br>
+            • <code>&lt;select&gt;</code>: Dropdown menu
+          </p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--warning);">Area Teks & Tombol</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            • <code>&lt;textarea&gt;</code>: Pesan paragraf<br>
+            • <code>&lt;button type="submit"&gt;</code>: Kirim form
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 13: PLAYGROUND 4 -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-play"></i> 12. Live Playground</div>
+        <div class="slide-counter">13 / 18</div>
+      </div>
+      <h2>Playground: <span class="blue">Formulir Kontak Pengembang</span></h2>
+      <p class="lead">Uji coba interaksi form dengan penanganan submit event:</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 'sp4-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 'sp4-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 'sp4-js')"><i class="fa-brands fa-js"></i> JS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="sp4-html" spellcheck="false"><form id="contact-form">
+  <div class="form-group">
+    <label for="nama">Nama Lengkap:</label>
+    <input type="text" id="nama" placeholder="Masukkan nama..." required>
+  </div>
+  <div class="form-group">
+    <label for="pesan">Pesan Singkat:</label>
+    <textarea id="pesan" rows="3" placeholder="Tuliskan pesanmu..." required></textarea>
+  </div>
+  <button type="submit" class="submit-btn">Kirim Pesan</button>
+</form>
+<div id="form-result"></div></textarea>
+<textarea class="code-input" id="sp4-css" spellcheck="false">.form-group { margin-bottom: 10px; }
+label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #1e293b; }
+input, textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12px;
+}
+.submit-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+#form-result { margin-top: 10px; font-size: 12px; font-weight: 600; color: #059669; }</textarea>
+<textarea class="code-input" id="sp4-js" spellcheck="false">document.getElementById('contact-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const nama = document.getElementById('nama').value;
+  document.getElementById('form-result').textContent = `Terima kasih, ${nama}! Pesan berhasil terkirim.`;
+});</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Isi form lalu klik Kirim Pesan</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 14: SEMANTIC HTML5 -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-sitemap"></i> 13. Semantic HTML5</div>
+        <div class="slide-counter">14 / 18</div>
+      </div>
+      <h2>Semantic HTML5: <span class="blue">Struktur Bermakna</span></h2>
+      <p class="lead">Gantilah penggunaan <code>&lt;div&gt;</code> berlebihan (Div Soup) dengan tag semantik yang memberikan arti jelas bagi mesin pencari dan screen reader.</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <strong style="color: var(--primary);">&lt;header&gt; & &lt;nav&gt;</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Kepala dokumen, logo, dan menu navigasi utama situs.</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--success);">&lt;main&gt; & &lt;section&gt;</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Konten utama unik halaman dan pembagian bab tematik.</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--warning);">&lt;article&gt; & &lt;footer&gt;</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Konten mandiri (posting/card) dan kaki halaman (hak cipta/kontak).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 15: BEST PRACTICES SEO & A11Y -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-universal-access"></i> 14. Best Practices</div>
+        <div class="slide-counter">15 / 18</div>
+      </div>
+      <h2>Best Practices: <span class="blue">SEO & Web Accessibility</span></h2>
+      <p class="lead">Panduan standar industri agar halaman web mudah ditemukan di Google dan nyaman diakses oleh seluruh pengguna:</p>
+
+      <div class="checklist">
+        <div class="check-item"><i class="fa-solid fa-check"></i> <b>Title Tag Unik:</b> Berikan judul &lt;title&gt; yang deskriptif pada setiap halaman.</div>
+        <div class="check-item"><i class="fa-solid fa-check"></i> <b>Wajib Alt Text:</b> Setiap tag &lt;img&gt; wajib memiliki atribut <code>alt</code> yang jelas.</div>
+        <div class="check-item"><i class="fa-solid fa-check"></i> <b>Struktur Heading Runtun:</b> Hindari melompat dari &lt;h1&gt; langsung ke &lt;h4&gt;.</div>
+        <div class="check-item"><i class="fa-solid fa-check"></i> <b>Label pada Form:</b> Setiap input harus dipasangkan dengan tag <code>&lt;label for="..."&gt;</code>.</div>
+      </div>
+    </section>
+
+    <!-- SLIDE 16: CHALLENGE -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-code-commit"></i> 15. Challenge #1</div>
+        <div class="slide-counter">16 / 18</div>
+      </div>
+      <h2>Hands-On Challenge: <span class="blue">Struktur Portofolio Pribadi</span></h2>
+      <p class="lead">Tugas: Lengkapi kerangka portofolio semantik dengan biodata, riwayat pendidikan, dan daftar keahlian!</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 'spc-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 'spc-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 'spc-js')"><i class="fa-brands fa-js"></i> JS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="spc-html" spellcheck="false"><header>
+  <h1>Portofolio Pengembang Web</h1>
+</header>
+<main>
+  <section id="about">
+    <h2>Tentang Saya</h2>
+    <p>Mahasiswa antusias di bidang Web Development & Keamanan Siber.</p>
+  </section>
+  <section id="skills">
+    <h2>Daftar Keahlian</h2>
+    <ul>
+      <li>HTML5 Semantic Structure</li>
+      <li>Responsive Design Concept</li>
+      <li>Git Version Control</li>
+    </ul>
+  </section>
+</main></textarea>
+<textarea class="code-input" id="spc-css" spellcheck="false">header { border-bottom: 2px solid #2563eb; padding-bottom: 8px; margin-bottom: 12px; }
+h1 { color: #2563eb; font-size: 18px; margin: 0; }
+h2 { color: #0f172a; font-size: 14px; margin: 10px 0 4px; }
+p, li { font-size: 12px; color: #475569; }
+ul { padding-left: 18px; }</textarea>
+<textarea class="code-input" id="spc-js" spellcheck="false">console.log("Challenge project siap dijalankan!");</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Lengkapi struktur lalu Run</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 17: CHECKLIST KELULUSAN -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-list-check"></i> 16. Review Sprint</div>
+        <div class="slide-counter">17 / 18</div>
+      </div>
+      <h2>Checklist Kelulusan <span class="blue">Sprint 01 (HTML5)</span></h2>
+      <p class="lead">Pastikan kamu telah menguasai seluruh kompetensi dasar berikut sebelum melangkah ke modul CSS3 & Styling:</p>
+
+      <div class="checklist">
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Memahami anatomi dan deklarasi dokumen standar HTML5.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Mampu menyusun heading hierarchy & paragraf dengan benar.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Menggunakan tag gambar dan hyperlink dengan atribut lengkap.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Membuat list dan tabel data terstruktur secara rapi.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Merancang formulir interaktif dengan berbagai elemen input.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Menerapkan tag Semantic HTML5 untuk optimasi struktur web.</div>
+      </div>
+    </section>
+
+    <!-- SLIDE 18: ROADMAP KE SPRINT 02 -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-forward"></i> 17. Langkah Berikutnya</div>
+        <div class="slide-counter">18 / 18</div>
+      </div>
+      <h2>Langkah Berikutnya: <span class="blue">Sprint 02 (CSS3 & Responsive Design)</span></h2>
+      <p class="lead">Selamat! Kamu telah menguasai pondasi kerangka HTML5. Sekarang saatnya menghias dan menata letak halaman web agar tampak profesional dan memukau.</p>
+
+      <div class="grid-3" style="margin-top: 18px;">
+        <div class="card" style="text-align: center;">
+          <i class="fa-brands fa-css3-alt" style="font-size: 36px; color: #2563eb; margin-bottom: 10px;"></i>
+          <h4 style="margin-bottom: 6px;">1. CSS Fundamentals</h4>
+          <p style="font-size: 12px; color: var(--text-muted);">Mempelajari selektor, warna, box model, dan hierarki styling.</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <i class="fa-solid fa-table-cells-large" style="font-size: 36px; color: #0284c7; margin-bottom: 10px;"></i>
+          <h4 style="margin-bottom: 6px;">2. Modern Layouting</h4>
+          <p style="font-size: 12px; color: var(--text-muted);">Menguasai Flexbox dan CSS Grid untuk perancangan tata letak modern.</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <i class="fa-solid fa-mobile-screen" style="font-size: 36px; color: #059669; margin-bottom: 10px;"></i>
+          <h4 style="margin-bottom: 6px;">3. Responsive Design</h4>
+          <p style="font-size: 12px; color: var(--text-muted);">Membuat tampilan website otomatis menyesuaikan layar smartphone & laptop.</p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top: 18px;">
+        <strong>Pusat Belajar:</strong> Kamu dapat kembali ke halaman utama platform kapan saja untuk memilih sprint pembelajaran lainnya melalui tombol <em>Pusat Belajar</em> di bawah.
+      </div>
+    </section>
+
+  </div> <!-- End Slide Deck -->
+
+  <!-- NAVIGATION BAR -->
+  <div class="navigation-bar">
+    <div class="nav-info">
+      <a href="../index.html" class="nav-hub-link"><i class="fa-solid fa-house"></i> Pusat Belajar</a>
+      <span>SPRINT 01 · FUNDAMENTAL HTML5</span>
+      <span class="nav-shortcuts">[←] [→] Navigasi Slide</span>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prev-btn" title="Slide Sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="nav-btn" id="next-btn" title="Slide Berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    <div class="progress-line" id="progress-bar"></div>
+  </div>
+</div>
+
+<script>
+  // SLIDE PRESENTATION LOGIC
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const progressBar = document.getElementById('progress-bar');
+  let currentIndex = 0;
+
+  function updateSlideDisplay(index) {
+    currentIndex = Math.max(0, Math.min(slides.length - 1, index));
+
+    slides.forEach((slide, idx) => {
+      slide.classList.toggle('active', idx === currentIndex);
+    });
+
+    const progressPercent = ((currentIndex + 1) / slides.length) * 100;
+    progressBar.style.width = progressPercent + '%';
+
+    const activeSlide = slides[currentIndex];
+    const activePlaygroundRunBtn = activeSlide.querySelector('.btn-run');
+    if (activePlaygroundRunBtn) {
+      setTimeout(() => runPlayground(activePlaygroundRunBtn), 80);
+    }
+  }
+
+  nextBtn.addEventListener('click', () => updateSlideDisplay(currentIndex + 1));
+  prevBtn.addEventListener('click', () => updateSlideDisplay(currentIndex - 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (['TEXTAREA', 'INPUT'].includes(document.activeElement?.tagName)) return;
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) {
+      e.preventDefault();
+      updateSlideDisplay(currentIndex + 1);
+    }
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) {
+      e.preventDefault();
+      updateSlideDisplay(currentIndex - 1);
+    }
+  });
+
+  // PLAYGROUND LOGIC
+  function switchTab(btnElement, targetId) {
+    const editorSection = btnElement.closest('.editor-section');
+    const tabs = editorSection.querySelectorAll('.editor-tab-btn');
+    const inputs = editorSection.querySelectorAll('.code-input');
+
+    tabs.forEach(t => t.classList.remove('active'));
+    inputs.forEach(i => i.classList.remove('active'));
+
+    btnElement.classList.add('active');
+    const activeInput = editorSection.querySelector(`#${targetId}`);
+    if (activeInput) activeInput.classList.add('active');
+  }
+
+  function runPlayground(buttonElement) {
+    const playground = buttonElement.closest('.playground-container');
+    const iframe = playground.querySelector('.preview-iframe');
+
+    const jsInput = playground.querySelector('textarea[id$="-js"]');
+    const htmlInput = playground.querySelector('textarea[id$="-html"]');
+    const cssInput = playground.querySelector('textarea[id$="-css"]');
+
+    const jsCode = jsInput ? jsInput.value : '';
+    const htmlCode = htmlInput ? htmlInput.value : '';
+    const cssCode = cssInput ? cssInput.value : '';
+
+    const documentContent = `
+      <!DOCTYPE html>
+      <html lang="id">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+        <style>
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          body {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            padding: 14px;
+            color: #0f172a;
+            background-color: #ffffff;
+            font-size: 13px;
+            line-height: 1.5;
+          }
+          code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.9em; }
+          ${cssCode}
+        </style>
+      </head>
+      <body>
+        ${htmlCode}
+        <script>
+          try {
+            ${jsCode.replace(/<\/script>/gi, '<\\/script>')}
+          } catch(err) {
+            const errDiv = document.createElement('div');
+            errDiv.style.cssText = 'color: #dc2626; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 8px 12px; margin-top: 10px; font-family: monospace; font-size: 11px; font-weight: 600;';
+            errDiv.textContent = 'Runtime Error: ' + err.message;
+            document.body.appendChild(errDiv);
+          }
+        <\/script>
+      </body>
+      </html>
+    `;
+
+    iframe.srcdoc = documentContent;
+  }
+
+  // Initialize
+  updateSlideDisplay(0);
+</script>
+
+</body>
+</html>
