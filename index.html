@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pusat Belajar Web Development — ITSENJA</title>
+  <meta name="description" content="Pusat materi, slide presentasi interaktif, dan hands-on project Web Development Bootcamp ITSENJA. Dari dasar HTML5, CSS3, JavaScript DOM, hingga Async & Fetch API.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* 1. RESET & DESIGN TOKENS */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --primary-border: #bfdbfe;
+      --accent: #0284c7;
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;
+      --bg-canvas: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-sub: #64748b;
+      --border: #e2e8f0;
+      --border-dark: #cbd5e1;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 2. HEADER NAVBAR */
+    .site-header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .brand-text h1 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .brand-text span {
+      font-size: 11px;
+      color: var(--text-sub);
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .docker-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid var(--primary-border);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .docker-status-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 6px var(--success);
+    }
+
+    .github-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 18px;
+      transition: color 0.15s;
+    }
+
+    .github-link:hover {
+      color: var(--text-main);
+    }
+
+    /* 3. HERO SECTION */
+    .hero-section {
+      background: linear-gradient(180deg, #ffffff 0%, var(--bg-canvas) 100%);
+      padding: 48px 24px 32px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .hero-tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 14px;
+    }
+
+    .hero-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .search-wrapper {
+      max-width: 520px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 18px 12px 42px;
+      border: 1px solid var(--border-dark);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-sub);
+      font-size: 14px;
+    }
+
+    /* 4. MAIN CONTENT & GRID */
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .sprint-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 22px;
+      margin-bottom: 48px;
+    }
+
+    .sprint-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+
+    .sprint-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+      border-color: var(--primary-border);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .sprint-badge {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .sprint-badge.done { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+    .sprint-badge.active { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+    .sprint-badge.roadmap { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
+
+    .card-icon {
+      font-size: 22px;
+    }
+
+    .sprint-card h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .sprint-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 16px;
+      flex: 1;
+    }
+
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .tech-tag {
+      background: #f8fafc;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-slide {
+      flex: 1;
+      background: var(--primary);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+
+    .btn-slide:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-practice {
+      background: #f1f5f9;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+
+    .btn-practice:hover {
+      background: #e2e8f0;
+    }
+
+    /* 5. EVALUATION BANNER */
+    .evaluation-section {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 40px;
+    }
+
+    .eval-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 16px;
+    }
+
+    .eval-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .eval-card h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .eval-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      flex: 1;
+    }
+
+    .eval-link-btn {
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: white;
+    }
+
+    .eval-link-btn.blue { background: var(--primary); }
+    .eval-link-btn.blue:hover { background: var(--primary-hover); }
+    .eval-link-btn.green { background: var(--success); }
+    .eval-link-btn.green:hover { background: #047857; }
+
+    /* 6. FOOTER */
+    .site-footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero-title { font-size: 28px; }
+      .sprint-grid { grid-template-columns: 1fr; }
+      .eval-grid { grid-template-columns: 1fr; }
+      .header-container { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER NAVBAR -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon"><i class="fa-solid fa-code"></i></div>
+        <div class="brand-text">
+          <h1>ITSENJA WEB DEV</h1>
+          <span>CENTRAL LEARNING HUB</span>
+        </div>
+      </a>
+
+      <div class="header-nav">
+        <span class="docker-status-badge"><i class="fa-brands fa-docker"></i> Docker Ready</span>
+        <a href="https://github.com/FahmiYoshikage/web-dev-itsenja" target="_blank" class="github-link" title="GitHub Repository"><i class="fa-brands fa-github"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <span class="hero-tag"><i class="fa-solid fa-graduation-cap"></i> Modul Pembelajaran Terbuka</span>
+      <h2 class="hero-title">Pusat Belajar Web Development</h2>
+      <p class="hero-desc">
+        Kumpulan slide presentasi interaktif berbasis HTML, editor kode live, dan studi kasus proyek portofolio yang dapat diakses secara publik dan terus berkembang di setiap sprint.
+      </p>
+
+      <div class="search-wrapper">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="Cari materi atau topik (contoh: flexbox, fetch, html, dom)...">
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN SPRINT CARDS -->
+  <main class="main-container">
+
+    <div class="section-header">
+      <div>
+        <h3 class="section-title">Kurikulum & Modul Sprint</h3>
+        <p class="section-subtitle">Pilih slide materi untuk memulai sesi pembelajaran interaktif</p>
+      </div>
+      <div id="sprintCount" style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--text-sub);">
+        4 Sprint Tersedia
+      </div>
+    </div>
+
+    <div class="sprint-grid" id="sprintGrid">
+
+      <!-- SPRINT 01 -->
+      <article class="sprint-card" data-keywords="html html5 semantic form table link image struktur">
+        <div class="card-top">
+          <span class="sprint-badge done">Sprint 01 · Selesai</span>
+          <i class="fa-brands fa-html5 card-icon" style="color: #e34f26;"></i>
+        </div>
+        <h3>Fundamental HTML5 & Semantic Web</h3>
+        <p>
+          Memahami cara kerja browser, deklarasi dokumen HTML5, heading hierarchy, format teks, gambar, list, tabel data, dan perancangan form input interaktif.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">HTML5</span>
+          <span class="tech-tag">Semantic Structure</span>
+          <span class="tech-tag">Forms & Tables</span>
+          <span class="tech-tag">SEO Basics</span>
+        </div>
+        <div class="card-actions">
+          <a href="Sprint-01/slide.html" class="btn-slide"><i class="fa-solid fa-play"></i> Buka Slide HTML</a>
+          <a href="Sprint-01/index.html" class="btn-practice" title="Lihat hasil latihan praktikum"><i class="fa-solid fa-file-code"></i> Portofolio</a>
+        </div>
+      </article>
+
+      <!-- SPRINT 02 -->
+      <article class="sprint-card" data-keywords="css css3 style flexbox grid layout responsive media query typography">
+        <div class="card-top">
+          <span class="sprint-badge done">Sprint 02 · Selesai</span>
+          <i class="fa-brands fa-css3-alt card-icon" style="color: #2563eb;"></i>
+        </div>
+        <h3>CSS3 & Modern Responsive Design</h3>
+        <p>
+          The Box Model, Google Fonts, selektor, layout modern 1D/2D dengan Flexbox & CSS Grid, serta perancangan antarmuka responsif di semua resolusi layar via Media Queries.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">CSS3</span>
+          <span class="tech-tag">Box Model</span>
+          <span class="tech-tag">Flexbox</span>
+          <span class="tech-tag">CSS Grid</span>
+          <span class="tech-tag">Media Queries</span>
+        </div>
+        <div class="card-actions">
+          <a href="Sprint-02/slide.html" class="btn-slide"><i class="fa-solid fa-play"></i> Buka Slide HTML</a>
+          <a href="Sprint-02/index.html" class="btn-practice" title="Lihat hasil latihan praktikum"><i class="fa-solid fa-file-code"></i> Portofolio</a>
+        </div>
+      </article>
+
+      <!-- SPRINT 03 -->
+      <article class="sprint-card" data-keywords="javascript js dom event listener function variabel interaktif">
+        <div class="card-top">
+          <span class="sprint-badge done">Sprint 03 · Selesai</span>
+          <i class="fa-brands fa-js card-icon" style="color: #f7df1e;"></i>
+        </div>
+        <h3>JavaScript DOM & Web Interactivity</h3>
+        <p>
+          Menghidupkan halaman web dengan logika pemrograman: variabel, fungsi, event handling klik/input, manipulasi elemen DOM (`querySelector`), dan runtime interaktif.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">JavaScript</span>
+          <span class="tech-tag">DOM Manipulation</span>
+          <span class="tech-tag">Event Listeners</span>
+          <span class="tech-tag">Dynamic UI</span>
+        </div>
+        <div class="card-actions">
+          <a href="Sprint-03/index.html" class="btn-slide"><i class="fa-solid fa-play"></i> Buka Slide HTML</a>
+        </div>
+      </article>
+
+      <!-- SPRINT 04 -->
+      <article class="sprint-card" data-keywords="async await fetch api rest json error handling promise tvmaze">
+        <div class="card-top">
+          <span class="sprint-badge active">Sprint 04 · Aktif</span>
+          <i class="fa-solid fa-cloud-arrow-down card-icon" style="color: #0284c7;"></i>
+        </div>
+        <h3>Modern JS, Asynchronous & Fetch API</h3>
+        <p>
+          Komunikasi REST API, pemrosesan format data JSON, siklus hidup Promise, async/await, error handling try-catch, dan integrasi live API pencarian TV Shows & Movie.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">Async / Await</span>
+          <span class="tech-tag">Fetch API</span>
+          <span class="tech-tag">JSON Parsing</span>
+          <span class="tech-tag">Error Handling</span>
+        </div>
+        <div class="card-actions">
+          <a href="Sprint-04/index.html" class="btn-slide"><i class="fa-solid fa-play"></i> Buka Slide HTML</a>
+        </div>
+      </article>
+
+      <!-- ROADMAP SPRINT 05 (UPCOMING) -->
+      <article class="sprint-card" data-keywords="git github version control deployment pipeline collaboration">
+        <div class="card-top">
+          <span class="sprint-badge roadmap">Sprint 05 · Segera</span>
+          <i class="fa-brands fa-git-alt card-icon" style="color: #f05032;"></i>
+        </div>
+        <h3>Git, GitHub & Deployment Workflow</h3>
+        <p>
+          Version control manajemen kode dengan Git, kolaborasi di GitHub (Branching & PR), serta deployment website dinamis ke internet via GitHub Pages / Vercel.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">Git</span>
+          <span class="tech-tag">GitHub</span>
+          <span class="tech-tag">Collaboration</span>
+          <span class="tech-tag">Deployment</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn-slide" style="background: #94a3b8; cursor: not-allowed;"><i class="fa-solid fa-lock"></i> Segera Hadir</button>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- EVALUASI & FEEDBACK BOX -->
+    <section class="evaluation-section">
+      <h3 style="font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">
+        <i class="fa-solid fa-clipboard-check blue"></i> Evaluasi Pembelajaran & Feedback Mentor
+      </h3>
+      <p style="font-size: 13px; color: var(--text-muted);">
+        Akses instrumen evaluasi materi dan penilaian cara mengajar mentor berikut:
+      </p>
+
+      <div class="eval-grid">
+        <div class="eval-card">
+          <h4><i class="fa-solid fa-file-pen" style="color: var(--primary);"></i> Kuis Evaluasi Materi (MCQ)</h4>
+          <p>Uji pemahamanmu seputar materi Asynchronous JS, Fetch API, dan konsep fundamental web.</p>
+          <a href="https://s.id/MKb5O" target="_blank" class="eval-link-btn blue"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Kuis MCQ (s.id/MKb5O)</a>
+        </div>
+
+        <div class="eval-card">
+          <h4><i class="fa-solid fa-comment-dots" style="color: var(--success);"></i> Survei Cara Mengajar Mentor</h4>
+          <p>Berikan ulasan dan saran konstruktif agar metode penyampaian sesi berikutnya semakin maksimal.</p>
+          <a href="https://s.id/dqeBo" target="_blank" class="eval-link-btn green"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Survei Mentor (s.id/dqeBo)</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div>© 2026 <strong>ITSENJA Web Development Bootcamp</strong> · Fahmi Ilham Bagaskara</div>
+      <div style="font-family: var(--font-mono); font-size: 11px;">Containerized with Docker & Nginx</div>
+    </div>
+  </footer>
+
+  <script>
+    // Live Search Filter Logic
+    const searchInput = document.getElementById('searchInput');
+    const cards = Array.from(document.querySelectorAll('.sprint-card'));
+    const sprintCount = document.getElementById('sprintCount');
+
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const text = (card.innerText + ' ' + (card.dataset.keywords || '')).toLowerCase();
+        if (text.includes(query)) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      sprintCount.textContent = `${visibleCount} Sprint Ditemukan`;
+    });
+  </script>
+</body>
+</html>

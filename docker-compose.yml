@@ -1,0 +1,15 @@
+services:
+  learning-hub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: itsenja_web_dev_hub
+    ports:
+      - "${PORT:-8080}:80"
+    volumes:
+      # Live hot reload: changes to HTML/CSS files are immediately reflected
+      - ./:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
