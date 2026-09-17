@@ -1,0 +1,23 @@
+{
+  "name": "web-dev-itsenja",
+  "version": "1.0.0",
+  "description": "Platform modul pembelajaran web development komprehensif ITSENJA",
+  "scripts": {
+    "test": "./scripts/run-all-tests.sh",
+    "test:unit": "pytest tests/test_unit_safetynet.py -v",
+    "test:e2e": "pytest tests/test_e2e_safetynet.py -v",
+    "test:links": "python3 scripts/check-links.py",
+    "test:seo": "python3 scripts/check-indexing.py"
+  },
+  "keywords": [
+    "itsenja",
+    "web-development",
+    "html5",
+    "css3",
+    "javascript",
+    "git",
+    "github"
+  ],
+  "author": "Fahmi Ilham Bagaskara",
+  "license": "MIT"
+}

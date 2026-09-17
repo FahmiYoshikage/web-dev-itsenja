@@ -21,3 +21,8 @@ Thumbs.db
 # Editor Settings
 .vscode/
 .idea/
+
+# Python & Test Artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/

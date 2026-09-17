@@ -1,740 +1,2043 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ITSENJA — Modern JavaScript + Async + Fetch API</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f8fafc;
-    --card-bg: #ffffff;
-    --border: #e2e8f0;
-    --text: #0f172a;
-    --text-muted: #64748b;
-    --primary: #2563eb;
-    --primary-light: #eff6ff;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --code-bg: #0f172a;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-    overflow: hidden;
-  }
-  #deck { width: 100vw; height: 100vh; position: relative; }
-  .slide {
-    display: none;
-    position: absolute;
-    inset: 0;
-    padding: 7vh 8vw 10vh;
-    overflow-y: auto;
-    justify-content: center;
-    flex-direction: column;
-  }
-  .slide.active { display: flex; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITSENJA — Modern JavaScript, Asynchronous & Fetch API</title>
+  <meta name="description" content="Slide presentasi interaktif Sprint 04: Modern JavaScript, REST API, JSON, Promise, Async/Await, dan Fetch API.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://itsenja.com/Sprint-04/">
 
-  /* Header Badges & Counters */
-  .badge {
-    position: absolute;
-    top: 3.5vh;
-    left: 8vw;
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    padding: 8px 16px;
-    color: var(--primary);
-    font: 700 12px 'JetBrains Mono', monospace;
-    letter-spacing: .05em;
-  }
-  .counter {
-    position: absolute;
-    top: 3.8vh;
-    right: 8vw;
-    color: var(--text-muted);
-    font: 700 13px 'JetBrains Mono', monospace;
-  }
-  .kicker {
-    color: var(--primary);
-    font: 800 13px 'JetBrains Mono', monospace;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  h1 {
-    font-size: clamp(2.4rem, 5vw, 4.5rem);
-    line-height: 1.05;
-    letter-spacing: -.03em;
-    margin: 0 0 16px;
-    font-weight: 800;
-  }
-  h2 {
-    font-size: clamp(1.8rem, 3.8vw, 3rem);
-    line-height: 1.1;
-    letter-spacing: -.02em;
-    margin: 0 0 14px;
-    font-weight: 700;
-  }
-  p, li { font-size: clamp(0.95rem, 1.3vw, 1.15rem); line-height: 1.6; }
-  .lead { max-width: 960px; color: var(--text-muted); font-size: clamp(1.05rem, 1.5vw, 1.3rem); margin-bottom: 16px; }
-  .blue { color: var(--primary); }
-
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 22px 26px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, .04);
-    margin-top: 14px;
-  }
-  .callout {
-    background: var(--primary-light);
-    border-left: 4px solid var(--primary);
-    border-radius: 0 12px 12px 0;
-    padding: 16px 20px;
-    margin-top: 16px;
-    font-size: clamp(0.95rem, 1.25vw, 1.1rem);
-  }
-
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
-  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-
-  /* Diagram Visual Elements */
-  .visual-box {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.03);
-  }
-  .visual-icon { font-size: 2.5rem; margin-bottom: 8px; }
-  .visual-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
-  .visual-desc { font-size: 0.85rem; color: var(--text-muted); }
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/favicon.svg">
   
-  .flow-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin: 18px 0;
-    background: white;
-    padding: 20px;
-    border-radius: 16px;
-    border: 1px solid var(--border);
-  }
-  .flow-item {
-    flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    padding: 14px 10px;
-    border-radius: 12px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 0.95rem;
-  }
-  .flow-arrow {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--primary);
-  }
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  /* Interactive Code Playground */
-  .playground {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    min-height: 380px;
-    margin-top: 14px;
-  }
-  .editor-wrap {
-    display: flex;
-    flex-direction: column;
-    background: var(--code-bg);
-    border-radius: 14px;
-    overflow: hidden;
-    border: 1px solid #1e293b;
-  }
-  .editor-header {
-    background: #1e293b;
-    padding: 8px 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #94a3b8;
-    font: 700 11px 'JetBrains Mono', monospace;
-  }
-  textarea.code-area {
-    width: 100%;
-    flex: 1;
-    min-height: 250px;
-    resize: none;
-    background: var(--code-bg);
-    color: #f1f5f9;
-    border: 0;
-    padding: 14px;
-    font: 13px/1.55 'JetBrains Mono', monospace;
-    outline: none;
-  }
-  .run-btn {
-    align-self: flex-start;
-    margin: 10px 14px;
-    border: 0;
-    background: var(--primary);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font: 700 12px 'Plus Jakarta Sans', sans-serif;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.2s ease;
-  }
-  .run-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+  <style>
+    /* 1. RESET & DESIGN TOKENS */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  .sandbox-output {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-  }
-  .output-header {
-    padding: 9px 14px;
-    background: #f1f5f9;
-    border-bottom: 1px solid var(--border);
-    font: 700 11px 'JetBrains Mono', monospace;
-    color: var(--text-muted);
-  }
-  .output-frame {
-    flex: 1;
-    width: 100%;
-    min-height: 290px;
-    border: 0;
-    background: #fff;
-  }
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --primary-border: #bfdbfe;
+      --accent: #0284c7;
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --success-border: #a7f3d0;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --warning-border: #fde68a;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --danger-border: #fecaca;
+      --bg-canvas: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-sub: #64748b;
+      --border: #e2e8f0;
+      --border-dark: #cbd5e1;
+      --code-bg: #0f172a;
+      --code-header: #1e293b;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
 
-  /* Status Chips */
-  .status-tag {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font: 700 11px 'JetBrains Mono', monospace;
-  }
-  .st-200 { background: #dcfce7; color: #166534; }
-  .st-404 { background: #fef3c7; color: #92400e; }
-  .st-500 { background: #fee2e2; color: #991b1b; }
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
 
-  /* Navigation Footer */
-  .footer { position: absolute; bottom: 3vh; left: 8vw; color: var(--text-muted); font: 700 11px 'JetBrains Mono', monospace; }
-  .nav {
-    position: absolute;
-    bottom: 2.8vh;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    background: #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,.06);
-    font-weight: 900;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-  }
-  .nav:hover { background: #f1f5f9; }
-  .prev { right: calc(8vw + 52px); }
-  .next { right: 8vw; }
-  .progress { position: absolute; bottom: 0; left: 0; height: 4px; background: var(--primary); transition: width 0.3s ease; }
+    /* 2. FULL VIEWPORT PRESENTATION WRAPPER */
+    #presentation-viewport {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background-color: var(--bg-canvas);
+    }
 
-  @media(max-width: 900px){
-    .grid2, .grid3, .playground { grid-template-columns: 1fr; }
-    .slide { padding: 9vh 6vw 12vh; }
-    .badge, .footer { left: 6vw; }
-    .counter { right: 6vw; }
-    .prev { right: calc(6vw + 52px); }
-    .next { right: 6vw; }
-  }
-</style>
+    .slide-deck {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 60px);
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 32px 48px 84px;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow-y: auto;
+      background-color: var(--bg-canvas);
+    }
+
+    .slide.active {
+      display: flex;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 3. HEADER BAR & BADGES */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-shrink: 0;
+    }
+
+    .badge-tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      background: var(--bg-card);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    /* 4. TYPOGRAPHY */
+    .kicker {
+      color: var(--primary);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      font-size: 34px;
+      line-height: 1.2;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 26px;
+      line-height: 1.25;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+
+    p.lead {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      max-width: 1150px;
+    }
+
+    .blue { color: var(--primary); }
+    .green { color: var(--success); }
+    .orange { color: var(--warning); }
+    .red { color: var(--danger); }
+
+    code {
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      font-weight: 600;
+    }
+
+    /* 5. CARDS & GRIDS */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .callout {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #1e3a8a;
+      margin-top: 14px;
+    }
+
+    .callout strong {
+      color: var(--primary-hover);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      width: 100%;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    /* Visual Diagrams */
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 14px 0;
+      flex-wrap: wrap;
+    }
+
+    .flow-node {
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 12px 16px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 13px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      min-width: 130px;
+    }
+
+    .flow-node small {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-sub);
+      margin-top: 3px;
+    }
+
+    .flow-node.client { border-color: #93c5fd; background: #eff6ff; color: #1e40af; }
+    .flow-node.api { border-color: #cbd5e1; background: #f8fafc; color: #0f172a; }
+    .flow-node.server { border-color: #a7f3d0; background: #ecfdf5; color: #065f46; }
+    .flow-node.data { border-color: #fde68a; background: #fffbeb; color: #92400e; }
+
+    .arrow-connector {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* 6. PLAYGROUND WITH JS, HTML, AND CSS TABS */
+    .playground-container {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 16px;
+      margin-top: 10px;
+      height: 390px;
+      flex-shrink: 0;
+    }
+
+    .editor-section {
+      display: flex;
+      flex-direction: column;
+      background: var(--code-bg);
+      border-radius: 10px;
+      border: 1px solid #1e293b;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .editor-tabs {
+      display: flex;
+      background: var(--code-header);
+      border-bottom: 1px solid #334155;
+    }
+
+    .editor-tab-btn {
+      padding: 8px 16px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .editor-tab-btn:hover {
+      color: #f8fafc;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .editor-tab-btn.active {
+      color: #38bdf8;
+      background: var(--code-bg);
+      border-bottom-color: #38bdf8;
+    }
+
+    .editor-body {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .code-input {
+      display: none;
+      width: 100%;
+      height: 100%;
+      background: var(--code-bg);
+      color: #f8fafc;
+      border: none;
+      padding: 14px 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.55;
+      resize: none;
+      outline: none;
+      white-space: pre;
+    }
+
+    .code-input.active {
+      display: block;
+    }
+
+    .editor-footer {
+      padding: 8px 14px;
+      background: var(--code-header);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #334155;
+    }
+
+    .editor-tip {
+      color: #94a3b8;
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+
+    .btn-run {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 7px 18px;
+      border-radius: 6px;
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+
+    .btn-run:hover {
+      background: var(--primary-hover);
+    }
+
+    .preview-section {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .preview-header {
+      background: #f1f5f9;
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preview-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      display: inline-block;
+    }
+
+    .preview-iframe {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #ffffff;
+    }
+
+    /* 7. DEVTOOLS MOCK */
+    .devtools-mock {
+      background: #0f172a;
+      border-radius: 8px;
+      overflow: hidden;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #cbd5e1;
+      margin-top: 12px;
+      border: 1px solid #334155;
+    }
+
+    .dt-header {
+      display: flex;
+      gap: 2px;
+      background: #1e293b;
+      padding: 6px 10px 0;
+    }
+
+    .dt-tab {
+      padding: 6px 14px;
+      border-radius: 6px 6px 0 0;
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    .dt-tab.active {
+      background: #0f172a;
+      color: #38bdf8;
+    }
+
+    .dt-body {
+      padding: 10px;
+    }
+
+    .dt-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      padding: 8px 10px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .dt-row.head {
+      color: #64748b;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+
+    /* 8. CHECKLIST & LINK CARDS */
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 12px 14px;
+      border-radius: 8px;
+    }
+
+    .check-item i {
+      color: var(--primary);
+      font-size: 16px;
+      margin-top: 2px;
+    }
+
+    .link-showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .link-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .link-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .link-card.primary { border-top: 4px solid var(--primary); }
+    .link-card.success { border-top: 4px solid var(--success); }
+
+    .link-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .link-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .link-card.primary .link-icon-wrap { background: var(--primary-light); color: var(--primary); }
+    .link-card.success .link-icon-wrap { background: var(--success-light); color: var(--success); }
+
+    .link-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .link-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 18px;
+      flex: 1;
+    }
+
+    .link-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-action-link {
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+
+    .btn-action-link.primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .btn-action-link.primary:hover { background: var(--primary-hover); }
+
+    .btn-action-link.success {
+      background: var(--success);
+      color: #ffffff;
+    }
+    .btn-action-link.success:hover { background: #047857; }
+
+    .btn-copy {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-copy:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    /* 9. NAVIGATION BAR (BOTTOM) */
+    .navigation-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 32px;
+      z-index: 100;
+    }
+
+    .nav-info {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-hub-link {
+      color: var(--primary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      transition: background 0.15s;
+    }
+
+    .nav-hub-link:hover {
+      background: #dbeafe;
+    }
+
+    .nav-shortcuts {
+      color: #94a3b8;
+      font-size: 10px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-main);
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary-border);
+    }
+
+    .progress-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--primary);
+      transition: width 0.25s ease;
+    }
+  </style>
 </head>
 <body>
 
-<div id="deck">
+<div id="presentation-viewport">
+  <div class="slide-deck">
 
-  <!-- SLIDE 1: INTRO -->
-  <section class="slide active">
-    <div class="badge">ITSENJA · WEB TECHNOLOGIES</div>
-    <div class="kicker">Modern JavaScript · Async · Fetch API</div>
-    <h1>Modern JavaScript<br><span class="blue">+ Async + Fetch API</span></h1>
-    <p class="lead">Dari website statis menuju aplikasi web cerdas yang bisa mengambil, memproses, dan menampilkan data nyata dari internet secara real-time.</p>
-    <div class="callout">
-      <b>🎯 Target Sesi Hari Ini:</b> Memahami konsep API secara visual, format JSON, cara kerja asynchronous/Promise, Fetch API + async/await, error handling, serta merender data dinamis ke layar.
-    </div>
-    <div class="footer">SPRINT · MODERN JAVASCRIPT + ASYNC + FETCH API</div>
-  </section>
+    <!-- SLIDE 1: TITLE / COVER -->
+    <section class="slide active">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-code"></i> ITSENJA · WEB TECHNOLOGIES</div>
+        <div class="slide-counter">01 / 18</div>
+      </div>
+      <div style="margin-top: 10px;">
+        <div class="kicker">Sprint 04 · Modern JavaScript</div>
+        <h1>Asynchronous JavaScript <span class="blue">& Fetch API</span></h1>
+        <p class="lead">Panduan visual, code-first, dan interaktif untuk memahami pengambilan data dari REST API luar, mengolah format JSON, menangani proses asynchronous, dan merender hasilnya secara dinamis ke halaman web.</p>
 
-  <!-- SLIDE 2: RECAP & PROBLEM -->
-  <section class="slide">
-    <div class="badge">KONSEP UTAMA</div>
-    <h2>Kenapa kita butuh <span class="blue">Data Eksternal?</span></h2>
-    <p class="lead">Selama ini kita menulis data langsung di HTML (*hardcoded*). Tapi bayangkan kalau kamu membuat Tokopedia atau Instagram:</p>
-    <div class="grid2">
-      <div class="card">
-        <h3 style="margin-top:0;">❌ Cara Lama (Hardcoded di HTML)</h3>
-        <p>Setiap ada produk baru atau postingan baru, kamu harus buka file <code>index.html</code> dan ngetik tag <code>&lt;div&gt;</code> satu per satu. Capek dan mustahil untuk ribuan item!</p>
-      </div>
-      <div class="card" style="border-color: var(--primary);">
-        <h3 style="margin-top:0; color:var(--primary);">✨ Cara Modern (Dinamis dengan API)</h3>
-        <p>HTML cuma menyiapkan wadah/kerangka kosong. JavaScript yang bertugas "mengambil data dari server" lalu menampilkannya secara otomatis!</p>
-      </div>
-    </div>
-  </section>
+        <div class="grid-2" style="margin-top: 18px;">
+          <div class="card" style="border-left: 4px solid var(--primary);">
+            <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-bullseye blue"></i> Target Belajar Pemula</h3>
+            <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.8; padding-left: 18px;">
+              <li>Memahami peran API & arsitektur Client-Server.</li>
+              <li>Menguasai format data JSON & parsing data string ke object.</li>
+              <li>Memahami mekanisme Promise, async/await, dan Try/Catch.</li>
+              <li>Praktik langsung integrasi live REST API menggunakan Fetch API.</li>
+            </ul>
+          </div>
 
-  <!-- SLIDE 3: ANALOGI VISUAL API -->
-  <section class="slide">
-    <div class="badge">VISUALISASI</div>
-    <h2>Analogi API: <span class="blue">Restoran & Pelayan</span></h2>
-    <p class="lead">API (Application Programming Interface) adalah jembatan komunikasi antara Frontend dan Server.</p>
-    <div class="grid3" style="margin-top: 20px;">
-      <div class="visual-box">
-        <div class="visual-icon">📱</div>
-        <div class="visual-title">Frontend (Pelanggan)</div>
-        <div class="visual-desc">Duduk di meja, melihat menu, dan memesan makanan lewat pelayan.</div>
-      </div>
-      <div class="visual-box" style="border: 2px solid var(--primary); background: var(--primary-light);">
-        <div class="visual-icon">🤵‍♂️</div>
-        <div class="visual-title" style="color:var(--primary);">API (Pelayan)</div>
-        <div class="visual-desc">Membawa pesanan ke dapur, lalu mengantarkan makanan kembali ke meja pelanggan.</div>
-      </div>
-      <div class="visual-box">
-        <div class="visual-icon">🍳</div>
-        <div class="visual-title">Server & DB (Dapur)</div>
-        <div class="visual-desc">Tempat data dimasak, dicari, dan disiapkan sesuai pesanan.</div>
-      </div>
-    </div>
-    <div class="callout" style="margin-top:20px;">
-      💡 <b>Frontend</b> tidak boleh langsung masuk ke dapur database demi keamanan. Semuanya harus lewat <b>API</b>.
-    </div>
-  </section>
-
-  <!-- SLIDE 4: ALUR HTTP REQUEST & RESPONSE -->
-  <section class="slide">
-    <div class="badge">ALUR KOMUNIKASI</div>
-    <h2>Alur <span class="blue">HTTP Request ↔ Response</span></h2>
-    <p class="lead">Setiap kali browser meminta data, ini tahapan yang terjadi di balik layar:</p>
-    
-    <div class="flow-container">
-      <div class="flow-item">1. Browser kirim <b>Request (GET)</b> 🌐</div>
-      <div class="flow-arrow">➔</div>
-      <div class="flow-item">2. Server API terima & proses ⚙️</div>
-      <div class="flow-arrow">➔</div>
-      <div class="flow-item">3. Server kirim <b>Response (JSON)</b> 📦</div>
-      <div class="flow-arrow">➔</div>
-      <div class="flow-item">4. JS Render ke Layar 🎨</div>
-    </div>
-
-    <div class="grid3" style="margin-top:14px;">
-      <div class="card">
-        <b>GET</b>
-        <p style="font-size:0.9rem; color:var(--text-muted);">Meminta/mengambil data dari server (fokus utama kita hari ini).</p>
-      </div>
-      <div class="card">
-        <b>POST</b>
-        <p style="font-size:0.9rem; color:var(--text-muted);">Mengirim data baru (misal: registrasi akun, upload postingan).</p>
-      </div>
-      <div class="card">
-        <b>DELETE / PUT</b>
-        <p style="font-size:0.9rem; color:var(--text-muted);">Menghapus atau memperbarui data yang sudah ada di server.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 5: HTTP STATUS CODE -->
-  <section class="slide">
-    <div class="badge">STATUS CODE</div>
-    <h2>Response Selalu Membawa <span class="blue">Status Kode</span></h2>
-    <p class="lead">Jangan mengira semua permintaan selalu berhasil. Browser membaca kode ini untuk tahu hasilnya:</p>
-    
-    <div class="grid3">
-      <div class="card" style="border-top: 4px solid var(--success);">
-        <span class="status-tag st-200">200 OK / 201 Created</span>
-        <h3 style="margin: 10px 0 6px;">🟢 Berhasil!</h3>
-        <p style="font-size:0.9rem; color:var(--text-muted);">Data ditemukan dan berhasil dikirimkan oleh server ke client.</p>
-      </div>
-      <div class="card" style="border-top: 4px solid var(--warning);">
-        <span class="status-tag st-404">404 Not Found</span>
-        <h3 style="margin: 10px 0 6px;">🟡 Tidak Ditemukan</h3>
-        <p style="font-size:0.9rem; color:var(--text-muted);">Alamat URL/Endpoint salah atau data yang dicari memang tidak ada.</p>
-      </div>
-      <div class="card" style="border-top: 4px solid var(--danger);">
-        <span class="status-tag st-500">500 Server Error</span>
-        <h3 style="margin: 10px 0 6px;">🔴 Server Rusak/Down</h3>
-        <p style="font-size:0.9rem; color:var(--text-muted);">Ada error kodingan atau database di sisi server yang sedang crash.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 6: PENGENALAN JSON DENGAN PLAYGROUND -->
-  <section class="slide">
-    <div class="badge">FORMAT DATA</div>
-    <h2>Data Dikirim Sebagai <span class="blue">JSON</span></h2>
-    <p class="lead">JSON (JavaScript Object Notation) adalah format teks standar dunia untuk pertukaran data web.</p>
-    
-    <div class="playground" data-id="json-demo">
-      <div class="editor-wrap">
-        <div class="editor-header">
-          <span>EDIT KODE JAVASCRIPT & JSON</span>
-          <span>✎ Coba ganti namanya</span>
+          <div class="card" style="border-left: 4px solid var(--accent);">
+            <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-laptop-code" style="color: var(--accent);"></i> Metode Pembelajaran Interaktif</h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+              Setiap topik dilengkapi dengan penjelasan konsep, visual diagram, serta <b>Interactive Code Playground</b> (HTML, CSS, dan JavaScript) yang dapat diubah dan diuji coba secara langsung di browsermu!
+            </p>
+          </div>
         </div>
-        <textarea class="code-area" spellcheck="false">// 1. Ini adalah string JSON yang datang dari server
-const jsonString = '{"nama": "Fahmi Bagaskara", "jurusan": "Internet Engineering", "keahlian": ["Linux", "JS", "Network"]}';
+      </div>
+    </section>
 
-// 2. Parse mengubah teks JSON menjadi Object JS asli
+    <!-- SLIDE 2: MENGAPA PERLU DATA LUAR? -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-database"></i> 01. Konsep Dasar Data</div>
+        <div class="slide-counter">02 / 18</div>
+      </div>
+      <h2>Website Modern Bekerja dengan <span class="blue">Data Dinamis</span></h2>
+      <p class="lead">Pada website statis, seluruh data ditulis secara manual di dalam dokumen HTML (Hardcoded). Sedangkan aplikasi web modern memisahkan struktur tampilan dengan data yang bersumber dari API/Database.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="color: var(--danger); font-size: 15px; margin-bottom: 8px;"><i class="fa-solid fa-xmark"></i> Pendekatan Statis (Tradisional)</h3>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            Semua teks & daftar produk ditulis langsung di file HTML. Jika ada pembaruan, kamu harus mengedit file <code>index.html</code> secara manual dan mengunggahnya kembali ke server.
+          </p>
+        </div>
+
+        <div class="card" style="background: #f0fdf4; border-color: #bbf7d0;">
+          <h3 style="color: var(--success); font-size: 15px; margin-bottom: 8px;"><i class="fa-solid fa-check"></i> Pendekatan Dinamis (Modern API)</h3>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            HTML hanya menyediakan kerangka wadah. JavaScript meminta data terbaru dari API server, lalu merender antarmuka secara otomatis tanpa perlu mengubah kode HTML.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Prinsip Inti:</strong> Memisahkan <em>User Interface (HTML/CSS)</em> dengan <em>Data Management (API/JSON)</em> adalah fondasi utama pengembangan web modern.
+      </div>
+    </section>
+
+    <!-- SLIDE 3: APA ITU API? ARSITEKTUR CLIENT-SERVER -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-network-wired"></i> 02. Memahami API</div>
+        <div class="slide-counter">03 / 18</div>
+      </div>
+      <h2>Apa itu <span class="blue">API (Application Programming Interface)?</span></h2>
+      <p class="lead">API adalah jembatan komunikasi terstandar yang menghubungkan antarmuka pengguna di sisi browser (Client) dengan penyedia data di sisi server.</p>
+
+      <div class="card">
+        <h3 style="font-size: 15px; margin-bottom: 12px; text-align: center; color: var(--text-main);">Alur Komunikasi Client - API - Server</h3>
+        <div class="flow-diagram">
+          <div class="flow-node client">
+            <b>Client (Browser)</b>
+            <small>Kirim Request ke API</small>
+          </div>
+          <div class="arrow-connector"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="flow-node api">
+            <b>API Endpoint</b>
+            <small>Jembatan Penghubung</small>
+          </div>
+          <div class="arrow-connector"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="flow-node server">
+            <b>Server & Database</b>
+            <small>Memproses & Siapkan Data</small>
+          </div>
+        </div>
+
+        <div class="flow-diagram" style="margin-top: 10px;">
+          <div class="flow-node data">
+            <b>Data JSON</b>
+            <small>Hasil Olahan Server</small>
+          </div>
+          <div class="arrow-connector"><i class="fa-solid fa-arrow-left"></i></div>
+          <div class="flow-node api">
+            <b>API Response</b>
+            <small>Kirim Balik ke Browser</small>
+          </div>
+          <div class="arrow-connector"><i class="fa-solid fa-arrow-left"></i></div>
+          <div class="flow-node client">
+            <b>DOM Render</b>
+            <small>Tampil di Antarmuka UI</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <b>Kesimpulan:</b> Frontend tidak perlu tahu bagaimana database server dikelola. Frontend cukup mengirim permintaan ke <b>API</b>, dan API akan memberikan data dalam format JSON.
+      </div>
+    </section>
+
+    <!-- SLIDE 4: ANATOMI API REQUEST & RESPONSE -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-diagram-project"></i> 03. Protokol HTTP</div>
+        <div class="slide-counter">04 / 18</div>
+      </div>
+      <h2>Anatomi Komunikasi <span class="blue">HTTP Request & Response</span></h2>
+      <p class="lead">Setiap komunikasi antara browser dan server API terdiri dari komponen terstruktur berikut:</p>
+
+      <div class="grid-4">
+        <div class="card">
+          <strong style="color: var(--primary); display: block; margin-bottom: 6px; font-size: 14px;">1. Endpoint (URL)</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Alamat spesifik tujuan request.<br>Contoh: <code>api.tvmaze.com/shows/1</code></p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--primary); display: block; margin-bottom: 6px; font-size: 14px;">2. HTTP Method</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Aksi yang dilakukan:<br>• <b>GET</b>: Ambil data<br>• <b>POST</b>: Kirim data baru<br>• <b>DELETE</b>: Hapus data</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--primary); display: block; margin-bottom: 6px; font-size: 14px;">3. Request Header</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Metadata seperti tipe format data atau token otorisasi keamanan.</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--primary); display: block; margin-bottom: 6px; font-size: 14px;">4. HTTP Response</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Balasan server yang memuat <b>Status Code</b> dan <b>Data Payload</b>.</p>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 14px;">
+        <div class="card" style="border-left: 4px solid var(--success); text-align: center;">
+          <b style="color: var(--success); font-size: 18px; display: block;">200 OK</b>
+          <small style="color: var(--text-muted); font-weight: 600;">Permintaan berhasil diproses.</small>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--warning); text-align: center;">
+          <b style="color: var(--warning); font-size: 18px; display: block;">404 Not Found</b>
+          <small style="color: var(--text-muted); font-weight: 600;">Alamat endpoint tidak ditemukan.</small>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--danger); text-align: center;">
+          <b style="color: var(--danger); font-size: 18px; display: block;">500 Server Error</b>
+          <small style="color: var(--text-muted); font-weight: 600;">Terjadi kendala pada server backend.</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: FORMAT DATA JSON & PARSING -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-file-code"></i> 04. Format Data</div>
+        <div class="slide-counter">05 / 18</div>
+      </div>
+      <h2>Format Data <span class="blue">JSON & Parsing Object</span></h2>
+      <p class="lead">JSON (JavaScript Object Notation) adalah format pertukaran data standar berbentuk string teks. Gunakan <code>JSON.parse()</code> untuk mengubahnya menjadi objek JavaScript nyata.</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 's5-js')"><i class="fa-brands fa-js"></i> JAVASCRIPT</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's5-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's5-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="s5-js" spellcheck="false">// 1. Data JSON mentah berbentuk string
+const jsonString = '{"name":"Budi Santoso","role":"Frontend Developer","skills":["HTML","CSS","JavaScript","Fetch API"]}';
+
+// 2. Parsing string JSON menjadi Object JS
 const user = JSON.parse(jsonString);
 
-// 3. Menampilkan ke DOM
-document.getElementById('hasil').innerHTML = `
-  <div style="font-family:sans-serif; padding:15px; background:#eff6ff; border-radius:10px; border:1px solid #bfdbfe;">
-    <h3 style="margin:0 0 5px; color:#1e40af;">Halo, ${user.nama}!</h3>
-    <p style="margin:0 0 8px; color:#475569;">Jurusan: <b>${user.jurusan}</b></p>
-    <small>Skill: ${user.keahlian.join(", ")}</small>
+// 3. Render ke elemen HTML
+const card = document.getElementById('user-card');
+card.innerHTML = `
+  <h3>${user.name}</h3>
+  <span class="badge">${user.role}</span>
+  <p class="section-label">Daftar Keahlian:</p>
+  <div class="skill-tags">
+    ${user.skills.map(skill => `<span class="tag">${skill}</span>`).join('')}
   </div>
 `;</textarea>
-        <button class="run-btn">▶ Jalankan Kode</button>
-      </div>
-      <div class="sandbox-output">
-        <div class="output-header">LIVE SANDBOX OUTPUT</div>
-        <iframe class="output-frame"></iframe>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 7: ASYNC & PROMISE -->
-  <section class="slide">
-    <div class="badge">LOGIKA ASYNC</div>
-    <h2>Kenapa Butuh <span class="blue">Async / Promise?</span></h2>
-    <p class="lead">Mengambil data dari internet butuh waktu (koneksi lemot, jarak server). JS tidak boleh diam membeku (*freeze*) saat menunggu.</p>
-    
-    <div class="grid2">
-      <div class="card">
-        <h3>🥪 Analogi Pesan Kopi (Asynchronous)</h3>
-        <p>Kamu pesan kopi di kasir $\rightarrow$ Dikasih struk/nomor antrian (<strong>Promise</strong>) $\rightarrow$ Kamu bisa santai main HP dulu $\rightarrow$ Saat kopi siap, nomormu dipanggil (<strong>Resolved</strong>).</p>
-      </div>
-      <div class="card">
-        <h3>⏳ 3 Status Promise</h3>
-        <ul style="margin:0; padding-left:20px; font-size:0.95rem; color:var(--text-muted);">
-          <li><b>Pending:</b> Sedang menunggu balasan server.</li>
-          <li><b>Fulfilled / Resolved:</b> Berhasil dapat data.</li>
-          <li><b>Rejected:</b> Gagal (misal: internet putus).</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 8: ASYNC / AWAIT DENGAN LIVE SANDBOX -->
-  <section class="slide">
-    <div class="badge">SINTAKS MODERN</div>
-    <h2>Menggunakan <span class="blue">async / await</span></h2>
-    <p class="lead">Daripada menggunakan <code>.then()</code> bertingkat yang membingungkan, modern JS memakai <code>async/await</code> agar kode terbaca lurus seperti cerita.</p>
-    
-    <div class="playground" data-id="async-demo">
-      <div class="editor-wrap">
-        <div class="editor-header">
-          <span>KODE ASYNC / AWAIT</span>
-          <span>✎ Coba klik jalankan</span>
+<textarea class="code-input" id="s5-html" spellcheck="false"><div class="user-card" id="user-card">
+  <p style="color: #64748b;">Memuat data JSON...</p>
+</div></textarea>
+<textarea class="code-input" id="s5-css" spellcheck="false">.user-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.user-card h3 {
+  margin: 0 0 6px 0;
+  color: #0f172a;
+  font-size: 16px;
+}
+.badge {
+  display: inline-block;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+.section-label {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0 0 6px 0;
+}
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tag {
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Ubah kode lalu klik Run</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
         </div>
-        <textarea class="code-area" spellcheck="false">// Menandai function dengan kata kunci 'async'
-async function ambilDataUser() {
-  const info = document.getElementById('status');
-  info.innerText = "⏳ Sedang menghubungi server...";
 
-  // Endpoint API publik untuk latihan (Dummy Data)
-  const url = "https://jsonplaceholder.typicode.com/users/1";
-  
-  // 'await' bertugas menunggu respons tanpa bikin browser macet
-  const response = await fetch(url);
-  const data = await response.json();
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
 
-  // Tampilkan data hasil fetch
-  info.innerHTML = `
-    <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:15px; border-radius:10px; color:#065f46;">
-      <h3 style="margin:0;">✅ Data Diterima!</h3>
-      <p style="margin:5px 0;"><b>Nama:</b> ${data.name}</p>
-      <p style="margin:0;"><b>Email:</b> ${data.email}</p>
-      <p style="margin:5px 0 0;"><b>Kota:</b> ${data.address.city}</p>
+    <!-- SLIDE 6: SYNCHRONOUS VS ASYNCHRONOUS -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-clock"></i> 05. Alur Async</div>
+        <div class="slide-counter">06 / 18</div>
+      </div>
+      <h2>Sync vs <span class="blue">Asynchronous Execution</span></h2>
+      <p class="lead">Mengambil data dari internet membutuhkan waktu (1-3 detik). Mekanisme asynchronous mencegah seluruh tampilan browser membeku saat menunggu respon jaringan.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="color: var(--danger); font-size: 15px; margin-bottom: 8px;"><i class="fa-solid fa-pause"></i> Synchronous (Blocking)</h3>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            Baris berikutnya harus menunggu baris saat ini selesai total. Jika sebuah request memakan waktu lama, browser akan mengunci interaksi pengguna.
+          </p>
+          <div style="background: var(--code-bg); padding: 10px; border-radius: 6px; margin-top: 10px; font-family: var(--font-mono); font-size: 11px; color: #fff;">
+            console.log("Baris 1");<br>
+            ambilDataLama(); // Blocking 5 detik!<br>
+            console.log("Baris 3");
+          </div>
+        </div>
+
+        <div class="card" style="background: #f0fdf4; border-color: #bbf7d0;">
+          <h3 style="color: var(--success); font-size: 15px; margin-bottom: 8px;"><i class="fa-solid fa-forward"></i> Asynchronous (Non-Blocking)</h3>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            JavaScript mendelegasikan proses lambat ke latar belakang (Web API). Kode di bawahnya langsung dieksekusi tanpa jeda.
+          </p>
+          <div style="background: var(--code-bg); padding: 10px; border-radius: 6px; margin-top: 10px; font-family: var(--font-mono); font-size: 11px; color: #fff;">
+            console.log("Mulai");<br>
+            fetchDataAsync(); // Berjalan di background<br>
+            console.log("Selesai (Langsung jalan!)");
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Karakteristik JS:</strong> JavaScript secara default adalah <em>single-threaded</em>. Model Asynchronous memungkinkan aplikasi menangani tugas I/O jaringan dengan lancar tanpa freeze.
+      </div>
+    </section>
+
+    <!-- SLIDE 7: JAVASCRIPT PROMISE -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-handshake-simple"></i> 06. JavaScript Promise</div>
+        <div class="slide-counter">07 / 18</div>
+      </div>
+      <h2>Memahami <span class="blue">Promise (Janji Asynchronous)</span></h2>
+      <p class="lead">Promise adalah objek JavaScript yang mewakili status dan hasil dari operasi asynchronous di masa depan. Memiliki 3 state utama:</p>
+
+      <div class="grid-3" style="margin-bottom: 12px;">
+        <div class="card" style="border-top: 3px solid var(--warning); padding: 12px 16px;">
+          <b style="color: var(--warning); display:block; margin-bottom: 3px; font-size: 14px;">1. Pending</b>
+          <p style="font-size: 12px; color: var(--text-muted);">Sedang memproses request jaringan.</p>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--success); padding: 12px 16px;">
+          <b style="color: var(--success); display:block; margin-bottom: 3px; font-size: 14px;">2. Fulfilled (Resolved)</b>
+          <p style="font-size: 12px; color: var(--text-muted);">Permintaan sukses dan data diterima.</p>
+        </div>
+        <div class="card" style="border-top: 3px solid var(--danger); padding: 12px 16px;">
+          <b style="color: var(--danger); display:block; margin-bottom: 3px; font-size: 14px;">3. Rejected</b>
+          <p style="font-size: 12px; color: var(--text-muted);">Permintaan gagal karena error/timeout.</p>
+        </div>
+      </div>
+
+      <div class="playground-container" style="height: 310px;">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 's7-js')"><i class="fa-brands fa-js"></i> JAVASCRIPT</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's7-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's7-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="s7-js" spellcheck="false">// Simulasi Janji Mengambil Data (Delay 1 detik)
+const janjiAmbilData = new Promise((resolve, reject) => {
+  const koneksiBagus = true; // Coba ubah menjadi false!
+  setTimeout(() => {
+    if (koneksiBagus) {
+      resolve({ status: "200 OK", pesan: "Data berhasil dimuat!" });
+    } else {
+      reject("Koneksi jaringan terputus.");
+    }
+  }, 1000);
+});
+
+const box = document.getElementById('promise-box');
+box.innerHTML = '<span class="status pending">Status: Pending (Menunggu)...</span>';
+
+janjiAmbilData
+  .then(res => {
+    box.innerHTML = `<span class="status resolved">Fulfilled: ${res.pesan}</span>`;
+  })
+  .catch(err => {
+    box.innerHTML = `<span class="status rejected">Rejected: ${err}</span>`;
+  });</textarea>
+<textarea class="code-input" id="s7-html" spellcheck="false"><div class="promise-card">
+  <h4>Simulasi Status Promise</h4>
+  <div id="promise-box" style="margin-top: 10px;">Memproses...</div>
+</div></textarea>
+<textarea class="code-input" id="s7-css" spellcheck="false">.promise-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px;
+}
+.promise-card h4 {
+  margin: 0;
+  font-size: 14px;
+  color: #0f172a;
+}
+.status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.status.pending { background: #fef3c7; color: #d97706; }
+.status.resolved { background: #d1fae5; color: #059669; }
+.status.rejected { background: #fee2e2; color: #dc2626; }</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Ubah koneksiBagus lalu Run</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: KENALAN DENGAN FETCH API -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-cloud-arrow-down"></i> 07. Fetch API</div>
+        <div class="slide-counter">08 / 18</div>
+      </div>
+      <h2>Fetch API: Mengambil Data <span class="blue">Real-Time dari Server</span></h2>
+      <p class="lead"><code>fetch()</code> adalah fungsi bawaan browser untuk mengirim HTTP request ke API secara asynchronous dan mengembalikan Promise secara otomatis.</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 's8-js')"><i class="fa-brands fa-js"></i> JAVASCRIPT</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's8-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's8-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="s8-js" spellcheck="false">// Mengambil data TV Show dari TVMaze Public API
+fetch('https://api.tvmaze.com/shows/1')
+  .then(response => response.json()) // Parsing stream ke JSON
+  .then(show => {
+    const container = document.getElementById('show-container');
+    container.innerHTML = `
+      <div class="show-card">
+        <img src="${show.image.medium}" alt="${show.name}" class="poster">
+        <div class="info">
+          <h3>${show.name}</h3>
+          <p class="genres">Genre: ${show.genres.join(', ')}</p>
+          <p class="rating">Rating: <b>${show.rating.average || 'N/A'} / 10</b></p>
+        </div>
+      </div>
+    `;
+  })
+  .catch(error => {
+    document.getElementById('show-container').innerHTML = `<p style="color:red;">Error: ${error}</p>`;
+  });</textarea>
+<textarea class="code-input" id="s8-html" spellcheck="false"><div id="show-container">
+  <p style="color: #64748b;">Mengambil data dari API...</p>
+</div></textarea>
+<textarea class="code-input" id="s8-css" spellcheck="false">.show-card {
+  display: flex;
+  gap: 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+  align-items: center;
+}
+.poster {
+  width: 75px;
+  height: 105px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.info h3 {
+  margin: 0 0 6px 0;
+  color: #0f172a;
+  font-size: 16px;
+}
+.genres {
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  color: #64748b;
+}
+.rating {
+  margin: 0;
+  font-size: 12px;
+  color: #2563eb;
+}</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Live Public API Call</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: MODERN ASYNC / AWAIT -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-bolt"></i> 08. Async / Await</div>
+        <div class="slide-counter">09 / 18</div>
+      </div>
+      <h2>Menulis Asynchronous Rapi dengan <span class="blue">Async / Await</span></h2>
+      <p class="lead"><code>async/await</code> adalah cara penulisan modern untuk menangani Promise tanpa perlu rantai <code>.then()</code> yang panjang. Kode terlihat bersih layaknya synchronous code.</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 's9-js')"><i class="fa-brands fa-js"></i> JAVASCRIPT</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's9-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's9-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="s9-js" spellcheck="false">// 1. Gunakan kata kunci 'async' di awal fungsi
+async function loadShowById(id) {
+  const resultDiv = document.getElementById('result-view');
+  resultDiv.innerHTML = '<em>Mengambil data show...</em>';
+
+  // 2. Gunakan 'await' untuk menunggu hasil fetch & JSON parsing
+  const response = await fetch(`https://api.tvmaze.com/shows/${id}`);
+  const show = await response.json();
+
+  // 3. Render ke antarmuka
+  resultDiv.innerHTML = `
+    <div class="detail-box">
+      <h4>${show.name}</h4>
+      <p>Bahasa: <b>${show.language}</b> | Tipe: <b>${show.type}</b></p>
+      <p>Premiered: ${show.premiered}</p>
     </div>
   `;
 }
 
-// Jalankan fungsinya
-ambilDataUser();</textarea>
-        <button class="run-btn">▶ Jalankan Kode</button>
-      </div>
-      <div class="sandbox-output">
-        <div class="output-header">LIVE SANDBOX OUTPUT</div>
-        <iframe class="output-frame"></iframe>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 9: ERROR HANDLING TRY / CATCH -->
-  <section class="slide">
-    <div class="badge">KEANDALAN APLIKASI</div>
-    <h2>Menangani Error dengan <span class="blue">try ... catch</span></h2>
-    <p class="lead">Apa jadinya kalau URL salah atau kuota habis? Jangan biarkan aplikasi kita layar putih tanpa info!</p>
-    
-    <div class="playground" data-id="error-demo">
-      <div class="editor-wrap">
-        <div class="editor-header">
-          <span>SIMULASI TRY CATCH</span>
-          <span>✎ Coba ganti urlSalah jadi benar</span>
+// Panggil fungsi
+loadShowById(2);</textarea>
+<textarea class="code-input" id="s9-html" spellcheck="false"><div class="container">
+  <div id="result-view">Memuat...</div>
+</div></textarea>
+<textarea class="code-input" id="s9-css" spellcheck="false">.detail-box {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  padding: 14px;
+}
+.detail-box h4 {
+  margin: 0 0 6px 0;
+  color: #0369a1;
+  font-size: 15px;
+}
+.detail-box p {
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  color: #475569;
+}</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Async/Await Pattern</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
         </div>
-        <textarea class="code-area" spellcheck="false">async function loadUserAman() {
-  const display = document.getElementById('hasil');
-  display.innerHTML = "<em>Memuat data...</em>";
+
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: ALUR 6 LANGKAH FETCH DATA LENGKAP -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-route"></i> 09. Alur Data Baku</div>
+        <div class="slide-counter">10 / 18</div>
+      </div>
+      <h2>6 Langkah Baku <span class="blue">Siklus Fetch & Render Data</span></h2>
+      <p class="lead">Urutan standar yang selalu digunakan saat membangun aplikasi web berbasis API:</p>
+
+      <div class="flow-diagram">
+        <div class="flow-node client"><b>1. Trigger Event</b><small>Klik Tombol / Input / Onload</small></div>
+        <div class="arrow-connector"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="flow-node api"><b>2. Loading UI</b><small>Tampilkan Spinner / Skeleton</small></div>
+        <div class="arrow-connector"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="flow-node server"><b>3. Fetch Request</b><small>Kirim HTTP ke Endpoint</small></div>
+      </div>
+
+      <div class="flow-diagram" style="margin-top: 12px;">
+        <div class="flow-node data"><b>6. DOM Render</b><small>Tampilkan Elemen HTML</small></div>
+        <div class="arrow-connector"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="flow-node api"><b>5. Process Data</b><small>Transformasi & Filter Array</small></div>
+        <div class="arrow-connector"><i class="fa-solid fa-arrow-left"></i></div>
+        <div class="flow-node server"><b>4. Parse JSON</b><small>await response.json()</small></div>
+      </div>
+
+      <div class="callout">
+        <strong>Penting:</strong> Selalu terapkan <b>Langkah #2 (Loading UI)</b> agar pengguna mengetahui bahwa sistem sedang bekerja mengunduh data di latar belakang.
+      </div>
+    </section>
+
+    <!-- SLIDE 11: ERROR HANDLING DENGAN TRY / CATCH -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-shield-halved"></i> 10. Error Handling</div>
+        <div class="slide-counter">11 / 18</div>
+      </div>
+      <h2>Pencegahan Error dengan <span class="blue">Try / Catch & response.ok</span></h2>
+      <p class="lead">Jaringan internet dapat terputus atau URL endpoint salah (404). Gunakan blok <code>try...catch</code> dan validasi <code>response.ok</code> agar aplikasi tidak crash.</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 's11-js')"><i class="fa-brands fa-js"></i> JAVASCRIPT</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's11-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's11-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="s11-js" spellcheck="false">async function ambilDataAman() {
+  const alertBox = document.getElementById('alert-box');
+  alertBox.className = 'alert loading';
+  alertBox.textContent = 'Menghubungkan ke API...';
 
   try {
-    // Sengaja mencoba URL endpoint yang TIDAK ADA (404)
-    const res = await fetch("https://jsonplaceholder.typicode.com/user-ngawur/999");
-    
-    // Validasi apakah respons OK (Status 200-299)
-    if (!res.ok) {
-      throw new Error("Server membalas dengan status: " + res.status);
+    // Memanggil endpoint yang sengaja salah untuk menguji 404
+    const response = await fetch('https://api.tvmaze.com/shows/99999999');
+
+    // 1. Cek status HTTP OK (200 - 299)
+    if (!response.ok) {
+      throw new Error(`Request gagal! Status HTTP: ${response.status}`);
     }
 
-    const data = await res.json();
-    display.innerText = "Berhasil: " + data.name;
+    const data = await response.json();
+    alertBox.className = 'alert success';
+    alertBox.textContent = 'Data berhasil didapat: ' + data.name;
 
   } catch (error) {
-    // Tangani error dengan elegan ke pengguna
-    display.innerHTML = `
-      <div style="background:#fef2f2; border:1px solid #fecaca; padding:15px; border-radius:10px; color:#991b1b;">
-        <b>⚠️ Terjadi Kesalahan:</b>
-        <p style="margin:5px 0 0;">${error.message}</p>
+    // 2. Tangani error jaringan atau status gagal
+    alertBox.className = 'alert error';
+    alertBox.textContent = 'Gagal memuat: ' + error.message;
+  }
+}
+
+ambilDataAman();</textarea>
+<textarea class="code-input" id="s11-html" spellcheck="false"><div id="alert-box" class="alert">
+  Menyiapkan request...
+</div></textarea>
+<textarea class="code-input" id="s11-css" spellcheck="false">.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+.alert.loading {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+.alert.success {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+.alert.error {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Robust Error Handling</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 12: MEMPROSES ARRAY DATA DENGAN MAP -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-layer-group"></i> 11. Array API Data</div>
+        <div class="slide-counter">12 / 18</div>
+      </div>
+      <h2>Mengolah Data Array dari API <span class="blue">(Multiple Items)</span></h2>
+      <p class="lead">Sebagian besar API mengembalikan kumpulan data berupa Array of Objects. Gunakan method <code>.map()</code> untuk merender setiap item ke dalam template HTML.</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 's12-js')"><i class="fa-brands fa-js"></i> JAVASCRIPT</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's12-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's12-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="s12-js" spellcheck="false">async function loadShowGrid() {
+  const container = document.getElementById('grid-container');
+
+  try {
+    const res = await fetch('https://api.tvmaze.com/search/shows?q=superman');
+    const data = await res.json();
+
+    // Render array hasil pencarian (ambil 2 item teratas)
+    container.innerHTML = data.slice(0, 2).map(item => {
+      const show = item.show;
+      return `
+        <div class="card-item">
+          <h5>${show.name}</h5>
+          <p>Tipe: ${show.type}</p>
+          <p>Rating: <b>${show.rating.average || 'N/A'}</b></p>
+        </div>
+      `;
+    }).join('');
+
+  } catch(err) {
+    container.innerHTML = '<p style="color:red;">Gagal memuat list data.</p>';
+  }
+}
+
+loadShowGrid();</textarea>
+<textarea class="code-input" id="s12-html" spellcheck="false"><div class="grid-wrapper" id="grid-container">
+  <p style="color: #64748b;">Memuat data array...</p>
+</div></textarea>
+<textarea class="code-input" id="s12-css" spellcheck="false">.grid-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.card-item {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+.card-item h5 {
+  margin: 0 0 4px 0;
+  color: #2563eb;
+  font-size: 14px;
+}
+.card-item p {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
+}</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Array Map Rendering</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 13: PATTERN 3 STATE UI -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-sliders"></i> 12. UX States</div>
+        <div class="slide-counter">13 / 18</div>
+      </div>
+      <h2>Penerapan 3 State Antarmuka: <span class="blue">Loading, Success, Error</span></h2>
+      <p class="lead">Aplikasi profesional menangani status menunggu (Loading State), data berhasil dimuat (Success State), dan penanganan kendala (Error State) secara rapi.</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 's13-js')"><i class="fa-brands fa-js"></i> JAVASCRIPT</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's13-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's13-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="s13-js" spellcheck="false">async function fetchWithState() {
+  const box = document.getElementById('state-box');
+
+  // STATE 1: LOADING
+  box.innerHTML = `<div class="loading-state">Memuat data dari server...</div>`;
+
+  try {
+    const res = await fetch('https://api.tvmaze.com/shows/1');
+    if(!res.ok) throw new Error("Gagal mengambil data");
+    const show = await res.json();
+
+    // STATE 2: SUCCESS
+    box.innerHTML = `
+      <div class="success-state">
+        <b>Data Berhasil Dimuat:</b>
+        <p style="margin-top:4px;">${show.name} (${show.premiered})</p>
+      </div>
+    `;
+  } catch(err) {
+    // STATE 3: ERROR
+    box.innerHTML = `
+      <div class="error-state">
+        <b>Error Terjadi:</b> ${err.message}
       </div>
     `;
   }
 }
 
-loadUserAman();</textarea>
-        <button class="run-btn">▶ Jalankan Kode</button>
-      </div>
-      <div class="sandbox-output">
-        <div class="output-header">LIVE SANDBOX OUTPUT</div>
-        <iframe class="output-frame"></iframe>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 10: 3 UI STATES (LOADING, SUCCESS, ERROR) -->
-  <section class="slide">
-    <div class="badge">PENGALAMAN PENGGUNA (UX)</div>
-    <h2>3 State Utama Aplikasi Web: <span class="blue">Loading, Success, Error</span></h2>
-    <p class="lead">Aplikasi standar industri yang baik selalu memiliki 3 kondisi visual:</p>
-    
-    <div class="grid3">
-      <div class="card" style="background:#f8fafc;">
-        <h3>1. Loading State ⏳</h3>
-        <p style="font-size:0.9rem; color:var(--text-muted);">Beri tahu user bahwa sistem sedang bekerja (spinner / teks loading / skeleton).</p>
-      </div>
-      <div class="card" style="background:#f0fdf4;">
-        <h3 style="color:#166534;">2. Success State ✅</h3>
-        <p style="font-size:0.9rem; color:#166534;">Data bersih berhasil dirender ke elemen-elemen HTML (Card / Tabel).</p>
-      </div>
-      <div class="card" style="background:#fef2f2;">
-        <h3 style="color:#991b1b;">3. Error State ❌</h3>
-        <p style="font-size:0.9rem; color:#991b1b;">Pesan kesalahan yang manusiawi plus tombol "Coba Lagi" (Retry).</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 11: RENDER ARRAY DARI API KE DOM -->
-  <section class="slide">
-    <div class="badge">PRAKTIK NYATA</div>
-    <h2>Merender Banyak Data <span class="blue">(Array & List)</span></h2>
-    <p class="lead">Biasanya API mengirim kumpulan banyak item (Array). Kita gunakan loop <code>forEach()</code> atau <code>map()</code> untuk mencetak card ke DOM.</p>
-    
-    <div class="playground" data-id="render-demo">
-      <div class="editor-wrap">
-        <div class="editor-header">
-          <span>RENDER MULTIPLE USERS</span>
-          <span>✎ Coba klik jalankan</span>
+fetchWithState();</textarea>
+<textarea class="code-input" id="s13-html" spellcheck="false"><div id="state-box">
+  Menyiapkan antarmuka...
+</div></textarea>
+<textarea class="code-input" id="s13-css" spellcheck="false">.loading-state {
+  color: #2563eb;
+  font-weight: 700;
+  font-size: 13px;
+}
+.success-state {
+  background: #ecfdf5;
+  border: 1px solid #10b981;
+  padding: 12px;
+  border-radius: 8px;
+  color: #047857;
+  font-size: 13px;
+}
+.error-state {
+  background: #fef2f2;
+  border: 1px solid #ef4444;
+  padding: 12px;
+  border-radius: 8px;
+  color: #b91c1c;
+  font-size: 13px;
+}</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">3-State Pattern</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
         </div>
-        <textarea class="code-area" spellcheck="false">async function renderDaftarUser() {
-  const container = document.getElementById('user-list');
-  container.innerHTML = "<p>Sedang memuat 3 user...</p>";
+
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 14: INSPEKSI DENGAN BROWSER DEVTOOLS -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-bug"></i> 13. Debugging API</div>
+        <div class="slide-counter">14 / 18</div>
+      </div>
+      <h2>Investigasi API dengan <span class="blue">Browser DevTools</span></h2>
+      <p class="lead">Tekan <code>F12</code> atau <code>Inspect Element</code> di browser. Tab <b>Network</b> dan <b>Console</b> adalah instrumen utama dalam menganalisis request dan respon data.</p>
+
+      <div class="devtools-mock">
+        <div class="dt-header">
+          <div class="dt-tab active">Network</div>
+          <div class="dt-tab">Console</div>
+          <div class="dt-tab">Elements</div>
+        </div>
+        <div class="dt-body">
+          <div class="dt-row head">
+            <span>Name / Endpoint</span>
+            <span>Status</span>
+            <span>Type</span>
+            <span>Time</span>
+          </div>
+          <div class="dt-row">
+            <span>api.tvmaze.com/shows/1</span>
+            <span class="green">200 OK</span>
+            <span>fetch</span>
+            <span>95 ms</span>
+          </div>
+          <div class="dt-row">
+            <span>api.tvmaze.com/search/shows?q=batman</span>
+            <span class="green">200 OK</span>
+            <span>fetch</span>
+            <span>110 ms</span>
+          </div>
+          <div class="dt-row">
+            <span>api.tvmaze.com/shows/999999</span>
+            <span class="red">404 Not Found</span>
+            <span>fetch</span>
+            <span>60 ms</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Checklist Debugging Pemula:</strong><br>
+        1. Apakah URL Endpoint & parameter sudah benar? (Cek tab Network)<br>
+        2. Berapa HTTP Status Code-nya? (200 = Sukses, 404 = Salah Endpoint, 500 = Server Down)<br>
+        3. Apakah struktur JSON sesuai kebutuhan? (Cek tab Preview/Response di DevTools)
+      </div>
+    </section>
+
+    <!-- SLIDE 15: HANDS-ON CHALLENGE 01 -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-code-commit"></i> 14. Challenge #1</div>
+        <div class="slide-counter">15 / 18</div>
+      </div>
+      <h2>Challenge #1: <span class="blue">Live TV Show Search</span></h2>
+      <p class="lead">Tugas: Lengkapi fungsi pencarian acara TV secara live menggunakan TVMaze Search API berdasarkan kata kunci input!</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 's15-js')"><i class="fa-brands fa-js"></i> JAVASCRIPT</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's15-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's15-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="s15-js" spellcheck="false">const input = document.getElementById('search-input');
+const button = document.getElementById('search-btn');
+const results = document.getElementById('results');
+
+button.addEventListener('click', async () => {
+  const keyword = input.value.trim();
+  if (!keyword) return;
+
+  results.innerHTML = '<p style="color:#64748b;">Mencari show...</p>';
 
   try {
-    const res = await fetch("https://jsonplaceholder.typicode.com/users?_limit=3");
-    const list = await res.json();
+    const response = await fetch(`https://api.tvmaze.com/search/shows?q=${keyword}`);
+    const data = await response.json();
 
-    // Reset container sebelum render
-    container.innerHTML = "";
+    results.innerHTML = data.slice(0, 3).map(item => `
+      <div class="res-item">
+        <strong>${item.show.name}</strong>
+        <span>Tipe: ${item.show.type} | Rating: ${item.show.rating.average || 'N/A'}</span>
+      </div>
+    `).join('');
 
-    // Loop setiap item dan masukkan HTML Card
-    list.forEach(u => {
-      container.innerHTML += `
-        <div style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:10px 14px; margin-bottom:8px; box-shadow:0 2px 4px rgba(0,0,0,0.03);">
-          <div style="font-weight:bold; color:#1e293b;">👤 ${u.name}</div>
-          <div style="font-size:12px; color:#64748b;">📧 ${u.email} · 🏢 ${u.company.name}</div>
+  } catch(err) {
+    results.innerHTML = '<p style="color:red;">Error: ' + err.message + '</p>';
+  }
+});</textarea>
+<textarea class="code-input" id="s15-html" spellcheck="false"><div class="search-box">
+  <div class="input-row">
+    <input id="search-input" placeholder="Ketik nama show (contoh: Flash)..." value="Flash">
+    <button id="search-btn">Cari</button>
+  </div>
+  <div id="results" class="results-list"></div>
+</div></textarea>
+<textarea class="code-input" id="s15-css" spellcheck="false">.input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.input-row input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.input-row button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.res-item {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Coba ketik kata kunci lalu klik Cari</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 16: MINI PROJECT: DYNAMIC MOVIE APP -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-rocket"></i> 15. Mini Project</div>
+        <div class="slide-counter">16 / 18</div>
+      </div>
+      <h2>Mini Project: <span class="blue">Dynamic TV Show Explorer</span></h2>
+      <p class="lead">Simulasikan aplikasi penjelajah acara TV dinamis dengan gambar poster, metadata rating, dan layout responsif.</p>
+
+      <div class="playground-container">
+        <div class="editor-section">
+          <div class="editor-tabs">
+            <button class="editor-tab-btn active" onclick="switchTab(this, 's16-js')"><i class="fa-brands fa-js"></i> JAVASCRIPT</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's16-html')"><i class="fa-brands fa-html5"></i> HTML</button>
+            <button class="editor-tab-btn" onclick="switchTab(this, 's16-css')"><i class="fa-brands fa-css3-alt"></i> CSS</button>
+          </div>
+          <div class="editor-body">
+<textarea class="code-input active" id="s16-js" spellcheck="false">async function loadMovies(keyword) {
+  const gallery = document.getElementById('gallery');
+  gallery.innerHTML = '<p style="color:#64748b;">Memuat data...</p>';
+
+  try {
+    const res = await fetch(`https://api.tvmaze.com/search/shows?q=${keyword}`);
+    const items = await res.json();
+
+    gallery.innerHTML = items.slice(0, 2).map(item => {
+      const show = item.show;
+      const poster = show.image?.medium || 'https://via.placeholder.com/70x95?text=No+Cover';
+      return `
+        <div class="movie-card">
+          <img src="${poster}" alt="${show.name}">
+          <div>
+            <h6>${show.name}</h6>
+            <span class="type-tag">${show.type}</span>
+            <p class="rating-text">Rating: ${show.rating?.average || 'N/A'}</p>
+          </div>
         </div>
       `;
-    });
+    }).join('');
   } catch(e) {
-    container.innerHTML = "<p style='color:red;'>Gagal mengambil data.</p>";
+    gallery.innerHTML = '<p style="color:red;">Gagal memuat film.</p>';
   }
 }
 
-renderDaftarUser();</textarea>
-        <button class="run-btn">▶ Jalankan Kode</button>
-      </div>
-      <div class="sandbox-output">
-        <div class="output-header">LIVE SANDBOX OUTPUT</div>
-        <iframe class="output-frame"></iframe>
-      </div>
-    </div>
-  </section>
+loadMovies('avengers');</textarea>
+<textarea class="code-input" id="s16-html" spellcheck="false"><div class="explorer-wrapper">
+  <div id="gallery" class="gallery-grid"></div>
+</div></textarea>
+<textarea class="code-input" id="s16-css" spellcheck="false">.gallery-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.movie-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.movie-card img {
+  width: 55px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.movie-card h6 {
+  margin: 0 0 2px;
+  font-size: 13px;
+  color: #0f172a;
+}
+.type-tag {
+  font-size: 10px;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #475569;
+}
+.rating-text {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: #d97706;
+  font-weight: 700;
+}</textarea>
+          </div>
+          <div class="editor-footer">
+            <span class="editor-tip">Complete Mini Project</span>
+            <button class="btn-run" onclick="runPlayground(this)"><i class="fa-solid fa-play"></i> Run Code</button>
+          </div>
+        </div>
 
-  <!-- SLIDE 12: DEVTOOLS & INSPECT NETWORK -->
-  <section class="slide">
-    <div class="badge">TOOLS DEVELOPER</div>
-    <h2>Melihat API di <span class="blue">DevTools Browser</span></h2>
-    <p class="lead">Tombol <code>F12</code> $\rightarrow$ Tab <b>Network</b> adalah senjata rahasia developer untuk mengintip kiriman API.</p>
-    
-    <div class="grid2">
-      <div class="card">
-        <h3>🔍 Tab "Network" (Koneksi)</h3>
-        <p style="font-size:0.95rem; color:var(--text-muted);">
-          Kamu bisa melihat URL yang diminta, berapa milidetik kecepatan responnya, status kodenya (200/404), dan bentuk JSON aslinya di tab <i>Response</i>.
-        </p>
+        <div class="preview-section">
+          <div class="preview-header">
+            <span class="preview-dot"></span>
+            <span>HASIL PREVIEW</span>
+          </div>
+          <iframe class="preview-iframe"></iframe>
+        </div>
       </div>
-      <div class="card">
-        <h3>💻 Tab "Console" (Log Data)</h3>
-        <p style="font-size:0.95rem; color:var(--text-muted);">
-          Gunakan <code>console.log(data)</code> untuk mengecek struktur object sebelum kamu mencoba merendernya ke elemen DOM.
-        </p>
+    </section>
+
+    <!-- SLIDE 17: CHECKLIST KELULUSAN SPRINT -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-list-check"></i> 16. Review Sprint</div>
+        <div class="slide-counter">17 / 18</div>
       </div>
-    </div>
-  </section>
+      <h2>Checklist Kelulusan <span class="blue">Sprint Modern JS</span></h2>
+      <p class="lead">Pastikan kamu sudah menguasai poin-poin kompetensi berikut sebelum melangkah ke topik Version Control & Deployment:</p>
 
-  <!-- SLIDE 13: CHALLENGE MINI PROJECT -->
-  <section class="slide">
-    <div class="badge">TANTANGAN EKSKUL</div>
-    <h2>🔥 Tantangan: <span class="blue">Daftar Project Dinamis</span></h2>
-    <p class="lead">Saatnya mencoba sendiri! Gabungkan konsep DOM pertemuan kemarin dengan Fetch API hari ini.</p>
-    <div class="card" style="border: 2px dashed var(--primary);">
-      <h3 style="margin-top:0;">Misi Kamu:</h3>
-      <ol style="margin-bottom:0; padding-left:22px; line-height:1.8;">
-        <li>Gunakan <code>fetch()</code> dengan <code>async/await</code> untuk mengambil data dari URL API.</li>
-        <li>Tampilkan pesan <i>"Memuat project..."</i> saat request sedang berlangsung (Loading State).</li>
-        <li>Render data (Judul project, deskripsi, tag teknologi) menjadi Card yang rapi di layar.</li>
-        <li>Tambahkan blok <code>try ... catch</code> untuk mencegah error crash.</li>
-      </ol>
-    </div>
-  </section>
+      <div class="checklist">
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Memahami perbedaan Client, API, dan Server dalam web modern.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Mampu mengubah String JSON menjadi Object nyata via JSON.parse().</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Mengerti 3 Status Promise (Pending, Fulfilled, Rejected).</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Mampu menulis fungsi Async/Await secara rapi dan terstruktur.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Menggunakan Try/Catch dan response.ok untuk mencegah crash.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Berhasil merender data array API ke DOM secara dinamis via .map().</div>
+      </div>
+    </section>
 
-  <!-- SLIDE 14: KESIMPULAN -->
-  <section class="slide">
-    <div class="badge">RANGKUMAN</div>
-    <h2>Rumus Sakti <span class="blue">Fetch API</span></h2>
-    <p class="lead">Hafalkan pola sederhana 6 langkah ini untuk semua jenis web API di masa depan:</p>
-    <div class="card" style="background:#0f172a; color:#f8fafc; font-family:'JetBrains Mono', monospace; font-size:14px; line-height:1.8;">
-      1. Tampilkan Loading UI<br>
-      2. <b>const res = await fetch(url);</b><br>
-      3. Periksa status <b>if (!res.ok) throw ...</b><br>
-      4. <b>const data = await res.json();</b><br>
-      5. Olah data dengan <b>data.forEach(...)</b><br>
-      6. Render ke DOM & sembunyikan Loading!
-    </div>
-  </section>
+    <!-- SLIDE 18: EVALUASI & FEEDBACK LINKS -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-clipboard-question"></i> 17. Evaluasi & Feedback</div>
+        <div class="slide-counter">18 / 18</div>
+      </div>
+      <h2>Evaluasi Pemahaman & <span class="blue">Feedback Sesi</span></h2>
+      <p class="lead">Silakan akses tautan di bawah ini untuk mengerjakan kuis evaluasi pemahaman materi serta mengisi survei evaluasi cara mengajar mentor:</p>
 
+      <div class="link-showcase">
+        <!-- CARD 1: MCQ -->
+        <div class="link-card primary">
+          <div class="link-header">
+            <div class="link-icon-wrap">
+              <i class="fa-solid fa-file-pen"></i>
+            </div>
+            <div>
+              <div class="link-title">Kuis Evaluasi Materi (MCQ)</div>
+              <small style="color: var(--text-sub); font-family: var(--font-mono); font-weight: 600;">https://s.id/MKb5O</small>
+            </div>
+          </div>
+          <p class="link-desc">
+            Uji pemahamanmu seputar konsep Asynchronous JavaScript, JSON Parsing, Promise Lifecycle, Async/Await, dan Fetch API.
+          </p>
+          <div class="link-actions">
+            <a href="https://s.id/MKb5O" target="_blank" class="btn-action-link primary">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Kuis MCQ
+            </a>
+            <button class="btn-copy" onclick="copyToClipboard('https://s.id/MKb5O', this)">
+              <i class="fa-regular fa-copy"></i> Salin Link
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 2: SURVEY -->
+        <div class="link-card success">
+          <div class="link-header">
+            <div class="link-icon-wrap">
+              <i class="fa-solid fa-comment-dots"></i>
+            </div>
+            <div>
+              <div class="link-title">Survei Cara Mengajar Mentor</div>
+              <small style="color: var(--text-sub); font-family: var(--font-mono); font-weight: 600;">https://s.id/dqeBo</small>
+            </div>
+          </div>
+          <p class="link-desc">
+            Berikan ulasan objektif, kritik, dan saran untuk metode mengajar mentor agar sesi pembelajaran berikutnya semakin optimal.
+          </p>
+          <div class="link-actions">
+            <a href="https://s.id/dqeBo" target="_blank" class="btn-action-link success">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Survei
+            </a>
+            <button class="btn-copy" onclick="copyToClipboard('https://s.id/dqeBo', this)">
+              <i class="fa-regular fa-copy"></i> Salin Link
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top: 20px;">
+        <strong>Informasi:</strong> Tautan di atas dapat dibuka langsung melalui browser ponsel maupun laptop. Terima kasih atas partisipasi aktifmu dalam Sprint 04!
+      </div>
+    </section>
+
+  </div> <!-- End Slide Deck -->
+
+  <!-- NAVIGATION BAR -->
+  <div class="navigation-bar">
+    <div class="nav-info">
+      <a href="../index.html" class="nav-hub-link"><i class="fa-solid fa-house"></i> Pusat Belajar</a>
+      <span>SPRINT 04 · MODERN JAVASCRIPT & FETCH API</span>
+      <span class="nav-shortcuts">[←] [→] Navigasi Slide</span>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prev-btn" title="Slide Sebelumnya (Left Arrow)"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="nav-btn" id="next-btn" title="Slide Berikutnya (Right Arrow)"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    <div class="progress-line" id="progress-bar"></div>
+  </div>
 </div>
 
-<!-- Navigation & Progress Bar -->
-<div class="counter" id="counter">01 / 14</div>
-<button class="nav prev" id="prev" title="Sebelumnya (Panah Kiri)">←</button>
-<button class="nav next" id="next" title="Selanjutnya (Panah Kanan)">→</button>
-<div class="progress" id="progress"></div>
-
 <script>
-  const slides = [...document.querySelectorAll('.slide')];
-  let cur = 0;
+  // SLIDE PRESENTATION LOGIC
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const progressBar = document.getElementById('progress-bar');
+  let currentIndex = 0;
 
-  function show(i) {
-    cur = Math.max(0, Math.min(slides.length - 1, i));
-    slides.forEach((s, n) => s.classList.toggle('active', n === cur));
-    document.getElementById('counter').textContent = 
-      String(cur + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
-    document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
+  function updateSlideDisplay(index) {
+    currentIndex = Math.max(0, Math.min(slides.length - 1, index));
+
+    slides.forEach((slide, idx) => {
+      slide.classList.toggle('active', idx === currentIndex);
+    });
+
+    // Update Progress Bar
+    const progressPercent = ((currentIndex + 1) / slides.length) * 100;
+    progressBar.style.width = progressPercent + '%';
+
+    // Auto-run active playground in slide if present
+    const activeSlide = slides[currentIndex];
+    const activePlaygroundRunBtn = activeSlide.querySelector('.btn-run');
+    if (activePlaygroundRunBtn) {
+      setTimeout(() => runPlayground(activePlaygroundRunBtn), 80);
+    }
   }
 
-  document.getElementById('next').onclick = () => show(cur + 1);
-  document.getElementById('prev').onclick = () => show(cur - 1);
+  nextBtn.addEventListener('click', () => updateSlideDisplay(currentIndex + 1));
+  prevBtn.addEventListener('click', () => updateSlideDisplay(currentIndex - 1));
 
-  // Focus isolation: Tidak pindah slide saat mengetik di dalam textarea/input
-  document.addEventListener('keydown', e => {
-    const tag = document.activeElement?.tagName;
-    if (tag === 'TEXTAREA' || tag === 'INPUT') return;
-    
-    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); show(cur + 1); }
-    if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(cur - 1); }
+  document.addEventListener('keydown', (e) => {
+    if (['TEXTAREA', 'INPUT'].includes(document.activeElement?.tagName)) return;
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) {
+      e.preventDefault();
+      updateSlideDisplay(currentIndex + 1);
+    }
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) {
+      e.preventDefault();
+      updateSlideDisplay(currentIndex - 1);
+    }
   });
 
-  // Runner untuk Sandbox Playground di dalam slide
-  document.querySelectorAll('.playground').forEach(box => {
-    const area = box.querySelector('.code-area');
-    const iframe = box.querySelector('.output-frame');
-    const btn = box.querySelector('.run-btn');
+  // PLAYGROUND CODE RUNNER & TAB SWITCHER LOGIC
+  function switchTab(btnElement, targetId) {
+    const editorSection = btnElement.closest('.editor-section');
+    const tabs = editorSection.querySelectorAll('.editor-tab-btn');
+    const inputs = editorSection.querySelectorAll('.code-input');
 
-    const execute = () => {
-      const code = area.value;
-      const htmlWrapper = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 14px; margin: 0; color: #1e293b; background: #fff; }
-          </style>
-        </head>
-        <body>
-          <div id="hasil"></div>
-          <div id="status"></div>
-          <div id="user-list"></div>
-          <script>
-            // Safety wrapper eksekusi
-            (async function() {
-              try {
-                ${code}
-              } catch(err) {
-                document.body.innerHTML += '<div style="color:red; font-size:12px; margin-top:10px; font-family:monospace;"><b>Runtime Error:</b> ' + err.message + '</div>';
-              }
-            })();
-          <\/script>
-        </body>
-        </html>
-      `;
-      iframe.srcdoc = htmlWrapper;
-    };
+    tabs.forEach(t => t.classList.remove('active'));
+    inputs.forEach(i => i.classList.remove('active'));
 
-    btn.onclick = execute;
-    // Render awal sekali saat slide dimuat
-    execute();
-  });
+    btnElement.classList.add('active');
+    const activeInput = editorSection.querySelector(`#${targetId}`);
+    if (activeInput) activeInput.classList.add('active');
+  }
 
-  show(0);
+  function runPlayground(buttonElement) {
+    const playground = buttonElement.closest('.playground-container');
+    const iframe = playground.querySelector('.preview-iframe');
+
+    // Retrieve Code from inputs in current playground
+    const jsInput = playground.querySelector('textarea[id$="-js"]');
+    const htmlInput = playground.querySelector('textarea[id$="-html"]');
+    const cssInput = playground.querySelector('textarea[id$="-css"]');
+
+    const jsCode = jsInput ? jsInput.value : '';
+    const htmlCode = htmlInput ? htmlInput.value : '';
+    const cssCode = cssInput ? cssInput.value : '';
+
+    const documentContent = `
+      <!DOCTYPE html>
+      <html lang="id">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+        <style>
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          body {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            padding: 14px;
+            color: #0f172a;
+            background-color: #ffffff;
+            font-size: 13px;
+            line-height: 1.5;
+          }
+          code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.9em; }
+          ${cssCode}
+        </style>
+      </head>
+      <body>
+        ${htmlCode}
+        <script>
+          try {
+            ${jsCode.replace(/<\/script>/gi, '<\\/script>')}
+          } catch(err) {
+            const errDiv = document.createElement('div');
+            errDiv.style.cssText = 'color: #dc2626; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 8px 12px; margin-top: 10px; font-family: monospace; font-size: 11px; font-weight: 600;';
+            errDiv.textContent = 'Runtime Error: ' + err.message;
+            document.body.appendChild(errDiv);
+          }
+        <\/script>
+      </body>
+      </html>
+    `;
+
+    iframe.srcdoc = documentContent;
+  }
+
+  // COPY TO CLIPBOARD HELPER
+  function copyToClipboard(text, btnElement) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        const originalHtml = btnElement.innerHTML;
+        btnElement.innerHTML = '<i class="fa-solid fa-check"></i> Tersalin!';
+        btnElement.style.background = '#dcfce7';
+        btnElement.style.color = '#15803d';
+        btnElement.style.borderColor = '#86efac';
+        setTimeout(() => {
+          btnElement.innerHTML = originalHtml;
+          btnElement.style.background = '';
+          btnElement.style.color = '';
+          btnElement.style.borderColor = '';
+        }, 2000);
+      }).catch(() => {
+        prompt('Salin tautan:', text);
+      });
+    } else {
+      prompt('Salin tautan:', text);
+    }
+  }
+
+  // Initialize first slide
+  updateSlideDisplay(0);
 </script>
+
 </body>
 </html>
