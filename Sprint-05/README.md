@@ -9,15 +9,15 @@ Modul pembelajaran komprehensif Version Control System (VCS), arsitektur Git, Co
 
 ```
 Sprint-05/
-├── index.html                  # Slide presentasi interaktif fullscreen (20 Slide + Interactive Git Simulator)
+├── index.html                  # Slide presentasi teori interaktif fullscreen (20 Slide + Simulator)
+├── praktikum.html              # Slide workshop praktikum interaktif hands-on (12 Slide + Lab Live)
 ├── slide.html                  # Alias / backup slide presentasi
 ├── README.md                   # Dokumentasi kurikulum & panduan modul
 └── latihan-git/                # Template proyek praktikum mandiri
     ├── index.html              # Starter website portofolio modern
     ├── style.css               # Desain responsif & dark mode tokens
     ├── app.js                  # Interaktivitas JavaScript & event logic
-    ├── .gitignore              # Standar aturan ignore file sensitif/cache
-    └── PANDUAN_PRAKTIKUM.md    # Langkah panduan hands-on lab step-by-step
+    └── .gitignore              # Standar aturan ignore file sensitif/cache
 ```
 
 ---

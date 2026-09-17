@@ -14,7 +14,7 @@ Platform ini dapat dijalankan dengan mudah secara publik dan terisolasi mengguna
 | **Sprint 02** | **CSS3 & Modern Responsive Web Design**<br>• The Box Model, Tipografi Google Fonts, Warna HSL<br>• Modern Layout: Flexbox & CSS Grid, Media Queries | [Slide Presentasi](Sprint-02/slide.html) · [Proyek Portofolio](Sprint-02/index.html) | Selesai |
 | **Sprint 03** | **JavaScript DOM & Web Interactivity**<br>• Variabel, Fungsi, Logika Pemrograman<br>• Event Handling, Manipulasi DOM (`querySelector`) | [Slide Presentasi](Sprint-03/index.html) | Selesai |
 | **Sprint 04** | **Modern JS, Asynchronous & Fetch API**<br>• REST API, Status Code HTTP, JSON Data Parsing<br>• Promise Lifecycle, Async/Await, Error Handling & Live Search App | [Slide Presentasi](Sprint-04/index.html) | Selesai |
-| **Sprint 05** | **Git, GitHub & Deployment Workflow**<br>• Arsitektur 3-Stage Git, Conventional Commits, Feature Branching<br>• Resolusi Merge Conflict, Pull Request di GitHub, Auto Deploy Pages/Vercel | [Slide Presentasi](Sprint-05/index.html) · [Praktikum Mandiri](Sprint-05/latihan-git/PANDUAN_PRAKTIKUM.md) | Aktif |
+| **Sprint 05** | **Git, GitHub & Deployment Workflow**<br>• Arsitektur 3-Stage Git, Conventional Commits, Feature Branching<br>• Resolusi Merge Conflict, Pull Request di GitHub, Auto Deploy Pages/Vercel | [Slide Teori](Sprint-05/index.html) · [Praktikum Interaktif](Sprint-05/praktikum.html) | Aktif |
 | **Sprint 06+** | **Backend Integration & Fullstack Basics** (Roadmap Selanjutnya) | Coming Soon | Roadmap |
 
 ---

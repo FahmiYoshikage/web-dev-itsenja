@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITSENJA — Praktikum Interaktif: Git, GitHub & Modern Deployment</title>
+  <meta name="description" content="Modul slide praktikum interaktif hands-on step-by-step: Inisialisasi Git, Conventional Commits, Feature Branching, Resolusi Konflik, dan Deployment ke GitHub Pages / Vercel.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://itsenja.com/Sprint-05/praktikum.html">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --primary-border: #bfdbfe;
+      --git-orange: #f05032;
+      --git-light: #fff5f2;
+      --git-border: #fed7cd;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --success-border: #a7f3d0;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --warning-border: #fde68a;
+      --danger: #dc2626;
+      --bg-canvas: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-sub: #64748b;
+      --border: #e2e8f0;
+      --border-dark: #cbd5e1;
+      --code-bg: #0f172a;
+      --code-header: #1e293b;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #presentation-viewport {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background-color: var(--bg-canvas);
+    }
+
+    .slide-deck {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 58px);
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 24px 44px 80px;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow-y: auto;
+      background-color: var(--bg-canvas);
+    }
+
+    .slide.active {
+      display: flex;
+      animation: fadeIn 0.22s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* HEADER BAR & BADGES */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+
+    .badge-tag {
+      background: var(--git-light);
+      color: var(--git-orange);
+      border: 1px solid var(--git-border);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-tag.blue { background: var(--primary-light); color: var(--primary); border-color: var(--primary-border); }
+    .badge-tag.green { background: var(--success-light); color: var(--success); border-color: var(--success-border); }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-sub);
+      background: var(--bg-card);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    /* TYPOGRAPHY */
+    .kicker {
+      color: var(--git-orange);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 11.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    h1 {
+      font-size: 32px;
+      line-height: 1.2;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    h2 {
+      font-size: 25px;
+      line-height: 1.25;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    p.lead {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      max-width: 1100px;
+    }
+
+    .orange { color: var(--git-orange); }
+    .blue { color: var(--primary); }
+    .green { color: var(--success); }
+
+    code {
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      font-weight: 600;
+    }
+
+    /* CARDS & GRIDS */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .callout {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #1e3a8a;
+      margin-top: 10px;
+    }
+
+    .callout.git { background: var(--git-light); border-left-color: var(--git-orange); color: #7c2d12; }
+    .callout.success { background: var(--success-light); border-left-color: var(--success); color: #064e3b; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; }
+
+    /* CODE BOX & COPY */
+    .code-box {
+      background: var(--code-bg);
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 8px 0;
+      font-family: var(--font-mono);
+    }
+
+    .code-box-header {
+      background: var(--code-header);
+      padding: 6px 12px;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+    }
+
+    .code-box-content {
+      padding: 12px;
+      color: #f8fafc;
+      font-size: 12px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .cmd-prompt { color: #38bdf8; user-select: none; margin-right: 6px; }
+    .cmd-comment { color: #64748b; font-style: italic; }
+
+    .btn-copy-code {
+      background: #334155;
+      color: #f1f5f9;
+      border: none;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.15s;
+    }
+
+    .btn-copy-code:hover { background: #475569; }
+
+    /* INTERACTIVE PLAYGROUND / SIMULATOR WORKSPACES */
+    .interactive-workspace {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* BRANCH GRAPH VISUALIZER */
+    .branch-graph-box {
+      background: #0f172a;
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 140px;
+      position: relative;
+    }
+
+    .branch-track {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .commit-node {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .commit-node.feature {
+      background: #f59e0b;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+    }
+
+    .commit-node.merge {
+      background: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+    }
+
+    .node-label {
+      position: absolute;
+      top: -20px;
+      font-size: 9.5px;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+
+    .branch-link-line {
+      height: 3px;
+      width: 28px;
+      background: #475569;
+    }
+
+    /* CHECKLIST */
+    .checklist-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .check-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+
+    .check-card:hover {
+      border-color: var(--primary-border);
+      background: #fafbfc;
+    }
+
+    .check-card.checked {
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+    }
+
+    .check-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 11px;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+
+    .check-card.checked .check-circle {
+      background: #059669;
+      border-color: #059669;
+    }
+
+    .check-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 12px 0 6px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2563eb, #059669);
+      transition: width 0.3s ease;
+    }
+
+    /* ACTION BUTTONS */
+    .btn-action {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+
+    .btn-action:hover { background: var(--primary-hover); }
+    .btn-action.orange { background: var(--git-orange); }
+    .btn-action.orange:hover { background: #d03e22; }
+    .btn-action.green { background: var(--success); }
+    .btn-action.green:hover { background: #047857; }
+
+    /* NAVIGATION BAR */
+    .navigation-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 24px;
+      z-index: 40;
+    }
+
+    .nav-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-sub);
+    }
+
+    .nav-hub-link {
+      text-decoration: none;
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--primary-light);
+      transition: background 0.15s;
+    }
+
+    .nav-hub-link:hover { background: #dbeafe; }
+
+    .nav-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-main);
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--git-light);
+      color: var(--git-orange);
+      border-color: var(--git-border);
+    }
+
+    .progress-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--git-orange);
+      transition: width 0.25s ease;
+    }
+  </style>
+</head>
+<body>
+
+<div id="presentation-viewport">
+  <div class="slide-deck">
+
+    <!-- SLIDE 1: COVER PRAKTIKUM -->
+    <section class="slide active">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-laptop-code"></i> PRAKTIKUM HANDS-ON · SPRINT 05</div>
+        <div class="slide-counter">01 / 12</div>
+      </div>
+      <div style="margin-top: 8px;">
+        <div class="kicker">Workshop Interaktif Mandiri</div>
+        <h1>Hands-On Lab: <span class="orange">Git, GitHub & Deployment</span></h1>
+        <p class="lead">Panduan praktikum langkah-demi-langkah berbasis web interaktif. Kamu akan menginisialisasi Git, menulis commit standar industri, membuat fitur dengan branching, dan menerbitkan website portofolio ke internet.</p>
+
+        <div class="grid-3" style="margin-top: 14px;">
+          <div class="card" style="border-top: 3px solid var(--git-orange);">
+            <strong style="color: var(--git-orange); font-size: 13.5px; display: block; margin-bottom: 6px;">
+              <i class="fa-solid fa-code-commit"></i> 1. Repositori Lokal
+            </strong>
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+              Inisialisasi repo, status tracking, proteksi file rahasia via <code>.gitignore</code>, dan Atomic Conventional Commits.
+            </p>
+          </div>
+
+          <div class="card" style="border-top: 3px solid var(--primary);">
+            <strong style="color: var(--primary); font-size: 13.5px; display: block; margin-bottom: 6px;">
+              <i class="fa-solid fa-code-branch"></i> 2. Feature Branching
+            </strong>
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+              Mengisolasi penambahan fitur pada branch baru, memeriksa selisih baris kode (diff), dan melakukan merge ke <code>main</code>.
+            </p>
+          </div>
+
+          <div class="card" style="border-top: 3px solid var(--success);">
+            <strong style="color: var(--success); font-size: 13.5px; display: block; margin-bottom: 6px;">
+              <i class="fa-solid fa-globe"></i> 3. Publikasi Cloud
+            </strong>
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+              Menghubungkan ke remote GitHub dan melakukan deployment otomatis live ke internet via GitHub Pages / Vercel.
+            </p>
+          </div>
+        </div>
+
+        <div class="callout git" style="margin-top: 16px;">
+          <strong>Petunjuk Penggunaan:</strong> Gunakan tombol navigasi <code>[Next]</code> atau tombol panah keyboard <code>[→]</code> untuk mengikuti setiap tahapan hands-on lab. Setiap slide dilengkapi simulator interaktif dan perintah yang dapat disalin dengan 1 klik!
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: PRATINJAU PROYEK -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag blue"><i class="fa-solid fa-folder-tree"></i> 01. Pratinjau Proyek</div>
+        <div class="slide-counter">02 / 12</div>
+      </div>
+      <h2>Struktur Folder & <span class="blue">Pratinjau Web Portofolio</span></h2>
+      <p class="lead">Folder proyek latihan telah disediakan pada direktori <code>Sprint-05/latihan-git/</code>. Berikut adalah berkas yang akan kita kelola dengan Git:</p>
+
+      <div class="grid-2">
+        <!-- STRUKTUR BERKAS -->
+        <div class="card">
+          <strong style="font-size: 13px; color: var(--text-main); margin-bottom: 8px; display: block;">
+            <i class="fa-solid fa-folder-open orange"></i> Struktur File <code>Sprint-05/latihan-git/</code>
+          </strong>
+          <div style="background: #0f172a; border-radius: 8px; padding: 12px; font-family: var(--font-mono); font-size: 12px; line-height: 1.8; color: #cbd5e1;">
+            📁 latihan-git/<br>
+            ├── 📄 <span style="color: #f59e0b;">index.html</span> <span style="color: #64748b;">(Struktur web portofolio)</span><br>
+            ├── 🎨 <span style="color: #38bdf8;">style.css</span>  <span style="color: #64748b;">(Styling modern & dark mode)</span><br>
+            ├── ⚡ <span style="color: #facc15;">app.js</span>     <span style="color: #64748b;">(Logika toggle tema & interactivity)</span><br>
+            └── 🛡️ <span style="color: #a7f3d0;">.gitignore</span> <span style="color: #64748b;">(Proteksi file sensitif/cache)</span>
+          </div>
+          <div style="margin-top: 10px; display: flex; gap: 8px;">
+            <a href="latihan-git/index.html" target="_blank" class="btn-action blue"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Website Latihan di Tab Baru</a>
+          </div>
+        </div>
+
+        <!-- PRATINJAU LIVE IFRAME -->
+        <div class="card" style="display: flex; flex-direction: column; padding: 10px;">
+          <strong style="font-size: 12px; color: var(--text-sub); margin-bottom: 6px; font-family: var(--font-mono);">
+            <i class="fa-solid fa-display"></i> Pratinjau Tampilan Live
+          </strong>
+          <iframe src="latihan-git/index.html" style="flex: 1; min-height: 240px; border: 1px solid var(--border); border-radius: 6px; background: white;"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: LAB 1 - SETUP & INIT -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-play"></i> 02. Lab 1 — Inisialisasi</div>
+        <div class="slide-counter">03 / 12</div>
+      </div>
+      <h2>Tahap 1: Setup Identitas & <span class="orange">Inisialisasi Git</span></h2>
+      <p class="lead">Buka terminal kamu, arahkan ke folder latihan praktikum, konfigurasikan identitas global, lalu aktifkan pelacakan Git dengan <code>git init</code>.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <strong style="font-size: 13px; color: var(--text-main); margin-bottom: 6px; display: block;">Perintah di Terminal Komputer Kamu:</strong>
+          <div class="code-box">
+            <div class="code-box-header">
+              <span>Terminal / Bash</span>
+              <button class="btn-copy-code" onclick="copyCode(this, 'cd Sprint-05/latihan-git\ngit config --global user.name &quot;Nama Kamu&quot;\ngit config --global user.email &quot;email@kamu.com&quot;\ngit config --global init.defaultBranch main\ngit init\ngit status')"><i class="fa-regular fa-copy"></i> Salin</button>
+            </div>
+            <div class="code-box-content"><span class="cmd-comment"># 1. Masuk ke direktori latihan</span>
+<span class="cmd-prompt">$</span>cd Sprint-05/latihan-git
+
+<span class="cmd-comment"># 2. Atur identitas kamu</span>
+<span class="cmd-prompt">$</span>git config --global user.name <span style="color:#a7f3d0;">"Nama Kamu"</span>
+<span class="cmd-prompt">$</span>git config --global user.email <span style="color:#a7f3d0;">"email@kamu.com"</span>
+<span class="cmd-prompt">$</span>git config --global init.defaultBranch main
+
+<span class="cmd-comment"># 3. Inisialisasi repositori Git</span>
+<span class="cmd-prompt">$</span>git init
+<span class="cmd-prompt">$</span>git status</div>
+          </div>
+        </div>
+
+        <!-- SIMULATOR HASIL -->
+        <div class="card" style="background: #0f172a; color: #f1f5f9; font-family: var(--font-mono); font-size: 12px; display: flex; flex-direction: column;">
+          <div style="border-bottom: 1px solid #334155; padding-bottom: 6px; margin-bottom: 8px; color: #94a3b8; font-weight: 700;">
+            Output Terminal Ekspektasi:
+          </div>
+          <div style="flex: 1; line-height: 1.6;">
+            Initialized empty Git repository in /project/Sprint-05/latihan-git/.git/<br><br>
+            On branch main<br>
+            No commits yet<br><br>
+            <span style="color: #ef4444;">Untracked files:</span><br>
+            &nbsp;&nbsp;<span style="color: #ef4444;">.gitignore</span><br>
+            &nbsp;&nbsp;<span style="color: #ef4444;">app.js</span><br>
+            &nbsp;&nbsp;<span style="color: #ef4444;">index.html</span><br>
+            &nbsp;&nbsp;<span style="color: #ef4444;">style.css</span><br><br>
+            nothing added to commit but untracked files present (use "git add" to track)
+          </div>
+        </div>
+      </div>
+
+      <div class="callout git">
+        <strong>Penjelasan:</strong> Warna merah pada <code>git status</code> menandakan file masih berada di <b>Working Directory</b> dan belum dimasukkan ke antrean <b>Staging Area</b>.
+      </div>
+    </section>
+
+    <!-- SLIDE 4: LAB 2 - TESTER .GITIGNORE -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag green"><i class="fa-solid fa-shield-halved"></i> 03. Lab 2 — Proteksi File</div>
+        <div class="slide-counter">04 / 12</div>
+      </div>
+      <h2>Tahap 2: Proteksi File Rahasia via <span class="green">.gitignore</span></h2>
+      <p class="lead">Uji pemahamanmu terhadap aturan file <code>.gitignore</code> menggunakan simulator interaktif berikut. Ketik nama file di bawah untuk melihat apakah Git akan melacak atau mengabaikannya:</p>
+
+      <div class="interactive-workspace">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <input type="text" id="ignTestInput" placeholder="Ketik nama file (contoh: .env, node_modules/express, style.css, debug.log)..." style="flex: 1; min-width: 260px; padding: 9px 14px; border: 1px solid var(--border-dark); border-radius: 6px; font-family: var(--font-mono); font-size: 12.5px; outline: none;">
+          <button class="btn-action green" onclick="testGitignorePattern()"><i class="fa-solid fa-vial"></i> Uji Status File</button>
+        </div>
+
+        <div id="ignTestResult" style="padding: 12px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 12.5px; background: #f8fafc; border: 1px dashed var(--border-dark);">
+          Ketik nama file di atas atau klik rekomendasi di bawah untuk menguji aturan <code>.gitignore</code>.
+        </div>
+
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;">
+          <small style="color: var(--text-sub); margin-right: 6px; align-self: center;">Coba cepat:</small>
+          <button class="btn-copy-code" onclick="quickTestIgn('.env')">.env</button>
+          <button class="btn-copy-code" onclick="quickTestIgn('node_modules/axios/index.js')">node_modules/axios</button>
+          <button class="btn-copy-code" onclick="quickTestIgn('index.html')">index.html</button>
+          <button class="btn-copy-code" onclick="quickTestIgn('error.log')">error.log</button>
+          <button class="btn-copy-code" onclick="quickTestIgn('.DS_Store')">.DS_Store</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: LAB 3 - CONVENTIONAL COMMITS -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag blue"><i class="fa-solid fa-stamp"></i> 04. Lab 3 — Commit Pertama</div>
+        <div class="slide-counter">05 / 12</div>
+      </div>
+      <h2>Tahap 3: Staging & <span class="blue">Conventional Commit Generator</span></h2>
+      <p class="lead">Gunakan builder interaktif di bawah ini untuk merancang pesan commit pertama kamu dengan standar baku <b>Conventional Commits</b>:</p>
+
+      <div class="interactive-workspace">
+        <div class="grid-2">
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; display: block;">1. Pilih Tipe Commit:</label>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
+              <button class="btn-copy-code" style="background: #10b981;" onclick="setCommitType('feat')">feat (Fitur)</button>
+              <button class="btn-copy-code" style="background: #ef4444;" onclick="setCommitType('fix')">fix (Bugfix)</button>
+              <button class="btn-copy-code" style="background: #3b82f6;" onclick="setCommitType('docs')">docs (Dokumentasi)</button>
+              <button class="btn-copy-code" style="background: #f59e0b;" onclick="setCommitType('style')">style (Format)</button>
+            </div>
+
+            <label style="font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; display: block;">2. Deskripsi Aksi:</label>
+            <input type="text" id="commitDescInput" value="initialize responsive web portfolio starter" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-dark); border-radius: 6px; font-family: var(--font-mono); font-size: 12px; margin-bottom: 10px;" oninput="updateCommitPreview()">
+          </div>
+
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; display: block;">Hasil Perintah Git Siap Eksekusi:</label>
+            <div class="code-box" style="margin: 0;">
+              <div class="code-box-header">
+                <span>Perintah Siap Pakai</span>
+                <button class="btn-copy-code" onclick="copyGeneratedCommit()"><i class="fa-regular fa-copy"></i> Salin Perintah</button>
+              </div>
+              <div class="code-box-content" id="commitCmdOutput">git add .
+git commit -m "feat: initialize responsive web portfolio starter"</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout success" style="margin-top: 6px;">
+          Setelah menjalankan perintah di atas di terminal kamu, periksa jejak snapshot dengan: <code>git log --oneline</code>.
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: LAB 4 - FEATURE BRANCHING -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-code-branch"></i> 05. Lab 4 — Branching</div>
+        <div class="slide-counter">06 / 12</div>
+      </div>
+      <h2>Tahap 4: Mengembangkan Fitur dengan <span class="orange">Branch Terisolasi</span></h2>
+      <p class="lead">Jangan pernah mengedit fitur eksperimen langsung di branch <code>main</code>. Mari buat branch baru bernama <code>feature/add-sprint03-card</code>.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <strong style="font-size: 13px; color: var(--text-main); margin-bottom: 6px; display: block;">Jalankan di Terminal Komputer Kamu:</strong>
+          <div class="code-box">
+            <div class="code-box-header">
+              <span>Terminal</span>
+              <button class="btn-copy-code" onclick="copyCode(this, 'git switch -c feature/add-sprint03-card')"><i class="fa-regular fa-copy"></i> Salin</button>
+            </div>
+            <div class="code-box-content"><span class="cmd-comment"># Buat branch baru & langsung berpindah</span>
+<span class="cmd-prompt">$</span>git switch -c feature/add-sprint03-card
+
+<span class="cmd-comment"># Cek daftar branch (tanda * adalah yang aktif)</span>
+<span class="cmd-prompt">$</span>git branch</div>
+          </div>
+          <button class="btn-action orange" style="margin-top: 8px;" onclick="simulateBranchAnimation()"><i class="fa-solid fa-play"></i> Simulasikan Pembuatan Branch di Sini</button>
+        </div>
+
+        <!-- VISUAL GRAPH -->
+        <div class="card" style="display: flex; flex-direction: column;">
+          <strong style="font-size: 12px; color: var(--text-sub); font-family: var(--font-mono); margin-bottom: 8px;">Visualisasi Pohon Cabang (Git Tree)</strong>
+          <div class="branch-graph-box" id="branchGraphBox">
+            <div class="branch-track">
+              <div class="commit-node"><span class="node-label">main (C1)</span>C1</div>
+              <div class="branch-link-line"></div>
+              <div class="commit-node" id="nodeBranchMain"><span class="node-label">HEAD -&gt; main</span>C2</div>
+            </div>
+          </div>
+          <div id="branchSimStatus" style="font-size: 11.5px; color: var(--text-muted); font-family: var(--font-mono); margin-top: 8px; text-align: center;">
+            Saat ini berada di branch <code>main</code>. Klik tombol di kiri untuk mensimulasikan branch!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: LAB 5 - EDITING & DIFF -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag blue"><i class="fa-solid fa-code-compare"></i> 06. Lab 5 — Edit & Diff</div>
+        <div class="slide-counter">07 / 12</div>
+      </div>
+      <h2>Tahap 5: Menambahkan Konten & <span class="blue">Melihat Diff</span></h2>
+      <p class="lead">Buka berkas <code>Sprint-05/latihan-git/index.html</code> di VS Code, lalu tambahkan kartu proyek Sprint 03 ke dalam kontainer <code>#projectsList</code>:</p>
+
+      <div class="code-box">
+        <div class="code-box-header">
+          <span>Kode yang Ditambahkan ke index.html</span>
+          <button class="btn-copy-code" onclick="copyCode(this, '<article class=&quot;project-card&quot;>\n  <div class=&quot;project-header&quot;>\n    <span class=&quot;project-sprint&quot;>Sprint 03</span>\n    <span class=&quot;project-badge&quot;>JavaScript DOM</span>\n  </div>\n  <h3>Interaktivitas Web & Event Handling</h3>\n  <p>Manipulasi elemen DOM secara dinamis, event listeners klik mouse, dan validasi form.</p>\n</article>')"><i class="fa-regular fa-copy"></i> Salin Cuplikan HTML</button>
+        </div>
+        <div class="code-box-content"><span style="color: #a7f3d0;">+ &lt;article class="project-card"&gt;
++   &lt;div class="project-header"&gt;
++     &lt;span class="project-sprint"&gt;Sprint 03&lt;/span&gt;
++     &lt;span class="project-badge"&gt;JavaScript DOM&lt;/span&gt;
++   &lt;/div&gt;
++   &lt;h3&gt;Interaktivitas Web & Event Handling&lt;/h3&gt;
++   &lt;p&gt;Manipulasi elemen DOM secara dinamis, event listeners klik mouse, dan validasi form.&lt;/p&gt;
++ &lt;/article&gt;</span></div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 10px;">
+        <div class="card">
+          <strong style="font-size: 12.5px; color: var(--text-main); margin-bottom: 4px; display: block;">Periksa Perubahan dengan <code>git diff</code>:</strong>
+          <div class="code-box" style="margin: 0;"><div class="code-box-content"><span class="cmd-prompt">$</span>git diff index.html</div></div>
+        </div>
+
+        <div class="card">
+          <strong style="font-size: 12.5px; color: var(--text-main); margin-bottom: 4px; display: block;">Commit Fitur Tersebut:</strong>
+          <div class="code-box" style="margin: 0;"><div class="code-box-content"><span class="cmd-prompt">$</span>git add index.html
+<span class="cmd-prompt">$</span>git commit -m <span style="color: #a7f3d0;">"feat(projects): add sprint 03 card"</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: LAB 6 - MERGE TO MAIN -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag green"><i class="fa-solid fa-code-merge"></i> 07. Lab 6 — Merge</div>
+        <div class="slide-counter">08 / 12</div>
+      </div>
+      <h2>Tahap 6: Menggabungkan Cabang ke <span class="green">Main (Merge)</span></h2>
+      <p class="lead">Setelah fitur selesai dan di-commit pada branch fitur, pindah kembali ke branch <code>main</code> dan satukan perubahan.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <strong style="font-size: 13px; color: var(--text-main); margin-bottom: 6px; display: block;">Langkah Merge di Terminal Kamu:</strong>
+          <div class="code-box">
+            <div class="code-box-header">
+              <span>Terminal</span>
+              <button class="btn-copy-code" onclick="copyCode(this, 'git switch main\ngit merge feature/add-sprint03-card\ngit branch -d feature/add-sprint03-card')"><i class="fa-regular fa-copy"></i> Salin</button>
+            </div>
+            <div class="code-box-content"><span class="cmd-comment"># 1. Pindah kembali ke main</span>
+<span class="cmd-prompt">$</span>git switch main
+
+<span class="cmd-comment"># 2. Gabungkan perubahan dari branch fitur</span>
+<span class="cmd-prompt">$</span>git merge feature/add-sprint03-card
+
+<span class="cmd-comment"># 3. Hapus branch fitur lokal yang sudah selesai</span>
+<span class="cmd-prompt">$</span>git branch -d feature/add-sprint03-card</div>
+          </div>
+          <button class="btn-action green" style="margin-top: 8px;" onclick="simulateMergeAnimation()"><i class="fa-solid fa-play"></i> Simulasikan Fast-Forward Merge</button>
+        </div>
+
+        <!-- SIMULASI MERGE -->
+        <div class="card" style="display: flex; flex-direction: column;">
+          <strong style="font-size: 12px; color: var(--text-sub); font-family: var(--font-mono); margin-bottom: 8px;">Status Visual Pasca-Merge</strong>
+          <div class="branch-graph-box" id="mergeGraphBox">
+            <div class="branch-track">
+              <div class="commit-node">C1</div>
+              <div class="branch-link-line"></div>
+              <div class="commit-node">C2</div>
+              <div class="branch-link-line"></div>
+              <div class="commit-node merge" id="nodeMerge"><span class="node-label">HEAD -&gt; main</span>C3</div>
+            </div>
+          </div>
+          <div id="mergeStatusText" style="font-size: 11.5px; color: var(--text-muted); font-family: var(--font-mono); margin-top: 8px; text-align: center;">
+            Fast-forward merge sukses! Pointer branch main maju ke commit C3.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: LAB 7 - GITHUB REMOTE SYNC -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag blue"><i class="fa-brands fa-github"></i> 08. Lab 7 — Push Remote</div>
+        <div class="slide-counter">09 / 12</div>
+      </div>
+      <h2>Tahap 7: Menghubungkan ke <span class="blue">GitHub Cloud</span></h2>
+      <p class="lead">Simpan riwayat kodinganmu secara aman di cloud dan siap dibagikan ke seluruh dunia dengan menghubungkannya ke GitHub.</p>
+
+      <div class="interactive-workspace">
+        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
+          <label style="font-size: 12px; font-weight: 700; color: var(--text-main);">Nama Pengguna GitHub Kamu:</label>
+          <input type="text" id="ghUsernameInput" value="FahmiYoshikage" placeholder="Ketik username GitHub kamu..." style="padding: 7px 12px; border: 1px solid var(--border-dark); border-radius: 6px; font-family: var(--font-mono); font-size: 12px; flex: 1; min-width: 200px;" oninput="updateRemoteCommandPreview()">
+        </div>
+
+        <div class="code-box" style="margin: 0;">
+          <div class="code-box-header">
+            <span>Perintah Hubungkan & Push ke GitHub</span>
+            <button class="btn-copy-code" onclick="copyRemoteCommand()"><i class="fa-regular fa-copy"></i> Salin Perintah</button>
+          </div>
+          <div class="code-box-content" id="ghRemoteCmdOutput"><span class="cmd-comment"># 1. Daftarkan URL remote GitHub</span>
+git remote add origin https://github.com/FahmiYoshikage/web-portfolio-bootcamp.git
+
+<span class="cmd-comment"># 2. Pastikan branch utama bernama main</span>
+git branch -M main
+
+<span class="cmd-comment"># 3. Kirim seluruh riwayat commit ke GitHub</span>
+git push -u origin main</div>
+        </div>
+
+        <div class="callout">
+          <strong>Tips:</strong> Sebelum menjalankan perintah di atas, pastikan kamu sudah membuat repositori publik baru bernama <code>web-portfolio-bootcamp</code> di <a href="https://github.com/new" target="_blank" style="color: var(--primary); font-weight: 700;">github.com/new</a> (biarkan kosong tanpa centang README).
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: LAB 8 - DEPLOY GITHUB PAGES -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag green"><i class="fa-solid fa-cloud-arrow-up"></i> 09. Lab 8 — GitHub Pages</div>
+        <div class="slide-counter">10 / 12</div>
+      </div>
+      <h2>Tahap 8: Go Live via <span class="green">GitHub Pages (1 Menit)</span></h2>
+      <p class="lead">Publikasikan websitemu secara instan dan 100% gratis menggunakan fitur bawaan GitHub Pages:</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <strong style="font-size: 13px; color: var(--text-main); margin-bottom: 8px; display: block;">Langkah Konfigurasi di GitHub:</strong>
+          <ol style="font-size: 12.5px; color: var(--text-muted); line-height: 1.8; padding-left: 18px;">
+            <li>Buka repositori kamu di GitHub &gt; klik tab <b>Settings</b>.</li>
+            <li>Di bilah navigasi kiri, klik menu <b>Pages</b>.</li>
+            <li>Di bawah <i>Build and deployment</i>, pilih <b>Deploy from a branch</b>.</li>
+            <li>Pilih Branch: <code>main</code> dan folder: <code>/ (root)</code> &gt; klik <b>Save</b>.</li>
+            <li>Tunggu 1–2 menit, refresh halaman untuk mendapatkan tautan publik!</li>
+          </ol>
+        </div>
+
+        <div class="card" style="background: #f0fdf4; border-color: #bbf7d0; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 20px;">
+          <i class="fa-solid fa-circle-check" style="color: #16a34a; font-size: 36px; margin-bottom: 8px;"></i>
+          <h3 style="font-size: 16px; color: #166534; margin-bottom: 4px;">Website Kamu Live di Internet!</h3>
+          <p style="font-size: 12px; color: #15803d; margin-bottom: 12px;">Format URL publik resmi yang dihasilkan:</p>
+          <div style="background: white; border: 1px solid #86efac; padding: 8px 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 12px; color: #166534;">
+            https://<span id="ghPagesUrlUser">USERNAME</span>.github.io/web-portfolio-bootcamp/
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: LAB 9 - DEPLOY VERCEL -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag" style="background: #000; color: #fff;"><i class="fa-solid fa-triangle-circle-square"></i> 10. Lab 9 — Vercel CI/CD</div>
+        <div class="slide-counter">11 / 12</div>
+      </div>
+      <h2>Tahap 9: Modern Continuous Deployment via <span class="blue">Vercel</span></h2>
+      <p class="lead">Standar industri modern: setiap kali kamu menjalankan <code>git push</code>, Vercel akan otomatis mendeteksi dan memperbarui website kamu dalam 10 detik!</p>
+
+      <div class="grid-3">
+        <div class="card" style="text-align: center;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #eff6ff; color: #2563eb; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; margin: 0 auto 6px;">1</div>
+          <strong style="font-size: 13px; display: block; margin-bottom: 4px;">Login Vercel</strong>
+          <p style="font-size: 11.5px; color: var(--text-muted);">Buka <a href="https://vercel.com" target="_blank" style="color: var(--primary); font-weight: 700;">vercel.com</a> lalu masuk menggunakan akun GitHub kamu.</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #eff6ff; color: #2563eb; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; margin: 0 auto 6px;">2</div>
+          <strong style="font-size: 13px; display: block; margin-bottom: 4px;">Import Repositori</strong>
+          <p style="font-size: 11.5px; color: var(--text-muted);">Klik tombol <b>Add New... &gt; Project</b> lalu pilih repo <code>web-portfolio-bootcamp</code>.</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #ecfdf5; color: #059669; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; margin: 0 auto 6px;"><i class="fa-solid fa-rocket"></i></div>
+          <strong style="font-size: 13px; display: block; margin-bottom: 4px;">Klik Deploy</strong>
+          <p style="font-size: 11.5px; color: var(--text-muted);">Klik Deploy! Website kamu langsung aktif dengan sertifikat keamanan SSL gratis.</p>
+        </div>
+      </div>
+
+      <div class="callout success" style="margin-top: 14px;">
+        <strong>Kelebihan Vercel:</strong> Dilengkapi fitur <i>Preview Deployments</i> untuk setiap Pull Request sebelum digabungkan ke cabang utama.
+      </div>
+    </section>
+
+    <!-- SLIDE 12: CHECKLIST INTERAKTIF & KELULUSAN -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag green"><i class="fa-solid fa-trophy"></i> 11. Checklist Kelulusan</div>
+        <div class="slide-counter">12 / 12</div>
+      </div>
+      <h2>Checklist Penyelesaian <span class="green">Praktikum Mandiri</span></h2>
+      <p class="lead">Klik setiap tugas di bawah ini yang telah kamu selesaikan untuk memantau progres kelulusan praktikum hands-on kamu:</p>
+
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="labProgressFill"></div>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--text-sub); margin-bottom: 12px;">
+        <span>Progres Penyelesaian Lab</span>
+        <span id="labProgressPercent">0% Selesai (0/6 Tugas)</span>
+      </div>
+
+      <div class="checklist-container" id="checklistContainer">
+        <div class="check-card" onclick="toggleTask(this)">
+          <div class="check-circle"><i class="fa-solid fa-check"></i></div>
+          <div class="check-title">1. Berhasil mengonfigurasi user.name, user.email, dan git init</div>
+        </div>
+
+        <div class="check-card" onclick="toggleTask(this)">
+          <div class="check-circle"><i class="fa-solid fa-check"></i></div>
+          <div class="check-title">2. Memasang file .gitignore untuk melindungi file rahasia</div>
+        </div>
+
+        <div class="check-card" onclick="toggleTask(this)">
+          <div class="check-circle"><i class="fa-solid fa-check"></i></div>
+          <div class="check-title">3. Menulis pesan commit dengan format Conventional Commits</div>
+        </div>
+
+        <div class="check-card" onclick="toggleTask(this)">
+          <div class="check-circle"><i class="fa-solid fa-check"></i></div>
+          <div class="check-title">4. Membuat feature branch terpisah dan melakukan merge ke main</div>
+        </div>
+
+        <div class="check-card" onclick="toggleTask(this)">
+          <div class="check-circle"><i class="fa-solid fa-check"></i></div>
+          <div class="check-title">5. Berhasil push repositori portofolio ke remote GitHub</div>
+        </div>
+
+        <div class="check-card" onclick="toggleTask(this)">
+          <div class="check-circle"><i class="fa-solid fa-check"></i></div>
+          <div class="check-title">6. Menerbitkan website portofolio via GitHub Pages / Vercel</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 18px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <button class="btn-action green" onclick="copyLabReport()"><i class="fa-solid fa-clipboard-check"></i> Salin Laporan Penyelesaian Lab</button>
+        <a href="index.html" class="btn-action orange"><i class="fa-solid fa-book"></i> Buka Kembali Slide Teori</a>
+        <a href="../index.html" class="btn-action blue"><i class="fa-solid fa-house"></i> Kembali ke Pusat Belajar Hub</a>
+      </div>
+    </section>
+
+  </div> <!-- End Slide Deck -->
+
+  <!-- NAVIGATION BAR -->
+  <div class="navigation-bar">
+    <div class="nav-info">
+      <a href="../index.html" class="nav-hub-link"><i class="fa-solid fa-house"></i> Pusat Belajar</a>
+      <a href="index.html" class="nav-hub-link" style="background: var(--git-light); color: var(--git-orange);"><i class="fa-brands fa-git-alt"></i> Slide Teori</a>
+      <span>PRAKTIKUM INTERAKTIF · GIT & DEPLOYMENT</span>
+      <span style="color: #94a3b8; font-size: 10px;">[←] [→] Navigasi Slide</span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="nav-btn" id="prev-btn" title="Slide Sebelumnya (Left Arrow)"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="nav-btn" id="next-btn" title="Slide Berikutnya (Right Arrow)"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    <div class="progress-line" id="progress-bar"></div>
+  </div>
+</div>
+
+<script>
+  // SLIDE DECK LOGIC
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const progressBar = document.getElementById('progress-bar');
+  let currentIndex = 0;
+
+  function updateSlideDisplay(index) {
+    currentIndex = Math.max(0, Math.min(slides.length - 1, index));
+    slides.forEach((slide, idx) => {
+      slide.classList.toggle('active', idx === currentIndex);
+    });
+    const progressPercent = ((currentIndex + 1) / slides.length) * 100;
+    progressBar.style.width = progressPercent + '%';
+  }
+
+  nextBtn.addEventListener('click', () => updateSlideDisplay(currentIndex + 1));
+  prevBtn.addEventListener('click', () => updateSlideDisplay(currentIndex - 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (['TEXTAREA', 'INPUT'].includes(document.activeElement?.tagName)) return;
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) {
+      e.preventDefault();
+      updateSlideDisplay(currentIndex + 1);
+    }
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) {
+      e.preventDefault();
+      updateSlideDisplay(currentIndex - 1);
+    }
+  });
+
+  // COPY HELPER
+  function copyCode(btn, text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Tersalin!';
+        setTimeout(() => btn.innerHTML = originalHtml, 2000);
+      });
+    } else {
+      prompt('Salin perintah:', text);
+    }
+  }
+
+  // LAB 2: .GITIGNORE TESTER LOGIC
+  const gitignoreRules = [
+    { pattern: 'node_modules/', reason: 'Folder dependensi pihak ketiga yang berat dan dapat diinstal via npm.' },
+    { pattern: '.env', reason: 'File konfigurasi rahasia berisi password atau API Key yang dilarang publik.' },
+    { pattern: '*.log', reason: 'File log sistem dan error sementara.' },
+    { pattern: '.DS_Store', reason: 'File metadata sistem operasi macOS.' },
+    { pattern: 'dist/', reason: 'Hasil folder build produksi sementara.' }
+  ];
+
+  function testGitignorePattern() {
+    const input = document.getElementById('ignTestInput').value.trim();
+    const resultBox = document.getElementById('ignTestResult');
+    if (!input) {
+      resultBox.innerHTML = 'Harap ketik nama file terlebih dahulu.';
+      return;
+    }
+
+    const lower = input.toLowerCase();
+    let isIgnored = false;
+    let matchedReason = '';
+
+    if (lower.startsWith('node_modules') || lower.includes('/node_modules/')) {
+      isIgnored = true;
+      matchedReason = 'Cocok dengan aturan: <code>node_modules/</code> (Dependensi package)';
+    } else if (lower.startsWith('.env') || lower.includes('/.env')) {
+      isIgnored = true;
+      matchedReason = 'Cocok dengan aturan: <code>.env*</code> (File kredensial sensitif)';
+    } else if (lower.endsWith('.log')) {
+      isIgnored = true;
+      matchedReason = 'Cocok dengan aturan wildcard: <code>*.log</code> (File catatan aktivitas)';
+    } else if (lower.includes('.ds_store') || lower.includes('thumbs.db')) {
+      isIgnored = true;
+      matchedReason = 'Cocok dengan aturan file OS cache';
+    } else if (lower.endsWith('.pem') || lower.endsWith('.key')) {
+      isIgnored = true;
+      matchedReason = 'Cocok dengan aturan file kunci SSL / Private Key';
+    }
+
+    if (isIgnored) {
+      resultBox.style.background = '#fef2f2';
+      resultBox.style.border = '1px solid #fecaca';
+      resultBox.style.color = '#b91c1c';
+      resultBox.innerHTML = `<strong>🛡️ DIABAIKAN (IGNORED):</strong> File <code>${input}</code> TIDAK AKAN masuk ke Git.<br><small>${matchedReason}</small>`;
+    } else {
+      resultBox.style.background = '#ecfdf5';
+      resultBox.style.border = '1px solid #a7f3d0';
+      resultBox.style.color = '#047857';
+      resultBox.innerHTML = `<strong>✓ DILACAK (TRACKED):</strong> File <code>${input}</code> akan direkam oleh Git dan aman dimasukkan ke staging area.`;
+    }
+  }
+
+  function quickTestIgn(val) {
+    document.getElementById('ignTestInput').value = val;
+    testGitignorePattern();
+  }
+
+  // LAB 3: CONVENTIONAL COMMIT BUILDER
+  let currentCommitType = 'feat';
+  function setCommitType(type) {
+    currentCommitType = type;
+    updateCommitPreview();
+  }
+
+  function updateCommitPreview() {
+    const desc = document.getElementById('commitDescInput').value.trim() || 'update project components';
+    const cmd = `git add .\ngit commit -m "${currentCommitType}: ${desc}"`;
+    document.getElementById('commitCmdOutput').textContent = cmd;
+  }
+
+  function copyGeneratedCommit() {
+    const text = document.getElementById('commitCmdOutput').textContent;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => alert('Perintah commit berhasil disalin!'));
+    } else {
+      prompt('Salin perintah:', text);
+    }
+  }
+
+  // LAB 4: BRANCH ANIMATION SIMULATOR
+  function simulateBranchAnimation() {
+    const box = document.getElementById('branchGraphBox');
+    const status = document.getElementById('branchSimStatus');
+    box.innerHTML = `
+      <div style="display: flex; flex-direction: column; gap: 14px; align-items: center;">
+        <div class="branch-track">
+          <div class="commit-node">C1</div>
+          <div class="branch-link-line"></div>
+          <div class="commit-node">C2<span class="node-label" style="top:-20px;">main</span></div>
+        </div>
+        <div class="branch-track" style="margin-left: 50px;">
+          <div style="height: 20px; width: 2px; background: #f59e0b; margin-top: -24px; align-self: flex-start;"></div>
+          <div class="commit-node feature"><span class="node-label" style="color:#f59e0b; top:42px;">HEAD -&gt; feature</span>C3</div>
+        </div>
+      </div>
+    `;
+    status.innerHTML = `<span style="color: #10b981; font-weight:700;">✓ Sukses!</span> Kamu sekarang berada di branch <b>feature/add-sprint03-card</b> secara terisolasi.`;
+  }
+
+  // LAB 6: MERGE ANIMATION SIMULATOR
+  function simulateMergeAnimation() {
+    const box = document.getElementById('mergeGraphBox');
+    const text = document.getElementById('mergeStatusText');
+    box.innerHTML = `
+      <div class="branch-track">
+        <div class="commit-node">C1</div>
+        <div class="branch-link-line"></div>
+        <div class="commit-node">C2</div>
+        <div class="branch-link-line"></div>
+        <div class="commit-node feature">C3</div>
+        <div class="branch-link-line"></div>
+        <div class="commit-node merge"><span class="node-label" style="color:#10b981; top:-20px;">HEAD -&gt; main</span>C4</div>
+      </div>
+    `;
+    text.innerHTML = `<span style="color:#10b981; font-weight:700;">✓ Penggabungan Selesai!</span> Branch fitur telah di-merge dan dihapus dengan bersih.`;
+  }
+
+  // LAB 7: GITHUB REMOTE SYNC PREVIEW
+  function updateRemoteCommandPreview() {
+    const user = document.getElementById('ghUsernameInput').value.trim() || 'USERNAME';
+    document.getElementById('ghPagesUrlUser').textContent = user;
+    const cmd = `# 1. Daftarkan URL remote GitHub\ngit remote add origin https://github.com/${user}/web-portfolio-bootcamp.git\n\n# 2. Pastikan branch utama bernama main\ngit branch -M main\n\n# 3. Kirim seluruh riwayat commit ke GitHub\ngit push -u origin main`;
+    document.getElementById('ghRemoteCmdOutput').textContent = cmd;
+  }
+
+  function copyRemoteCommand() {
+    const text = document.getElementById('ghRemoteCmdOutput').textContent;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => alert('Perintah remote GitHub berhasil disalin!'));
+    } else {
+      prompt('Salin perintah:', text);
+    }
+  }
+
+  // LAB 12: CHECKLIST & REPORT GENERATOR
+  function toggleTask(cardElement) {
+    cardElement.classList.toggle('checked');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const cards = document.querySelectorAll('.check-card');
+    const checkedCount = document.querySelectorAll('.check-card.checked').length;
+    const total = cards.length;
+    const percent = Math.round((checkedCount / total) * 100);
+
+    document.getElementById('labProgressFill').style.width = percent + '%';
+    document.getElementById('labProgressPercent').textContent = `${percent}% Selesai (${checkedCount}/${total} Tugas)`;
+
+    if (percent === 100) {
+      document.getElementById('labProgressPercent').innerHTML = `🎉 <b>100% Selesai!</b> Selamat, kamu telah menuntaskan seluruh praktikum!`;
+    }
+  }
+
+  function copyLabReport() {
+    const checkedCount = document.querySelectorAll('.check-card.checked').length;
+    const total = document.querySelectorAll('.check-card').length;
+    const percent = Math.round((checkedCount / total) * 100);
+    const user = document.getElementById('ghUsernameInput')?.value.trim() || 'Siswa Bootcamp';
+
+    const report = `=== LAPORAN PENYELESAIAN PRAKTIKUM SPRINT 05 ===\n` +
+      `Bootcamp  : ITSENJA Web Development\n` +
+      `Modul     : Sprint 05 (Git, GitHub & Deployment Workflow)\n` +
+      `Peserta   : ${user}\n` +
+      `Progres   : ${percent}% (${checkedCount}/${total} Tugas Selesai)\n` +
+      `Waktu     : ${new Date().toLocaleString('id-ID')}\n` +
+      `Status    : ${percent === 100 ? 'LULUS / SELESAI SEMPURNA' : 'DALAM PENGERJAAN'}\n` +
+      `================================================`;
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(report).then(() => alert('Laporan hasil praktikum berhasil disalin ke clipboard!'));
+    } else {
+      prompt('Salin laporan:', report);
+    }
+  }
+
+  // Initialize
+  updateSlideDisplay(0);
+</script>
+
+</body>
+</html>
