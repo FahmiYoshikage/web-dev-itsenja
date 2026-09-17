@@ -4,7 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pusat Belajar Web Development — ITSENJA</title>
-  <meta name="description" content="Pusat materi, slide presentasi interaktif, dan hands-on project Web Development Bootcamp ITSENJA. Dari dasar HTML5, CSS3, JavaScript DOM, hingga Async & Fetch API.">
+  <meta name="description" content="Pusat materi, slide presentasi interaktif, dan hands-on project Web Development Bootcamp ITSENJA. Dari dasar HTML5, CSS3, JavaScript DOM, Async Fetch API, hingga Git, GitHub & Deployment.">
+  <meta name="keywords" content="web development, belajar coding, html5, css3, javascript, fetch api, git, github, deployment, itsenja, bootcamp">
+  <meta name="author" content="Fahmi Ilham Bagaskara">
+  
+  <!-- Indexing Directives -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  
+  <!-- Search Console Verification -->
+  <meta name="google-site-verification" content="itsenja-gsc-verification-code-2026">
+  <meta name="msvalidate.01" content="itsenja-bing-verification-code-2026">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://itsenja.com/">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Pusat Belajar Web Development — ITSENJA">
+  <meta property="og:description" content="Pusat materi, slide presentasi interaktif, dan hands-on project Web Development Bootcamp ITSENJA. Lengkap dari HTML5 hingga Git & Deployment.">
+  <meta property="og:url" content="https://itsenja.com/">
+  <meta property="og:site_name" content="ITSENJA Web Development Bootcamp">
+  <meta property="og:image" content="https://itsenja.com/favicon.svg">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Pusat Belajar Web Development — ITSENJA">
+  <meta name="twitter:description" content="Kurikulum bootcamp web dev interaktif berbasis Docker dan Nginx.">
+  <meta name="twitter:image" content="https://itsenja.com/favicon.svg">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +45,118 @@
   
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Structured Data: Organization & Local Schema & Course Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "EducationalOrganization",
+        "@id": "https://itsenja.com/#organization",
+        "name": "ITSENJA Web Development Bootcamp",
+        "url": "https://itsenja.com",
+        "logo": "https://itsenja.com/favicon.svg",
+        "description": "Pusat pembelajaran web development, slide interaktif, dan hands-on project praktikum berstandar industri.",
+        "founder": {
+          "@type": "Person",
+          "name": "Fahmi Ilham Bagaskara",
+          "jobTitle": "Lead Instructor & Web Developer",
+          "sameAs": [
+            "https://github.com/FahmiYoshikage",
+            "https://www.linkedin.com/in/fahmi-ilham-bagaskara-65a197305/",
+            "https://www.instagram.com/err.log/"
+          ]
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Politeknik Elektronika Negeri Surabaya, Kampus PENS, Jl. Raya ITS",
+          "addressLocality": "Surabaya",
+          "addressRegion": "Jawa Timur",
+          "postalCode": "60111",
+          "addressCountry": "ID"
+        },
+        "telephone": "+6287860407004",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+6287860407004",
+          "contactType": "customer service",
+          "availableLanguage": ["Indonesian", "English"]
+        },
+        "sameAs": [
+          "https://github.com/FahmiYoshikage/web-dev-itsenja",
+          "https://github.com/FahmiYoshikage",
+          "https://www.instagram.com/err.log/"
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://itsenja.com/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Pusat Belajar",
+            "item": "https://itsenja.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Kurikulum Modul Sprint",
+            "item": "https://itsenja.com/#sprintGrid"
+          }
+        ]
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://itsenja.com/#courses",
+        "name": "Daftar Modul Bootcamp Web Development ITSENJA",
+        "itemListElement": [
+          {
+            "@type": "Course",
+            "position": 1,
+            "name": "Sprint 01: Fundamental HTML5 & Semantic Web Structure",
+            "description": "Anatomi dokumen HTML5, heading hierarchy, teks, media, tabel, dan form input.",
+            "provider": { "@id": "https://itsenja.com/#organization" },
+            "url": "https://itsenja.com/Sprint-01/slide.html"
+          },
+          {
+            "@type": "Course",
+            "position": 2,
+            "name": "Sprint 02: CSS3 & Modern Responsive Web Design",
+            "description": "The Box Model, Google Fonts, Flexbox, CSS Grid, Media Queries.",
+            "provider": { "@id": "https://itsenja.com/#organization" },
+            "url": "https://itsenja.com/Sprint-02/slide.html"
+          },
+          {
+            "@type": "Course",
+            "position": 3,
+            "name": "Sprint 03: JavaScript DOM & Web Interactivity",
+            "description": "Variabel, fungsi, event handling, manipulasi DOM dinamis.",
+            "provider": { "@id": "https://itsenja.com/#organization" },
+            "url": "https://itsenja.com/Sprint-03/"
+          },
+          {
+            "@type": "Course",
+            "position": 4,
+            "name": "Sprint 04: Modern JS, Asynchronous & Fetch API",
+            "description": "REST API, status code HTTP, JSON parsing, Promise, async/await, error handling.",
+            "provider": { "@id": "https://itsenja.com/#organization" },
+            "url": "https://itsenja.com/Sprint-04/"
+          },
+          {
+            "@type": "Course",
+            "position": 5,
+            "name": "Sprint 05: Git, GitHub & Modern Deployment Workflow",
+            "description": "Arsitektur 3-Stage Git, Conventional Commits, Feature Branching, Merge Conflict, Pull Request, GitHub Pages & Vercel.",
+            "provider": { "@id": "https://itsenja.com/#organization" },
+            "url": "https://itsenja.com/Sprint-05/"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 
   <style>
     /* 1. RESET & DESIGN TOKENS */
@@ -441,7 +585,266 @@
     .eval-link-btn.green { background: var(--success); }
     .eval-link-btn.green:hover { background: #047857; }
 
-    /* 6. FOOTER */
+    /* 6. BREADCRUMBS */
+    .breadcrumb-nav {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 24px;
+      font-size: 11.5px;
+      font-family: var(--font-mono);
+      color: var(--text-sub);
+    }
+
+    .breadcrumb-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .breadcrumb-container a {
+      color: var(--primary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .breadcrumb-container a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumb-sep {
+      color: #94a3b8;
+      font-size: 9px;
+    }
+
+    /* 7. HEADER WHATSAPP CTA */
+    .header-wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .header-wa-btn:hover {
+      background: #059669;
+      color: #ffffff;
+      border-color: #059669;
+      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+    }
+
+    /* 8. FLOATING WHATSAPP BUTTON */
+    .floating-wa-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      background: #25d366;
+      color: #ffffff;
+      padding: 12px 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      box-shadow: 0 4px 18px rgba(37, 211, 102, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .floating-wa-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 24px rgba(37, 211, 102, 0.55);
+      background: #20ba5a;
+    }
+
+    .floating-wa-btn i {
+      font-size: 20px;
+    }
+
+    /* 9. CONSULTATION FORM & ANTI-SPAM */
+    .consultation-section {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .form-label .req {
+      color: var(--danger);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .form-control.is-valid {
+      border-color: var(--success);
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23059669' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 14px;
+    }
+
+    .form-control.is-invalid {
+      border-color: var(--danger);
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc2626'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc2626' stroke='none'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 14px;
+    }
+
+    .form-feedback {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      min-height: 16px;
+      margin-top: 2px;
+    }
+
+    .form-feedback.error { color: var(--danger); }
+    .form-feedback.success { color: var(--success); }
+
+    /* Honeypot Trap - Hidden from humans, caught by bots */
+    .hp-trap {
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 0;
+      width: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .form-actions-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 11px 22px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+
+    .btn-submit:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-wa-direct {
+      background: #25d366;
+      color: #ffffff;
+      border: none;
+      padding: 11px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+
+    .btn-wa-direct:hover {
+      background: #20ba5a;
+    }
+
+    /* 10. ANALYTICS TOAST */
+    .analytics-toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 10000;
+      transform: translateY(-50px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .analytics-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .analytics-toast i {
+      color: #38bdf8;
+    }
+
+    /* 11. FOOTER */
     .site-footer {
       background: #ffffff;
       border-top: 1px solid var(--border);
@@ -456,7 +859,10 @@
       .hero-title { font-size: 28px; }
       .sprint-grid { grid-template-columns: 1fr; }
       .eval-grid { grid-template-columns: 1fr; }
+      .form-grid-2 { grid-template-columns: 1fr; }
       .header-container { flex-direction: column; gap: 12px; }
+      .floating-wa-btn span { display: none; }
+      .floating-wa-btn { padding: 12px; }
     }
   </style>
 </head>
@@ -474,11 +880,21 @@
       </a>
 
       <div class="header-nav">
+        <a href="https://wa.me/6287860407004?text=Halo%20Mentor%20ITSENJA%2C%20saya%20ingin%20konsultasi%20materi%20web%20dev" target="_blank" class="header-wa-btn" data-track="whatsapp" data-track-loc="header_navbar" title="Konsultasi Langsung via WhatsApp"><i class="fa-brands fa-whatsapp"></i> Tanya Mentor</a>
         <span class="docker-status-badge"><i class="fa-brands fa-docker"></i> Docker Ready</span>
         <a href="https://github.com/FahmiYoshikage/web-dev-itsenja" target="_blank" class="github-link" title="GitHub Repository"><i class="fa-brands fa-github"></i></a>
       </div>
     </div>
   </header>
+
+  <!-- BREADCRUMB NAVIGATION -->
+  <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <div class="breadcrumb-container">
+      <a href="index.html"><i class="fa-solid fa-house"></i> Pusat Belajar</a>
+      <i class="fa-solid fa-chevron-right breadcrumb-sep"></i>
+      <span style="color: var(--text-main); font-weight: 700;">Kurikulum & Modul Sprint 2026</span>
+    </div>
+  </nav>
 
   <!-- HERO SECTION -->
   <section class="hero-section">
@@ -491,7 +907,7 @@
 
       <div class="search-wrapper">
         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" id="searchInput" class="search-input" placeholder="Cari materi atau topik (contoh: flexbox, fetch, html, dom)...">
+        <input type="text" id="searchInput" class="search-input" placeholder="Cari materi atau topik (contoh: flexbox, fetch, git, branch, html, dom)...">
       </div>
     </div>
   </section>
@@ -505,7 +921,7 @@
         <p class="section-subtitle">Pilih slide materi untuk memulai sesi pembelajaran interaktif</p>
       </div>
       <div id="sprintCount" style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--text-sub);">
-        4 Sprint Tersedia
+        5 Sprint Tersedia
       </div>
     </div>
 
@@ -580,7 +996,7 @@
       <!-- SPRINT 04 -->
       <article class="sprint-card" data-keywords="async await fetch api rest json error handling promise tvmaze">
         <div class="card-top">
-          <span class="sprint-badge active">Sprint 04 · Aktif</span>
+          <span class="sprint-badge done">Sprint 04 · Selesai</span>
           <i class="fa-solid fa-cloud-arrow-down card-icon" style="color: #0284c7;"></i>
         </div>
         <h3>Modern JS, Asynchronous & Fetch API</h3>
@@ -598,21 +1014,44 @@
         </div>
       </article>
 
-      <!-- ROADMAP SPRINT 05 (UPCOMING) -->
-      <article class="sprint-card" data-keywords="git github version control deployment pipeline collaboration">
+      <!-- SPRINT 05 -->
+      <article class="sprint-card" data-keywords="git github version control vcs branching merge conflict conventional commit deployment pages vercel remote stash restore">
         <div class="card-top">
-          <span class="sprint-badge roadmap">Sprint 05 · Segera</span>
+          <span class="sprint-badge active">Sprint 05 · Aktif</span>
           <i class="fa-brands fa-git-alt card-icon" style="color: #f05032;"></i>
         </div>
         <h3>Git, GitHub & Deployment Workflow</h3>
         <p>
-          Version control manajemen kode dengan Git, kolaborasi di GitHub (Branching & PR), serta deployment website dinamis ke internet via GitHub Pages / Vercel.
+          Arsitektur 3-Stage Git, Conventional Commits, isolasi fitur via Branching, resolusi Merge Conflict, kolaborasi Pull Request di GitHub, dan deployment otomatis via GitHub Pages & Vercel.
         </p>
         <div class="tech-tags">
           <span class="tech-tag">Git</span>
           <span class="tech-tag">GitHub</span>
-          <span class="tech-tag">Collaboration</span>
-          <span class="tech-tag">Deployment</span>
+          <span class="tech-tag">Conventional Commits</span>
+          <span class="tech-tag">Branching & PR</span>
+          <span class="tech-tag">Auto Deployment</span>
+        </div>
+        <div class="card-actions">
+          <a href="Sprint-05/index.html" class="btn-slide" style="background: var(--git-orange);"><i class="fa-solid fa-play"></i> Buka Slide HTML</a>
+          <a href="Sprint-05/latihan-git/PANDUAN_PRAKTIKUM.md" class="btn-practice" title="Panduan praktikum mandiri"><i class="fa-solid fa-book-open"></i> Praktikum</a>
+        </div>
+      </article>
+
+      <!-- ROADMAP SPRINT 06 (UPCOMING) -->
+      <article class="sprint-card" data-keywords="backend nodejs express fullstack api database mongodb sql rest">
+        <div class="card-top">
+          <span class="sprint-badge roadmap">Sprint 06 · Segera</span>
+          <i class="fa-solid fa-server card-icon" style="color: #64748b;"></i>
+        </div>
+        <h3>Backend Integration & Fullstack Basics</h3>
+        <p>
+          Membangun REST API mandiri dengan Node.js & Express, relasional database, otentikasi JWT, serta integrasi frontend ke backend terpadu.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">Node.js</span>
+          <span class="tech-tag">Express</span>
+          <span class="tech-tag">Database</span>
+          <span class="tech-tag">Fullstack</span>
         </div>
         <div class="card-actions">
           <button class="btn-slide" style="background: #94a3b8; cursor: not-allowed;"><i class="fa-solid fa-lock"></i> Segera Hadir</button>
@@ -645,18 +1084,147 @@
       </div>
     </section>
 
+    <!-- KONSULTASI & FORM VALIDASI DENGAN ANTI-SPAM -->
+    <section class="consultation-section" id="konsultasi">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <h3 style="font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">
+            <i class="fa-solid fa-comments" style="color: var(--primary);"></i> Form Konsultasi & Tanya Materi Mentor
+          </h3>
+          <p style="font-size: 13px; color: var(--text-muted);">
+            Mengalami kesulitan memahami materi HTML, CSS, JavaScript, atau Git? Kirim pertanyaanmu di bawah ini:
+          </p>
+        </div>
+        <span class="badge-tag" style="background: #ecfdf5; color: #059669; border-color: #a7f3d0;">
+          <i class="fa-solid fa-shield-halved"></i> Dilengkapi Proteksi Anti-Spam
+        </span>
+      </div>
+
+      <form id="consultForm" novalidate style="margin-top: 16px;">
+        <!-- HONEYPOT ANTI-SPAM TRAP (Tersembunyi dari manusia, dideteksi jika bot mengisinya) -->
+        <div class="hp-trap" aria-hidden="true">
+          <label for="hp_website">Website URL (Leave blank)</label>
+          <input type="text" id="hp_website" name="website_url_trap" tabindex="-1" autocomplete="off">
+        </div>
+
+        <!-- FORM SUBMISSION TIMESTAMP (Mencegah bot submit di bawah 2.5 detik) -->
+        <input type="hidden" id="formLoadTime" name="form_load_time" value="">
+
+        <div class="form-grid-2">
+          <!-- NAMA LENGKAP -->
+          <div class="form-group">
+            <label for="userName" class="form-label">
+              <span>Nama Lengkap</span>
+              <span class="req">*</span>
+            </label>
+            <input type="text" id="userName" class="form-control" placeholder="Contoh: Budi Santoso" required autocomplete="name">
+            <div class="form-feedback" id="nameFeedback"></div>
+          </div>
+
+          <!-- ALAMAT EMAIL -->
+          <div class="form-group">
+            <label for="userEmail" class="form-label">
+              <span>Alamat Email</span>
+              <span class="req">*</span>
+            </label>
+            <input type="email" id="userEmail" class="form-control" placeholder="nama@email.com" required autocomplete="email">
+            <div class="form-feedback" id="emailFeedback"></div>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <!-- NOMOR WHATSAPP -->
+          <div class="form-group">
+            <label for="userPhone" class="form-label">
+              <span>Nomor WhatsApp</span>
+              <span class="req">*</span>
+            </label>
+            <input type="tel" id="userPhone" class="form-control" placeholder="08xxxxxxxxxx atau +62..." required autocomplete="tel">
+            <div class="form-feedback" id="phoneFeedback"></div>
+          </div>
+
+          <!-- TOPIK SPRINT -->
+          <div class="form-group">
+            <label for="sprintSelect" class="form-label">
+              <span>Modul Sprint Terkait</span>
+              <span class="req">*</span>
+            </label>
+            <select id="sprintSelect" class="form-control" required>
+              <option value="">-- Pilih Topik Modul --</option>
+              <option value="Sprint 01">Sprint 01 · Fundamental HTML5 & Semantic Web</option>
+              <option value="Sprint 02">Sprint 02 · CSS3 & Modern Responsive Design</option>
+              <option value="Sprint 03">Sprint 03 · JavaScript DOM & Interactivity</option>
+              <option value="Sprint 04">Sprint 04 · Async JS & Fetch API</option>
+              <option value="Sprint 05">Sprint 05 · Git, GitHub & Deployment</option>
+              <option value="Pertanyaan Umum">Pertanyaan Umum / Info Bootcamp</option>
+            </select>
+            <div class="form-feedback" id="sprintFeedback"></div>
+          </div>
+        </div>
+
+        <!-- PERTANYAAN -->
+        <div class="form-group">
+          <label for="userMessage" class="form-label">
+            <span>Detail Pertanyaan / Kendala Belajar</span>
+            <span class="req">* (Minimal 15 karakter)</span>
+          </label>
+          <textarea id="userMessage" class="form-control" rows="3" placeholder="Tuliskan kendala koding atau pertanyaan yang ingin kamu tanyakan kepada mentor..." required></textarea>
+          <div class="form-feedback" id="messageFeedback"></div>
+        </div>
+
+        <!-- ANTI-SPAM MATH CHALLENGE -->
+        <div class="form-group" style="max-width: 320px;">
+          <label for="mathCaptcha" class="form-label">
+            <span id="mathQuestionLabel">Verifikasi Anti-Spam: Berapa 4 + 3?</span>
+            <span class="req">*</span>
+          </label>
+          <input type="number" id="mathCaptcha" class="form-control" placeholder="Tulis angka jawaban..." required>
+          <div class="form-feedback" id="captchaFeedback"></div>
+        </div>
+
+        <!-- ACTIONS ROW -->
+        <div class="form-actions-row">
+          <button type="submit" class="btn-submit" data-track="cta" data-cta-name="submit_consultation_form">
+            <i class="fa-solid fa-paper-plane"></i> Kirim Formulir Konsultasi
+          </button>
+          <button type="button" id="btnSendWA" class="btn-wa-direct" data-track="whatsapp" data-track-loc="consultation_form">
+            <i class="fa-brands fa-whatsapp"></i> Teruskan via WhatsApp
+          </button>
+        </div>
+
+        <!-- FORM ALERT BOX -->
+        <div id="formAlertBox" style="display: none; margin-top: 14px; padding: 12px 16px; border-radius: 8px; font-size: 13px;"></div>
+      </form>
+    </section>
+
   </main>
+
+  <!-- FLOATING WHATSAPP BUTTON -->
+  <a href="https://wa.me/6287860407004?text=Halo%20Kak%20Fahmi%20ITSENJA%2C%20saya%20ingin%20konsultasi%20materi%20web%20dev" target="_blank" class="floating-wa-btn" data-track="whatsapp" data-track-loc="floating_button" title="Konsultasi Langsung via WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+    <span>Tanya Mentor</span>
+  </a>
+
+  <!-- ANALYTICS EVENT TOAST -->
+  <div id="analyticsToast" class="analytics-toast" aria-live="polite">
+    <i class="fa-solid fa-chart-line"></i>
+    <span id="toastMsg">Event Telemetry Tracked</span>
+  </div>
 
   <!-- FOOTER -->
   <footer class="site-footer">
     <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
       <div>© 2026 <strong>ITSENJA Web Development Bootcamp</strong> · Fahmi Ilham Bagaskara</div>
-      <div style="font-family: var(--font-mono); font-size: 11px;">Containerized with Docker & Nginx</div>
+      <div style="font-family: var(--font-mono); font-size: 11px;">
+        <a href="sitemap.xml" style="color: var(--primary); text-decoration: none; margin-right: 10px;"><i class="fa-solid fa-sitemap"></i> Sitemap.xml</a>
+        <a href="robots.txt" style="color: var(--primary); text-decoration: none; margin-right: 10px;"><i class="fa-solid fa-robot"></i> Robots.txt</a>
+        <span>Containerized with Docker & Nginx</span>
+      </div>
     </div>
   </footer>
 
   <script>
-    // Live Search Filter Logic
+    // 1. LIVE SEARCH FILTER LOGIC
     const searchInput = document.getElementById('searchInput');
     const cards = Array.from(document.querySelectorAll('.sprint-card'));
     const sprintCount = document.getElementById('sprintCount');
@@ -676,6 +1244,239 @@
       });
 
       sprintCount.textContent = `${visibleCount} Sprint Ditemukan`;
+    });
+
+    // 2. ANALYTICS TELEMETRY & TOAST DISPATCHER
+    const toast = document.getElementById('analyticsToast');
+    const toastMsg = document.getElementById('toastMsg');
+    let toastTimeout;
+
+    function showAnalyticsToast(message) {
+      toastMsg.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function recordAnalyticsEvent(category, action, label) {
+      const eventData = {
+        category,
+        action,
+        label,
+        timestamp: new Date().toISOString(),
+        url: window.location.href
+      };
+
+      // Simpan ke localStorage untuk persistent audit
+      try {
+        const history = JSON.parse(localStorage.getItem('itsenja_analytics_events') || '[]');
+        history.unshift(eventData);
+        if (history.length > 50) history.pop();
+        localStorage.setItem('itsenja_analytics_events', JSON.stringify(history));
+      } catch (err) {
+        console.warn('LocalStorage analytics error:', err);
+      }
+
+      // Integrasi ke Google Analytics jika tersedia
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', action, {
+          event_category: category,
+          event_label: label
+        });
+      }
+
+      console.log('📊 [Analytics Tracked]:', eventData);
+      showAnalyticsToast(`Tracked [${category}]: ${label || action}`);
+    }
+
+    // 3. TRACK KLIK WHATSAPP & TRACK KLIK CTA
+    document.addEventListener('click', (e) => {
+      // Track WhatsApp clicks
+      const waBtn = e.target.closest('[data-track="whatsapp"]');
+      if (waBtn) {
+        const loc = waBtn.dataset.trackLoc || 'general_link';
+        recordAnalyticsEvent('WhatsApp', 'click_whatsapp', `WhatsApp Consultation (${loc})`);
+      }
+
+      // Track CTA clicks
+      const ctaBtn = e.target.closest('[data-track="cta"], .btn-slide, .btn-practice, .eval-link-btn');
+      if (ctaBtn) {
+        const ctaName = ctaBtn.dataset.ctaName || ctaBtn.innerText.trim();
+        const sprint = ctaBtn.closest('.sprint-card')?.querySelector('h3')?.innerText || 'General';
+        recordAnalyticsEvent('CTA', 'click_cta', `${ctaName} — ${sprint}`);
+      }
+    });
+
+    // 4. FORM REAL-TIME VALIDATION & MULTI-LAYER ANTI-SPAM
+    const consultForm = document.getElementById('consultForm');
+    const formLoadTimeInput = document.getElementById('formLoadTime');
+    const formAlertBox = document.getElementById('formAlertBox');
+    const formLoadTimestamp = Date.now();
+    formLoadTimeInput.value = formLoadTimestamp;
+
+    // Generate Dynamic Math Challenge
+    const num1 = Math.floor(Math.random() * 8) + 2;
+    const num2 = Math.floor(Math.random() * 8) + 1;
+    const expectedMathAnswer = num1 + num2;
+    document.getElementById('mathQuestionLabel').textContent = `Verifikasi Anti-Spam: Berapa ${num1} + ${num2}?`;
+
+    // Input elements
+    const nameInput = document.getElementById('userName');
+    const emailInput = document.getElementById('userEmail');
+    const phoneInput = document.getElementById('userPhone');
+    const sprintInput = document.getElementById('sprintSelect');
+    const messageInput = document.getElementById('userMessage');
+    const mathInput = document.getElementById('mathCaptcha');
+    const hpWebsite = document.getElementById('hp_website');
+
+    function validateField(input, feedbackEl, isValid, errorMsg) {
+      if (isValid) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+        feedbackEl.textContent = '✓ Sesuai';
+        feedbackEl.className = 'form-feedback success';
+        return true;
+      } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+        feedbackEl.textContent = errorMsg;
+        feedbackEl.className = 'form-feedback error';
+        return false;
+      }
+    }
+
+    // Real-time Event Listeners
+    nameInput.addEventListener('input', () => {
+      const val = nameInput.value.trim();
+      validateField(nameInput, document.getElementById('nameFeedback'), val.length >= 3, 'Nama minimal 3 karakter');
+    });
+
+    emailInput.addEventListener('input', () => {
+      const val = emailInput.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      validateField(emailInput, document.getElementById('emailFeedback'), emailRegex.test(val), 'Format email belum valid (contoh@domain.com)');
+    });
+
+    phoneInput.addEventListener('input', () => {
+      const val = phoneInput.value.trim().replace(/[-\s]/g, '');
+      const phoneRegex = /^(\+62|62|08)[0-9]{8,13}$/;
+      validateField(phoneInput, document.getElementById('phoneFeedback'), phoneRegex.test(val), 'Gunakan nomor valid (08... atau +62...) minimal 10 digit');
+    });
+
+    sprintInput.addEventListener('change', () => {
+      validateField(sprintInput, document.getElementById('sprintFeedback'), sprintInput.value !== '', 'Pilih salah satu topik modul');
+    });
+
+    userMessage.addEventListener('input', () => {
+      const val = userMessage.value.trim();
+      validateField(userMessage, document.getElementById('messageFeedback'), val.length >= 15, `Pertanyaan minimal 15 karakter (${val.length}/15)`);
+    });
+
+    mathInput.addEventListener('input', () => {
+      const val = parseInt(mathInput.value.trim(), 10);
+      validateField(mathInput, document.getElementById('captchaFeedback'), val === expectedMathAnswer, `Jawaban salah, ${num1} + ${num2} = ?`);
+    });
+
+    function runAllValidations() {
+      const v1 = validateField(nameInput, document.getElementById('nameFeedback'), nameInput.value.trim().length >= 3, 'Nama minimal 3 karakter');
+      const v2 = validateField(emailInput, document.getElementById('emailFeedback'), /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim()), 'Format email belum valid');
+      const v3 = validateField(phoneInput, document.getElementById('phoneFeedback'), /^(\+62|62|08)[0-9]{8,13}$/.test(phoneInput.value.trim().replace(/[-\s]/g, '')), 'Nomor WhatsApp belum valid');
+      const v4 = validateField(sprintInput, document.getElementById('sprintFeedback'), sprintInput.value !== '', 'Pilih topik modul');
+      const v5 = validateField(userMessage, document.getElementById('messageFeedback'), userMessage.value.trim().length >= 15, 'Pertanyaan minimal 15 karakter');
+      const v6 = validateField(mathInput, document.getElementById('captchaFeedback'), parseInt(mathInput.value.trim(), 10) === expectedMathAnswer, 'Verifikasi angka salah');
+      return v1 && v2 && v3 && v4 && v5 && v6;
+    }
+
+    // FORM SUBMIT HANDLER
+    consultForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // 1. Anti-Spam: Honeypot check
+      if (hpWebsite.value !== '') {
+        console.warn('🛡️ Bot spam terdeteksi melalui honeypot trap.');
+        formAlertBox.style.display = 'block';
+        formAlertBox.style.background = '#fef2f2';
+        formAlertBox.style.color = '#b91c1c';
+        formAlertBox.style.border = '1px solid #fecaca';
+        formAlertBox.innerHTML = '<strong>Pengiriman Ditolak:</strong> Aktivitas mencurigakan terdeteksi (Honeypot Trap).';
+        return;
+      }
+
+      // 2. Anti-Spam: Time submission check (< 2.5 detik = bot)
+      const submissionDuration = Date.now() - formLoadTimestamp;
+      if (submissionDuration < 2500) {
+        console.warn('🛡️ Bot spam terdeteksi melalui submission time (< 2.5s).');
+        formAlertBox.style.display = 'block';
+        formAlertBox.style.background = '#fef2f2';
+        formAlertBox.style.color = '#b91c1c';
+        formAlertBox.style.border = '1px solid #fecaca';
+        formAlertBox.innerHTML = '<strong>Pengiriman Terlalu Cepat:</strong> Harap luangkan waktu untuk membaca formulir sebelum mengirim.';
+        return;
+      }
+
+      // 3. Validasi Field
+      if (!runAllValidations()) {
+        formAlertBox.style.display = 'block';
+        formAlertBox.style.background = '#fffbeb';
+        formAlertBox.style.color = '#b45309';
+        formAlertBox.style.border = '1px solid #fde68a';
+        formAlertBox.innerHTML = '<strong>Harap Periksa Kembali:</strong> Beberapa kolom formulir belum terisi dengan benar.';
+        return;
+      }
+
+      // 4. Pengiriman Berhasil
+      const formData = {
+        name: nameInput.value.trim(),
+        email: emailInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        sprint: sprintInput.value,
+        message: userMessage.value.trim(),
+        submittedAt: new Date().toLocaleString('id-ID')
+      };
+
+      try {
+        const savedInquiries = JSON.parse(localStorage.getItem('itsenja_inquiries') || '[]');
+        savedInquiries.unshift(formData);
+        localStorage.setItem('itsenja_inquiries', JSON.stringify(savedInquiries));
+      } catch (err) {
+        console.warn(err);
+      }
+
+      recordAnalyticsEvent('Form', 'submit_consultation', `${formData.name} (${formData.sprint})`);
+
+      formAlertBox.style.display = 'block';
+      formAlertBox.style.background = '#ecfdf5';
+      formAlertBox.style.color = '#047857';
+      formAlertBox.style.border = '1px solid #a7f3d0';
+      formAlertBox.innerHTML = `
+        <strong><i class="fa-solid fa-circle-check"></i> Pesan Konsultasi Berhasil Terkirim!</strong><br>
+        Terima kasih, <b>${formData.name}</b>. Pertanyaan seputar <b>${formData.sprint}</b> telah dicatat oleh mentor ITSENJA.
+      `;
+
+      consultForm.reset();
+      document.querySelectorAll('.form-control').forEach(el => el.classList.remove('is-valid'));
+      document.querySelectorAll('.form-feedback').forEach(el => el.textContent = '');
+    });
+
+    // 5. BUTTON TERUSKAN KE WHATSAPP
+    document.getElementById('btnSendWA').addEventListener('click', () => {
+      const name = nameInput.value.trim() || 'Siswa Bootcamp';
+      const sprint = sprintInput.value || 'Umum';
+      const msg = userMessage.value.trim() || 'Saya ingin bertanya seputar materi web development';
+
+      const waText = encodeURIComponent(
+        `Halo Kak Fahmi / Mentor ITSENJA,\n\n` +
+        `Nama: ${name}\n` +
+        `Modul: ${sprint}\n` +
+        `Pertanyaan:\n${msg}\n\n` +
+        `Mohon bimbingan dan arahannya. Terima kasih!`
+      );
+
+      const targetUrl = `https://wa.me/6287860407004?text=${waText}`;
+      recordAnalyticsEvent('WhatsApp', 'dispatch_wa_form', `WA Form: ${sprint}`);
+      window.open(targetUrl, '_blank');
     });
   </script>
 </body>

@@ -13,8 +13,9 @@ Platform ini dapat dijalankan dengan mudah secara publik dan terisolasi mengguna
 | **Sprint 01** | **Fundamental HTML5 & Semantic Web Structure**<br>• Anatomi dokumen HTML5, Heading Hierarchy, Teks<br>• Media Gambar, Hyperlink, Lists, Tabel Data, Form Input | [Slide Presentasi](Sprint-01/slide.html) · [Proyek Portofolio](Sprint-01/index.html) | Selesai |
 | **Sprint 02** | **CSS3 & Modern Responsive Web Design**<br>• The Box Model, Tipografi Google Fonts, Warna HSL<br>• Modern Layout: Flexbox & CSS Grid, Media Queries | [Slide Presentasi](Sprint-02/slide.html) · [Proyek Portofolio](Sprint-02/index.html) | Selesai |
 | **Sprint 03** | **JavaScript DOM & Web Interactivity**<br>• Variabel, Fungsi, Logika Pemrograman<br>• Event Handling, Manipulasi DOM (`querySelector`) | [Slide Presentasi](Sprint-03/index.html) | Selesai |
-| **Sprint 04** | **Modern JS, Asynchronous & Fetch API**<br>• REST API, Status Code HTTP, JSON Data Parsing<br>• Promise Lifecycle, Async/Await, Error Handling & Live Search App | [Slide Presentasi](Sprint-04/index.html) | Aktif |
-| **Sprint 05+** | **Git, GitHub & Deployment Workflow** (Roadmap Selanjutnya) | Coming Soon | Roadmap |
+| **Sprint 04** | **Modern JS, Asynchronous & Fetch API**<br>• REST API, Status Code HTTP, JSON Data Parsing<br>• Promise Lifecycle, Async/Await, Error Handling & Live Search App | [Slide Presentasi](Sprint-04/index.html) | Selesai |
+| **Sprint 05** | **Git, GitHub & Deployment Workflow**<br>• Arsitektur 3-Stage Git, Conventional Commits, Feature Branching<br>• Resolusi Merge Conflict, Pull Request di GitHub, Auto Deploy Pages/Vercel | [Slide Presentasi](Sprint-05/index.html) · [Praktikum Mandiri](Sprint-05/latihan-git/PANDUAN_PRAKTIKUM.md) | Aktif |
+| **Sprint 06+** | **Backend Integration & Fullstack Basics** (Roadmap Selanjutnya) | Coming Soon | Roadmap |
 
 ---
 
@@ -34,6 +35,7 @@ Buka browser dan kunjungi:
 - **Sprint 02 (CSS3):** [http://localhost:8080/Sprint-02/slide.html](http://localhost:8080/Sprint-02/slide.html)
 - **Sprint 03 (JavaScript DOM):** [http://localhost:8080/Sprint-03/](http://localhost:8080/Sprint-03/)
 - **Sprint 04 (Async & Fetch API):** [http://localhost:8080/Sprint-04/](http://localhost:8080/Sprint-04/)
+- **Sprint 05 (Git & Deployment):** [http://localhost:8080/Sprint-05/](http://localhost:8080/Sprint-05/)
 
 ### 3. Mengubah Port (Opsional)
 Jika ingin menggunakan port lain (misal port `3000` atau `80`), kamu bisa menjalankannya dengan variabel `PORT`:

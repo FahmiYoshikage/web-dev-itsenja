@@ -1,0 +1,15 @@
+# Robots.txt for ITSENJA Web Development Bootcamp
+# Central Learning Hub & Interactive Slide Decks
+# https://itsenja.com/
+
+User-agent: *
+Allow: /
+Disallow: /.git/
+Disallow: /nginx.conf
+Disallow: /Dockerfile
+Disallow: /docker-compose.yml
+Disallow: /scripts/
+Disallow: /backups/
+
+# Primary XML Sitemap Location for Search Engines (Google, Bing, Yandex)
+Sitemap: https://itsenja.com/sitemap.xml

@@ -4,3 +4,6 @@
 !README.md
 .DS_Store
 *.tmp
+backups/
+*.tar.gz
+*.zip

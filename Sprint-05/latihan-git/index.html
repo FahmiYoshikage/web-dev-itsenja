@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portofolio Pengembang Web — Latihan Praktikum Git</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand">
+        <i class="fa-solid fa-code brand-icon"></i>
+        <span>DevPortofolio</span>
+      </a>
+      <nav class="nav-menu">
+        <a href="#about">Tentang</a>
+        <a href="#skills">Keahlian</a>
+        <a href="#projects">Proyek</a>
+        <a href="#contact">Kontak</a>
+      </nav>
+      <button id="themeToggle" class="btn-theme" title="Ganti Mode Tampilan">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="about">
+    <div class="hero-container">
+      <div class="badge-tag">
+        <i class="fa-brands fa-git-alt"></i> Versi Repositori: v1.0.0
+      </div>
+      <h1 class="hero-title">Halo, Saya <span class="highlight">Junior Web Developer</span></h1>
+      <p class="hero-subtitle">
+        Proyek ini digunakan sebagai studi kasus praktikum hands-on pembelajaran Git, GitHub, branching workflow, dan deployment otomatis pada <b>Sprint 05 ITSENJA Bootcamp</b>.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary"><i class="fa-solid fa-layer-group"></i> Lihat Portofolio</a>
+        <a href="https://github.com" target="_blank" class="btn btn-secondary"><i class="fa-brands fa-github"></i> Kunjungi GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS SECTION -->
+  <section class="section" id="skills">
+    <div class="section-container">
+      <h2 class="section-title">Keahlian Teknologi</h2>
+      <p class="section-desc">Teknologi yang telah dipelajari selama program bootcamp web development:</p>
+      
+      <div class="skills-grid">
+        <div class="skill-card">
+          <i class="fa-brands fa-html5 skill-icon" style="color: #e34f26;"></i>
+          <h3>HTML5 Semantic</h3>
+          <p>Penyusunan struktur dokumen web semantik, form interaktif, dan SEO-friendly.</p>
+        </div>
+        <div class="skill-card">
+          <i class="fa-brands fa-css3-alt skill-icon" style="color: #2563eb;"></i>
+          <h3>CSS3 & Responsive</h3>
+          <p>Tata letak modern menggunakan Flexbox, CSS Grid, serta Media Queries responsif.</p>
+        </div>
+        <div class="skill-card">
+          <i class="fa-brands fa-js skill-icon" style="color: #f7df1e;"></i>
+          <h3>Modern JavaScript</h3>
+          <p>Manipulasi DOM, asynchronous flow, Promise lifecycle, dan Fetch REST API.</p>
+        </div>
+        <div class="skill-card">
+          <i class="fa-brands fa-git-alt skill-icon" style="color: #f05032;"></i>
+          <h3>Git & Version Control</h3>
+          <p>Pelacakan riwayat, Conventional Commits, branching strategy, dan resolving conflicts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS SECTION -->
+  <section class="section bg-alt" id="projects">
+    <div class="section-container">
+      <h2 class="section-title">Koleksi Proyek Bootcamp</h2>
+      <p class="section-desc">Daftar latihan dan proyek yang diselesaikan dari Sprint 01 hingga Sprint 05:</p>
+      
+      <div class="projects-grid" id="projectsList">
+        <!-- Proyek akan di-render atau dikembangkan pada latihan Git Branching -->
+        <article class="project-card">
+          <div class="project-header">
+            <span class="project-sprint">Sprint 01</span>
+            <span class="project-badge">HTML5</span>
+          </div>
+          <h3>Profil Personal Semantik</h3>
+          <p>Struktur halaman web semantik komprehensif menggunakan semantic tags, media tabel, dan form pendaftaran.</p>
+        </article>
+
+        <article class="project-card">
+          <div class="project-header">
+            <span class="project-sprint">Sprint 02</span>
+            <span class="project-badge">CSS3</span>
+          </div>
+          <h3>Dashboard Portofolio Responsif</h3>
+          <p>Desain visual responsif mobile-friendly menggunakan CSS Grid 2 dimensi dan Flexbox flexibel.</p>
+        </article>
+
+        <article class="project-card">
+          <div class="project-header">
+            <span class="project-sprint">Sprint 04</span>
+            <span class="project-badge">Fetch API</span>
+          </div>
+          <h3>Live Movie & TV Shows Finder</h3>
+          <p>Aplikasi web interaktif yang mengonsumsi data publik TVMaze REST API secara asynchronous.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="contact">
+    <div class="footer-container">
+      <p>© 2026 <strong>Latihan Mandiri Git & GitHub</strong> · ITSENJA Web Development Bootcamp</p>
+      <p class="footer-sub">Dikelola dengan Git Version Control & Dideploy melalui GitHub Pages</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

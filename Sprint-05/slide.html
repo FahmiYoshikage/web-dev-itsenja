@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITSENJA — Sprint 05: Git, GitHub & Modern Deployment Workflow</title>
+  <meta name="description" content="Slide presentasi interaktif Sprint 05: Arsitektur 3-Stage Git, Conventional Commits, Feature Branching, Merge Conflict, Pull Request di GitHub, hingga Deployment.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://itsenja.com/Sprint-05/">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Sprint 05: Git, GitHub & Modern Deployment — ITSENJA">
+  <meta property="og:description" content="Slide interaktif belajar Git, GitHub, Conventional Commits, Branching, dan Deployment.">
+  <meta property="og:url" content="https://itsenja.com/Sprint-05/">
+  <meta property="og:image" content="https://itsenja.com/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* 1. RESET & DESIGN TOKENS */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --primary-border: #bfdbfe;
+      --accent: #0284c7;
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --success-border: #a7f3d0;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --warning-border: #fde68a;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --danger-border: #fecaca;
+      --git-orange: #f05032;
+      --git-light: #fff5f2;
+      --git-border: #fed7cd;
+      --bg-canvas: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-sub: #64748b;
+      --border: #e2e8f0;
+      --border-dark: #cbd5e1;
+      --code-bg: #0f172a;
+      --code-header: #1e293b;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 2. FULL VIEWPORT PRESENTATION WRAPPER */
+    #presentation-viewport {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background-color: var(--bg-canvas);
+    }
+
+    .slide-deck {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 60px);
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 28px 48px 84px;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow-y: auto;
+      background-color: var(--bg-canvas);
+    }
+
+    .slide.active {
+      display: flex;
+      animation: fadeIn 0.22s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 3. HEADER BAR & BADGES */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
+
+    .badge-tag {
+      background: var(--git-light);
+      color: var(--git-orange);
+      border: 1px solid var(--git-border);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-tag.blue {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary-border);
+    }
+
+    .badge-tag.green {
+      background: var(--success-light);
+      color: var(--success);
+      border-color: var(--success-border);
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      background: var(--bg-card);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    /* 4. TYPOGRAPHY */
+    .kicker {
+      color: var(--git-orange);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    h1 {
+      font-size: 34px;
+      line-height: 1.2;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 26px;
+      line-height: 1.25;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+
+    p.lead {
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      max-width: 1150px;
+    }
+
+    .orange { color: var(--git-orange); }
+    .blue { color: var(--primary); }
+    .green { color: var(--success); }
+    .red { color: var(--danger); }
+    .amber { color: var(--warning); }
+
+    code {
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      font-weight: 600;
+    }
+
+    /* 5. CARDS & GRIDS */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+
+    .callout {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      padding: 11px 16px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: #1e3a8a;
+      margin-top: 12px;
+    }
+
+    .callout.git {
+      background: var(--git-light);
+      border-left-color: var(--git-orange);
+      color: #7c2d12;
+    }
+
+    .callout.warning {
+      background: var(--warning-light);
+      border-left-color: var(--warning);
+      color: #78350f;
+    }
+
+    .callout.success {
+      background: var(--success-light);
+      border-left-color: var(--success);
+      color: #064e3b;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    /* 6. CODE BLOCKS & TERMINAL */
+    .code-box {
+      background: var(--code-bg);
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 10px 0;
+      font-family: var(--font-mono);
+    }
+
+    .code-box-header {
+      background: var(--code-header);
+      padding: 6px 14px;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+    }
+
+    .code-box-content {
+      padding: 12px 14px;
+      color: #f8fafc;
+      font-size: 12.5px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .cmd-prompt { color: #38bdf8; user-select: none; margin-right: 6px; }
+    .cmd-comment { color: #64748b; font-style: italic; }
+    .cmd-opt { color: #f59e0b; }
+    .cmd-str { color: #a7f3d0; }
+
+    /* 7. VISUAL STAGE DIAGRAM */
+    .git-stages {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .stage-col {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      position: relative;
+    }
+
+    .stage-col.working { border-top: 4px solid #ef4444; }
+    .stage-col.staging { border-top: 4px solid #f59e0b; }
+    .stage-col.local { border-top: 4px solid #10b981; }
+    .stage-col.remote { border-top: 4px solid #3b82f6; }
+
+    .stage-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stage-sub {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+
+    .stage-files {
+      min-height: 90px;
+      background: #f8fafc;
+      border: 1px dashed var(--border-dark);
+      border-radius: 6px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .file-item {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .file-item.untracked { border-left: 3px solid #ef4444; color: #b91c1c; }
+    .file-item.staged { border-left: 3px solid #f59e0b; color: #b45309; }
+    .file-item.committed { border-left: 3px solid #10b981; color: #047857; }
+    .file-item.pushed { border-left: 3px solid #3b82f6; color: #1d4ed8; }
+
+    /* 8. INTERACTIVE TERMINAL SIMULATOR */
+    .terminal-sim-container {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 14px;
+      height: 380px;
+      margin-top: 10px;
+    }
+
+    .terminal-window {
+      background: #0f172a;
+      border-radius: 10px;
+      border: 1px solid #1e293b;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .terminal-header {
+      background: #1e293b;
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tdot { width: 10px; height: 10px; border-radius: 50%; }
+    .tdot.red { background: #ef4444; }
+    .tdot.yellow { background: #f59e0b; }
+    .tdot.green { background: #10b981; }
+
+    .terminal-title {
+      color: #94a3b8;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .terminal-screen {
+      flex: 1;
+      padding: 12px 14px;
+      overflow-y: auto;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.55;
+      color: #f1f5f9;
+      background: #090d16;
+    }
+
+    .terminal-input-row {
+      display: flex;
+      align-items: center;
+      padding: 8px 14px;
+      background: #0f172a;
+      border-top: 1px solid #1e293b;
+    }
+
+    .terminal-prompt {
+      color: #38bdf8;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      margin-right: 8px;
+      white-space: nowrap;
+    }
+
+    .terminal-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      outline: none;
+    }
+
+    .terminal-chip-bar {
+      padding: 8px 14px;
+      background: #1e293b;
+      border-top: 1px solid #334155;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+    }
+
+    .term-chip {
+      background: #334155;
+      color: #cbd5e1;
+      border: none;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+
+    .term-chip:hover {
+      background: #475569;
+      color: #ffffff;
+    }
+
+    /* 9. VISUAL CONFLICT RESOLVER */
+    .conflict-container {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 10px;
+    }
+
+    .conflict-editor {
+      background: #0f172a;
+      border-radius: 8px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+      color: #e2e8f0;
+      margin-bottom: 12px;
+    }
+
+    .conf-current { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; padding: 2px 6px; }
+    .conf-divider { background: rgba(148, 163, 184, 0.2); color: #94a3b8; padding: 2px 6px; }
+    .conf-incoming { background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981; padding: 2px 6px; }
+
+    .conflict-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-resolve {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+
+    .btn-resolve.current { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+    .btn-resolve.incoming { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+    .btn-resolve.both { background: #fdf4ff; color: #86198f; border-color: #f5d0fe; }
+    .btn-resolve.save { background: var(--primary); color: white; border: none; margin-left: auto; }
+
+    /* 10. CHECKLIST & LINK SHOWCASE */
+    .checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .check-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--text-main);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .check-item i {
+      color: var(--success);
+      font-size: 16px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .link-showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .link-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .link-card.primary { border-top: 4px solid var(--primary); }
+    .link-card.success { border-top: 4px solid var(--success); }
+
+    .link-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .link-icon-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .link-card.primary .link-icon-wrap { background: var(--primary-light); color: var(--primary); }
+    .link-card.success .link-icon-wrap { background: var(--success-light); color: var(--success); }
+
+    .link-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
+    .link-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; flex: 1; }
+
+    .link-actions { display: flex; gap: 8px; }
+
+    .btn-action-link {
+      flex: 1;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: white;
+    }
+
+    .btn-action-link.primary { background: var(--primary); }
+    .btn-action-link.primary:hover { background: var(--primary-hover); }
+    .btn-action-link.success { background: var(--success); }
+    .btn-action-link.success:hover { background: #047857; }
+
+    .btn-copy {
+      background: #f1f5f9;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+
+    .btn-copy:hover { background: #e2e8f0; }
+
+    /* 11. NAVIGATION BAR */
+    .navigation-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 24px;
+      z-index: 40;
+    }
+
+    .nav-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-sub);
+    }
+
+    .nav-hub-link {
+      text-decoration: none;
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--primary-light);
+      transition: background 0.15s;
+    }
+
+    .nav-hub-link:hover {
+      background: #dbeafe;
+    }
+
+    .nav-shortcuts {
+      color: #94a3b8;
+      font-size: 10px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-main);
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--git-light);
+      color: var(--git-orange);
+      border-color: var(--git-border);
+    }
+
+    .progress-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--git-orange);
+      transition: width 0.25s ease;
+    }
+
+    /* SEARCH FILTER BOX IN CHEATSHEET */
+    .cmd-search-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border-dark);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+      margin-bottom: 10px;
+      outline: none;
+    }
+
+    .cmd-search-input:focus {
+      border-color: var(--git-orange);
+      box-shadow: 0 0 0 3px rgba(240, 80, 50, 0.15);
+    }
+  </style>
+</head>
+<body>
+
+<div id="presentation-viewport">
+  <div class="slide-deck">
+
+    <!-- SLIDE 1: COVER -->
+    <section class="slide active">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-brands fa-git-alt"></i> ITSENJA · SPRINT 05</div>
+        <div class="slide-counter">01 / 20</div>
+      </div>
+      <div style="margin-top: 10px;">
+        <div class="kicker">Sprint 05 · Version Control & Deployment</div>
+        <h1>Git, GitHub <span class="orange">& Modern Deployment Workflow</span></h1>
+        <p class="lead">Panduan visual, hands-on, dan interaktif menguasai sistem pencatat riwayat kode (VCS), arsitektur 3-Stage Git, kolaborasi branching & pull request, hingga publikasi website otomatis ke internet.</p>
+
+        <div class="grid-2" style="margin-top: 16px;">
+          <div class="card" style="border-left: 4px solid var(--git-orange);">
+            <h3 style="font-size: 15px; margin-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-bullseye orange"></i> Target Kompetensi Pemula</h3>
+            <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.8; padding-left: 18px;">
+              <li>Memahami filosofi Version Control & anatomi repositori Git.</li>
+              <li>Menguasai siklus 3-Stage (Working Tree, Staging Area, Local Repo).</li>
+              <li>Menulis pesan commit berstandar industri <b>Conventional Commits</b>.</li>
+              <li>Mampu mengelola cabang (Branching), menyelesaikan konflik, dan PR di GitHub.</li>
+              <li>Mendeploy website portofolio secara publik via GitHub Pages & Vercel.</li>
+            </ul>
+          </div>
+
+          <div class="card" style="border-left: 4px solid var(--primary);">
+            <h3 style="font-size: 15px; margin-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-terminal blue"></i> Fitur Simulator & Hands-on Interaktif</h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 10px;">
+              Modul ini dilengkapi dengan <b>Interactive Git Terminal Simulator</b> langsung di browser, visualizer status repositori real-time, latihan penyelesaian Merge Conflict, serta starter template praktikum mandiri!
+            </p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <span class="badge-tag" style="font-size: 10px;"><i class="fa-solid fa-check"></i> Git CLI Simulator</span>
+              <span class="badge-tag blue" style="font-size: 10px;"><i class="fa-solid fa-check"></i> Conflict Resolver</span>
+              <span class="badge-tag green" style="font-size: 10px;"><i class="fa-solid fa-check"></i> Auto Deployment</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: MENGAPA BUTUH VERSION CONTROL? -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-clock-rotate-left"></i> 01. Konsep Dasar VCS</div>
+        <div class="slide-counter">02 / 20</div>
+      </div>
+      <h2>Mengapa Kita Butuh <span class="orange">Version Control System?</span></h2>
+      <p class="lead">Sebelum mengenal Git, bagaimana cara developer menyimpan perubahan dokumen proyek mereka? Masalah klasik ini sering berujung bencana.</p>
+
+      <div class="grid-2">
+        <div class="card" style="border-left: 4px solid var(--danger);">
+          <strong style="color: var(--danger); font-size: 15px; display: block; margin-bottom: 8px;">
+            <i class="fa-solid fa-triangle-exclamation"></i> Manajemen Manual (Tanpa Git)
+          </strong>
+          <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 10px; font-family: var(--font-mono); font-size: 12px; line-height: 1.8; color: #475569; margin-bottom: 10px;">
+            📁 web-portfolio/<br>
+            ├── index.html<br>
+            ├── index_final.html<br>
+            ├── index_final_banget.html<br>
+            ├── index_final_revisi_bos.html<br>
+            └── index_final_fix_bismillah.zip
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">
+            <b>Risiko:</b> Tidak tahu apa yang berubah di setiap file, mudah tertimpa tanpa sengaja, dan mustahil mengembalikan versi lampau jika ada bug.
+          </p>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--success);">
+          <strong style="color: var(--success); font-size: 15px; display: block; margin-bottom: 8px;">
+            <i class="fa-solid fa-circle-check"></i> Manajemen Modern (Dengan Git)
+          </strong>
+          <div style="background: #0f172a; border-radius: 6px; padding: 10px; font-family: var(--font-mono); font-size: 12px; line-height: 1.8; color: #38bdf8; margin-bottom: 10px;">
+            <span style="color: #64748b;">$ git log --oneline</span><br>
+            <span style="color: #f59e0b;">e4b1a09</span> feat: add responsive navbar<br>
+            <span style="color: #f59e0b;">9f2c810</span> fix: resolve hero layout overflow<br>
+            <span style="color: #f59e0b;">1a7d422</span> feat: initial project structure
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5;">
+            <b>Keunggulan:</b> Struktur file tetap rapi, setiap snapshot riwayat tercatat siapa yang mengubah, kapan diubah, dan mengapa diubah. Bisa time-travel kapan saja!
+          </p>
+        </div>
+      </div>
+
+      <div class="callout git">
+        <strong>Definisi Git:</strong> Git adalah <i>Distributed Version Control System (DVCS)</i> open-source yang merekam perubahan file dalam bentuk <b>Snapshot</b> (bukan sekadar perbedaan teks delta), memungkinkan ribuan developer bekerja pada satu basis kode secara paralel tanpa saling merusak.
+      </div>
+    </section>
+
+    <!-- SLIDE 3: ARSITEKTUR 3 WILAYAH GIT -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-layer-group"></i> 02. Arsitektur Git</div>
+        <div class="slide-counter">03 / 20</div>
+      </div>
+      <h2>Arsitektur <span class="orange">3 Wilayah Utama Git</span></h2>
+      <p class="lead">Kunci terbesar memahami Git adalah mengetahui di wilayah mana file kamu sedang berada saat proses modifikasi berlangsung.</p>
+
+      <div class="git-stages">
+        <div class="stage-col working">
+          <div class="stage-title">
+            <span>1. Working Directory</span>
+            <i class="fa-solid fa-laptop-file red"></i>
+          </div>
+          <div class="stage-sub">Folder proyek fisik di komputermu (VS Code).</div>
+          <div class="stage-files">
+            <div class="file-item untracked">index.html <small>Modified</small></div>
+            <div class="file-item untracked">style.css <small>Untracked</small></div>
+          </div>
+          <small style="color: var(--danger); font-size: 10.5px; font-weight: 700; margin-top: 6px; display: block;">Perubahan belum diamankan Git</small>
+        </div>
+
+        <div class="stage-col staging">
+          <div class="stage-title">
+            <span>2. Staging Area (Index)</span>
+            <i class="fa-solid fa-list-check amber"></i>
+          </div>
+          <div class="stage-sub">Ruang persiapan sebelum dibuat commit.</div>
+          <div class="stage-files">
+            <div class="file-item staged">index.html <small>Staged</small></div>
+          </div>
+          <small style="color: var(--warning); font-size: 10.5px; font-weight: 700; margin-top: 6px; display: block;">Ditambahkan via <code>git add</code></small>
+        </div>
+
+        <div class="stage-col local">
+          <div class="stage-title">
+            <span>3. Git Local Repo</span>
+            <i class="fa-solid fa-box-archive green"></i>
+          </div>
+          <div class="stage-sub">Database riwayat commit tersimpan di <code>.git</code>.</div>
+          <div class="stage-files">
+            <div class="file-item committed">commit: #e4b1a09</div>
+            <div class="file-item committed">commit: #1a7d422</div>
+          </div>
+          <small style="color: var(--success); font-size: 10.5px; font-weight: 700; margin-top: 6px; display: block;">Tersimpan via <code>git commit</code></small>
+        </div>
+
+        <div class="stage-col remote">
+          <div class="stage-title">
+            <span>4. Remote Repository</span>
+            <i class="fa-brands fa-github blue"></i>
+          </div>
+          <div class="stage-sub">Penyimpanan cloud bersama (GitHub/GitLab).</div>
+          <div class="stage-files">
+            <div class="file-item pushed">origin/main <small>Synced</small></div>
+          </div>
+          <small style="color: var(--primary); font-size: 10.5px; font-weight: 700; margin-top: 6px; display: block;">Terkirim via <code>git push</code></small>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 8px;">
+        <div class="card">
+          <strong style="font-size: 13px; color: var(--text-main); display: block; margin-bottom: 4px;">Siklus Status File (File Lifecycle)</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+            • <b>Untracked:</b> File baru yang belum pernah dicatat oleh Git.<br>
+            • <b>Modified:</b> File yang sudah ada sebelumnya, lalu diubah isinya.<br>
+            • <b>Staged:</b> File yang ditandai untuk dimasukkan ke snapshot berikutnya.<br>
+            • <b>Committed:</b> File sudah tersimpan aman di database Git lokal.
+          </p>
+        </div>
+        <div class="card">
+          <strong style="font-size: 13px; color: var(--text-main); display: block; margin-bottom: 4px;">Mengapa Harus Lewat Staging Area?</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+            Staging Area memberi kita kontrol penuh untuk memilah: kamu bisa mengedit 5 file berbeda, namun hanya memilih 2 file terkait untuk dijadikan satu commit yang rapi dan terisolasi!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: SETUP & KONFIGURASI AWAL -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-gear"></i> 03. Setup Awal</div>
+        <div class="slide-counter">04 / 20</div>
+      </div>
+      <h2>Setup Awal & <span class="orange">Konfigurasi Identitas Git</span></h2>
+      <p class="lead">Sebelum membuat commit pertama, Git wajib mengetahui siapa kamu agar setiap rekaman jejak tercantum nama dan email penulis aslinya.</p>
+
+      <div class="code-box">
+        <div class="code-box-header">
+          <span><i class="fa-solid fa-terminal"></i> Terminal / Bash</span>
+          <span>Konfigurasi Global</span>
+        </div>
+        <div class="code-box-content"><span class="cmd-comment"># 1. Atur nama identitas kamu</span>
+<span class="cmd-prompt">$</span>git config --global user.name <span class="cmd-str">"Fahmi Ilham"</span>
+
+<span class="cmd-comment"># 2. Atur alamat email (gunakan email yang terdaftar di akun GitHub)</span>
+<span class="cmd-prompt">$</span>git config --global user.email <span class="cmd-str">"fahmi@itsenja.com"</span>
+
+<span class="cmd-comment"># 3. Tetapkan nama branch default standar industri modern</span>
+<span class="cmd-prompt">$</span>git config --global init.defaultBranch main
+
+<span class="cmd-comment"># 4. Periksa seluruh daftar konfigurasi yang aktif</span>
+<span class="cmd-prompt">$</span>git config --list</div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 10px;">
+        <div class="card">
+          <strong style="color: var(--git-orange); font-size: 13px; display: block; margin-bottom: 4px;">Opsi <code>--global</code></strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Konfigurasi berlaku untuk semua proyek di komputer kamu. Hanya perlu dijalankan 1 kali saja saat instalasi.</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--primary); font-size: 13px; display: block; margin-bottom: 4px;">Autentikasi GitHub: PAT</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">GitHub tidak lagi mengizinkan password akun untuk push kode via CLI. Gunakan <i>Personal Access Token (PAT)</i>.</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--success); font-size: 13px; display: block; margin-bottom: 4px;">Opsi Modern: SSH Key</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Setup SSH key (<code>ssh-keygen -t ed25519</code>) untuk otentikasi otomatis yang aman tanpa memasukkan password berulang.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: SIKLUS DASAR: INIT, STATUS, ADD, COMMIT -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-play"></i> 04. Siklus Dasar</div>
+        <div class="slide-counter">05 / 20</div>
+      </div>
+      <h2>Siklus Fundamental: <span class="orange">Init, Status, Add, & Commit</span></h2>
+      <p class="lead">Empat perintah ini adalah denyut nadi utama yang akan kamu gunakan ratusan kali setiap hari saat mengembangkan website.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <strong style="color: var(--git-orange); font-size: 14px; margin-bottom: 6px; display: block;">1. <code>git init</code> & <code>git status</code></strong>
+          <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+            • <code>git init</code>: Mengaktifkan folder biasa menjadi Git repository dengan membuat subfolder tersembunyi <code>.git/</code>.<br>
+            • <code>git status</code>: Kompas navigator kamu untuk melihat file mana yang diubah, mana yang sudah di-stage, atau belum terlacak.
+          </p>
+          <div class="code-box" style="margin: 0;">
+            <div class="code-box-content" style="padding: 8px;"><span class="cmd-prompt">$</span>git init
+Initialized empty Git repository in /project/.git/
+<span class="cmd-prompt">$</span>git status</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <strong style="color: var(--primary); font-size: 14px; margin-bottom: 6px; display: block;">2. <code>git add</code> & <code>git commit</code></strong>
+          <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+            • <code>git add index.html</code>: Memasukkan 1 file tertentu ke Staging Area.<br>
+            • <code>git add .</code>: Memasukkan semua perubahan di direktori saat ini ke Staging.<br>
+            • <code>git commit -m "pesan"</code>: Membungkus staging menjadi satu snapshot permanen.
+          </p>
+          <div class="code-box" style="margin: 0;">
+            <div class="code-box-content" style="padding: 8px;"><span class="cmd-prompt">$</span>git add .
+<span class="cmd-prompt">$</span>git commit -m <span class="cmd-str">"feat: create landing page structure"</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout success">
+        <strong>Aturan Emas (Atomic Commit):</strong> Satu commit harus menyelesaikan <b>satu tugas logis</b>. Hindari menumpuk 10 fitur dalam satu commit tunggal raksasa. Commit kecil dan sering jauh lebih mudah di-review dan aman di-rollback jika bermasalah!
+      </div>
+    </section>
+
+    <!-- SLIDE 6: CONVENTIONAL COMMITS -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag blue"><i class="fa-solid fa-stamp"></i> 05. Standar Industri</div>
+        <div class="slide-counter">06 / 20</div>
+      </div>
+      <h2>Standar Pesan Commit: <span class="blue">Conventional Commits</span></h2>
+      <p class="lead">Di industri profesional, menulis pesan commit seperti <i>"update", "fix bug", "bismillah"</i> dilarang keras. Gunakan standar format baku yang rapi dan mudah dibaca oleh tim serta sistem otomatisasi.</p>
+
+      <div class="card" style="margin-bottom: 12px; background: #0f172a; color: #e2e8f0; font-family: var(--font-mono); font-size: 13px;">
+        <span style="color: #38bdf8;">&lt;type&gt;</span>[optional scope]: <span style="color: #a7f3d0;">&lt;description in imperative tense&gt;</span>
+      </div>
+
+      <div class="grid-3">
+        <div class="card" style="border-top: 3px solid #10b981;">
+          <strong style="color: #10b981; font-family: var(--font-mono); font-size: 13px;">feat:</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Menambahkan fitur baru untuk pengguna.<br>Contoh: <code>feat: add dark mode switch</code></p>
+        </div>
+
+        <div class="card" style="border-top: 3px solid #ef4444;">
+          <strong style="color: #ef4444; font-family: var(--font-mono); font-size: 13px;">fix:</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Memperbaiki bug atau kesalahan tampilan.<br>Contoh: <code>fix: resolve mobile navbar overlap</code></p>
+        </div>
+
+        <div class="card" style="border-top: 3px solid #3b82f6;">
+          <strong style="color: #3b82f6; font-family: var(--font-mono); font-size: 13px;">docs:</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Perubahan pada dokumentasi saja (README).<br>Contoh: <code>docs: update deployment guide</code></p>
+        </div>
+
+        <div class="card" style="border-top: 3px solid #f59e0b;">
+          <strong style="color: #f59e0b; font-family: var(--font-mono); font-size: 13px;">refactor:</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Merombak kode tanpa mengubah fungsi luar.<br>Contoh: <code>refactor: simplify fetch promise</code></p>
+        </div>
+
+        <div class="card" style="border-top: 3px solid #8b5cf6;">
+          <strong style="color: #8b5cf6; font-family: var(--font-mono); font-size: 13px;">style:</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Format kode, spasi, titik koma (tanpa ubah logika).<br>Contoh: <code>style: format css indentation</code></p>
+        </div>
+
+        <div class="card" style="border-top: 3px solid #64748b;">
+          <strong style="color: #64748b; font-family: var(--font-mono); font-size: 13px;">chore:</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Konfigurasi build, dependencies, atau docker.<br>Contoh: <code>chore: update nginx config</code></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: INTERACTIVE GIT SIMULATOR -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-terminal"></i> 06. Interactive Simulator</div>
+        <div class="slide-counter">07 / 20</div>
+      </div>
+      <h2>Interactive <span class="orange">Git Terminal Simulator</span></h2>
+      <p class="lead">Ketik perintah Git sungguhan di bawah ini atau klik chip bantuan cepat untuk melihat bagaimana status file dan commit tree berubah secara real-time!</p>
+
+      <div class="terminal-sim-container">
+        <!-- TERMINAL WINDOW -->
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="tdot red"></span>
+              <span class="tdot yellow"></span>
+              <span class="tdot green"></span>
+            </div>
+            <div class="terminal-title">bash — user@itsenja: ~/my-portfolio (main)</div>
+            <div style="font-size: 10px; color: #64748b; font-family: var(--font-mono);">Interactive Terminal</div>
+          </div>
+          <div class="terminal-screen" id="termScreen">
+<span style="color: #10b981;">Selamat datang di ITSENJA Git Simulator!</span>
+Ketik perintah seperti <span style="color: #f59e0b;">git status</span>, <span style="color: #f59e0b;">git add .</span>, <span style="color: #f59e0b;">git commit -m "..."</span>, <span style="color: #f59e0b;">git log</span>, atau <span style="color: #f59e0b;">help</span>.
+          </div>
+          <div class="terminal-chip-bar">
+            <button class="term-chip" onclick="execSimCmd('git status')">git status</button>
+            <button class="term-chip" onclick="execSimCmd('git add .')">git add .</button>
+            <button class="term-chip" onclick="execSimCmd('git commit -m &quot;feat: add portfolio cards&quot;')">git commit</button>
+            <button class="term-chip" onclick="execSimCmd('git log --oneline')">git log</button>
+            <button class="term-chip" onclick="execSimCmd('git branch feature/navbar')">git branch</button>
+            <button class="term-chip" onclick="execSimCmd('git checkout feature/navbar')">git checkout</button>
+            <button class="term-chip" onclick="execSimCmd('git clear')">clear</button>
+          </div>
+          <div class="terminal-input-row">
+            <span class="terminal-prompt" id="termPrompt">user@itsenja:~/portfolio (main)$</span>
+            <input type="text" class="terminal-input" id="termInput" placeholder="Ketik perintah git di sini... (tekan Enter)" spellcheck="false" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- VISUAL STATE DISPLAY -->
+        <div style="display: flex; flex-direction: column; gap: 10px; height: 100%;">
+          <div class="card" style="flex: 1; display: flex; flex-direction: column; padding: 12px;">
+            <strong style="font-size: 12px; color: var(--text-main); margin-bottom: 6px; display: flex; justify-content: space-between;">
+              <span><i class="fa-solid fa-cubes-stacked orange"></i> Status Repositori Visual</span>
+              <span id="visBranch" style="font-family: var(--font-mono); font-size: 11px; color: var(--primary);">branch: main</span>
+            </strong>
+
+            <div style="display: flex; flex-direction: column; gap: 6px; flex: 1; font-family: var(--font-mono); font-size: 11px;">
+              <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 6px 8px; border-radius: 6px;">
+                <span style="font-weight: 700; color: #b91c1c;">Working Directory:</span>
+                <div id="visWorking" style="color: #991b1b; margin-top: 2px;">• index.html (Modified)<br>• style.css (Untracked)</div>
+              </div>
+
+              <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 6px 8px; border-radius: 6px;">
+                <span style="font-weight: 700; color: #b45309;">Staging Area:</span>
+                <div id="visStaging" style="color: #92400e; margin-top: 2px;">(kosong)</div>
+              </div>
+
+              <div style="background: #ecfdf5; border: 1px solid #a7f3d0; padding: 6px 8px; border-radius: 6px; flex: 1; overflow-y: auto;">
+                <span style="font-weight: 700; color: #047857;">Commit History:</span>
+                <div id="visCommits" style="color: #065f46; margin-top: 2px;">
+                  • <span style="color: #f59e0b;">e1a42b0</span> feat: initial project setup
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: GIT LOG & GIT DIFF -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-magnifying-glass"></i> 07. Inspeksi Riwayat</div>
+        <div class="slide-counter">08 / 20</div>
+      </div>
+      <h2>Membaca Jejak: <span class="orange">Git Log & Git Diff</span></h2>
+      <p class="lead">Mengetahui apa yang telah terjadi dan apa yang sedang berubah adalah kunci utama debugging dan kolaborasi yang tenang.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <strong style="color: var(--git-orange); font-size: 14px; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-timeline"></i> <code>git log</code> — Riwayat Snapshot
+          </strong>
+          <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+            Perintah <code>git log</code> menampilkan daftar lengkap siapa pembuat commit, tanggal pembuatan, pesan, dan kode hash unik SHA-1.
+          </p>
+          <div class="code-box" style="margin: 0;">
+            <div class="code-box-header">Paling Sering Digunakan di Tim</div>
+            <div class="code-box-content"><span class="cmd-comment"># Tampilan ringkas 1 baris per commit</span>
+<span class="cmd-prompt">$</span>git log --oneline
+
+<span class="cmd-comment"># Tampilan visual grafik percabangan</span>
+<span class="cmd-prompt">$</span>git log --oneline --graph --all</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <strong style="color: var(--primary); font-size: 14px; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-code-compare"></i> <code>git diff</code> — Selisih Baris Kode
+          </strong>
+          <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+            Melihat baris mana yang dihapus (warna merah tanda <code>-</code>) dan baris mana yang baru ditambahkan (warna hijau tanda <code>+</code>).
+          </p>
+          <div class="code-box" style="margin: 0;">
+            <div class="code-box-header">Pemeriksaan Sebelum Staging</div>
+            <div class="code-box-content"><span class="cmd-comment"># Periksa editan di working directory</span>
+<span class="cmd-prompt">$</span>git diff
+
+<span class="cmd-comment"># Periksa editan yang SUDAH di-stage</span>
+<span class="cmd-prompt">$</span>git diff --staged</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Anatomi Commit Hash:</strong> Setiap commit memiliki ID unik 40 karakter hex (SHA-1), misalnya <code>e4b1a09d3f1a2c...</code>. Untuk referensi perintah Git, kita cukup menuliskan 7 karakter awalnya saja (misal: <code>e4b1a09</code>).
+      </div>
+    </section>
+
+    <!-- SLIDE 9: FILE .GITIGNORE -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-shield-halved"></i> 08. Proteksi Kode</div>
+        <div class="slide-counter">09 / 20</div>
+      </div>
+      <h2>Mengabaikan File Sensitif: <span class="orange">File .gitignore</span></h2>
+      <p class="lead">Tidak semua file harus masuk ke Git. File rahasia, kredensial server, atau folder dependensi raksasa wajib diabaikan agar repositorimu aman dan ringan.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <strong style="color: var(--danger); font-size: 13.5px; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-ban"></i> File yang Wajib Diabaikan:
+          </strong>
+          <ul style="font-size: 12.5px; color: var(--text-muted); line-height: 1.7; padding-left: 18px;">
+            <li><b>File Rahasia & Kredensial:</b> <code>.env</code>, API keys, password, token JWT.</li>
+            <li><b>Dependensi Berat:</b> <code>node_modules/</code>, folder <code>vendor/</code>.</li>
+            <li><b>File Sistem Operasi:</b> <code>.DS_Store</code> (macOS), <code>Thumbs.db</code> (Windows).</li>
+            <li><b>Hasil Build:</b> Folder <code>dist/</code>, <code>build/</code>, file <code>*.log</code>.</li>
+          </ul>
+
+          <div class="callout warning" style="margin-top: 10px;">
+            <strong>Kasus Fatal di Industri:</strong> Meng-upload file <code>.env</code> berisi API key OpenAI atau AWS ke GitHub publik dapat menyebabkan tagihan ratusan juta rupiah dalam hitungan menit akibat bot pencuri kunci!
+          </div>
+        </div>
+
+        <div class="card">
+          <strong style="color: var(--text-main); font-size: 13.5px; margin-bottom: 6px; display: block;">
+            <i class="fa-solid fa-file-code"></i> Contoh Isi File <code>.gitignore</code>
+          </strong>
+          <div class="code-box" style="margin: 0;">
+            <div class="code-box-content"><span class="cmd-comment"># 1. Dependensi</span>
+node_modules/
+
+<span class="cmd-comment"># 2. File Lingkungan & Kunci Rahasia</span>
+.env
+.env.local
+*.key
+
+<span class="cmd-comment"># 3. File Log Sistem</span>
+*.log
+
+<span class="cmd-comment"># 4. Folder Build Sementara</span>
+dist/
+tmp/</div>
+          </div>
+          <small style="color: var(--text-sub); display: block; margin-top: 8px;">Jika file sudah terlanjur ter-track, lepaskan dengan: <code>git rm --cached &lt;file&gt;</code></small>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: TIME TRAVEL & UNDO WORKFLOW -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag amber"><i class="fa-solid fa-rotate-left"></i> 09. Pembatalan Aman</div>
+        <div class="slide-counter">10 / 20</div>
+      </div>
+      <h2>Time Travel & Pembatalan: <span class="amber">Undo & Reset Workflow</span></h2>
+      <p class="lead">Melakukan kesalahan saat menulis kode adalah hal wajar. Git menyediakan berbagai tingkat penyelamatan tergantung di mana kesalahan terjadi.</p>
+
+      <div class="grid-3">
+        <div class="card" style="border-top: 3px solid #3b82f6;">
+          <strong style="color: #3b82f6; font-size: 13.5px; display: block; margin-bottom: 6px;">1. Batalkan di Working Tree</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+            Kamu mengedit file, tapi ingin membatalkan semua editan tersebut dan kembali ke versi commit terakhir:
+          </p>
+          <div class="code-box" style="margin: 0;"><div class="code-box-content"><span class="cmd-prompt">$</span>git restore index.html</div></div>
+        </div>
+
+        <div class="card" style="border-top: 3px solid #f59e0b;">
+          <strong style="color: #f59e0b; font-size: 13.5px; display: block; margin-bottom: 6px;">2. Batalkan dari Staging</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+            File terlanjur dimasukkan lewat <code>git add</code>, tapi kamu ingin mengeluarkannya dari antrean staging:
+          </p>
+          <div class="code-box" style="margin: 0;"><div class="code-box-content"><span class="cmd-prompt">$</span>git restore --staged index.html</div></div>
+        </div>
+
+        <div class="card" style="border-top: 3px solid #10b981;">
+          <strong style="color: #10b981; font-size: 13.5px; display: block; margin-bottom: 6px;">3. Tambal Commit Terakhir</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+            Lupa memasukkan file atau salah ketik pesan di commit terakhir yang baru saja dibuat:
+          </p>
+          <div class="code-box" style="margin: 0;"><div class="code-box-content"><span class="cmd-prompt">$</span>git commit --amend -m <span class="cmd-str">"pesan benar"</span></div></div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 10px;">
+        <div class="card" style="border-left: 4px solid var(--success);">
+          <strong style="color: var(--success); font-size: 13px;"><code>git revert &lt;hash&gt;</code> (Pilihan Paling Aman!)</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            Membuat commit baru yang membalikkan efek dari commit masa lalu tanpa menghapus riwayat. Sangat aman digunakan pada branch yang sudah di-share ke GitHub bersama tim.
+          </p>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--danger);">
+          <strong style="color: var(--danger); font-size: 13px;"><code>git reset --hard</code> (Gunakan dengan Waspada)</strong>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+            Menghapus commit dan membuang semua perubahan file secara permanen. Jangan pernah gunakan opsi ini pada branch publik atau jika belum yakin!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: BRANCHING STRATEGY -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-code-branch"></i> 10. Percabangan</div>
+        <div class="slide-counter">11 / 20</div>
+      </div>
+      <h2>Strategi Percabangan: <span class="orange">Branching Workflow</span></h2>
+      <p class="lead">Branch memungkinkan kamu membuat ruang kerja terisolasi untuk fitur baru tanpa mengganggu kode utama yang sedang berjalan stabil di produksi.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <strong style="color: var(--git-orange); font-size: 14px; margin-bottom: 8px; display: block;">Perintah Esensial Branch</strong>
+          <div class="code-box" style="margin: 0;">
+            <div class="code-box-content"><span class="cmd-comment"># 1. Lihat semua branch lokal</span>
+<span class="cmd-prompt">$</span>git branch
+
+<span class="cmd-comment"># 2. Buat branch baru & langsung pindah ke sana</span>
+<span class="cmd-prompt">$</span>git switch -c feature/navbar-responsive
+<span class="cmd-comment"># (atau perintah klasik: git checkout -b feature/navbar)</span>
+
+<span class="cmd-comment"># 3. Pindah kembali ke branch main</span>
+<span class="cmd-prompt">$</span>git switch main
+
+<span class="cmd-comment"># 4. Hapus branch yang sudah selesai di-merge</span>
+<span class="cmd-prompt">$</span>git branch -d feature/navbar-responsive</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <strong style="color: var(--primary); font-size: 14px; margin-bottom: 8px; display: block;">Konvensi Penamaan Branch Profesional</strong>
+          <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.7;">
+            • <code>feature/&lt;nama-fitur&gt;</code>: Pembuatan fitur baru (misal: <code>feature/login-modal</code>)<br>
+            • <code>bugfix/&lt;nama-bug&gt;</code>: Perbaikan error non-kritis (misal: <code>bugfix/typo-header</code>)<br>
+            • <code>hotfix/&lt;nama-bug&gt;</code>: Tambalan darurat langsung pada server produksi<br>
+            • <code>refactor/&lt;nama&gt;</code>: Restrukturisasi arsitektur kode
+          </div>
+          <div class="callout git" style="margin-top: 12px;">
+            <strong>Golden Rule:</strong> Jangan pernah mengetik kode fitur baru langsung di branch <code>main</code>. Buat branch fitur terlebih dahulu!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 12: MERGING BRANCHES -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-code-merge"></i> 11. Penggabungan</div>
+        <div class="slide-counter">12 / 20</div>
+      </div>
+      <h2>Penggabungan Cabang: <span class="orange">Fast-Forward vs 3-Way Merge</span></h2>
+      <p class="lead">Setelah pengerjaan di branch fitur selesai dan teruji rapi, saatnya menggabungkan kembali perubahannya ke dalam branch utama (<code>main</code>).</p>
+
+      <div class="grid-2">
+        <div class="card" style="border-left: 4px solid var(--success);">
+          <strong style="color: var(--success); font-size: 14px; display: block; margin-bottom: 6px;">1. Fast-Forward Merge</strong>
+          <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px;">
+            Terjadi ketika branch <code>main</code> belum memiliki commit baru sama sekali sejak branch fitur dibuat. Git cukup memajukan pointer <code>main</code> ke commit terdepan.
+          </p>
+          <div style="background: #0f172a; padding: 8px; border-radius: 6px; font-family: var(--font-mono); font-size: 11.5px; color: #38bdf8;">
+            main:    (A) ───► (B) [Fast-Forward ke C]<br>
+            feature:           └──► (C)
+          </div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--primary);">
+          <strong style="color: var(--primary); font-size: 14px; display: block; margin-bottom: 6px;">2. 3-Way Merge (Merge Commit)</strong>
+          <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px;">
+            Terjadi jika branch <code>main</code> dan branch fitur masing-masing memiliki commit baru tersendiri. Git akan membuat satu commit penyatu otomatis khusus.
+          </p>
+          <div style="background: #0f172a; padding: 8px; border-radius: 6px; font-family: var(--font-mono); font-size: 11.5px; color: #38bdf8;">
+            main:    (A) ───► (B) ──────► (M: Merge Commit)<br>
+            feature:           └──► (C) ───┘
+          </div>
+        </div>
+      </div>
+
+      <div class="code-box" style="margin-top: 14px;">
+        <div class="code-box-header">Langkah Baku Melakukan Merge</div>
+        <div class="code-box-content"><span class="cmd-comment"># Langkah 1: Pindah ke branch tujuan (biasanya main)</span>
+<span class="cmd-prompt">$</span>git switch main
+
+<span class="cmd-comment"># Langkah 2: Satukan perubahan dari branch fitur</span>
+<span class="cmd-prompt">$</span>git merge feature/navbar-responsive
+
+<span class="cmd-comment"># Langkah 3: Hapus branch fitur yang sudah terintegrasi</span>
+<span class="cmd-prompt">$</span>git branch -d feature/navbar-responsive</div>
+      </div>
+    </section>
+
+    <!-- SLIDE 13: MERGE CONFLICT RESOLVER -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag" style="background: var(--danger-light); color: var(--danger); border-color: var(--danger-border);"><i class="fa-solid fa-fire"></i> 12. Conflict Resolver</div>
+        <div class="slide-counter">13 / 20</div>
+      </div>
+      <h2>Menghadapi & Menyelesaikan <span class="red">Merge Conflict</span></h2>
+      <p class="lead">Merge conflict terjadi jika dua branch memodifikasi <b>baris kode yang sama</b> pada file yang sama. Git tidak bisa menebak versi mana yang benar, sehingga meminta kamu menentukannya.</p>
+
+      <div class="conflict-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <strong style="font-size: 12.5px; color: var(--text-main); font-family: var(--font-mono);">File: index.html (Conflict State)</strong>
+          <span id="conflictStatus" style="font-size: 11px; font-weight: 700; color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Konflik Belum Selesai</span>
+        </div>
+
+        <div class="conflict-editor" id="conflictBox">
+&lt;!-- CONFLICT REGION --&gt;
+<div class="conf-current">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD (Branch main)
+&lt;h1 class="hero-title"&gt;Belajar Web Modern dengan Bootcamp ITSENJA&lt;/h1&gt;</div>
+<div class="conf-divider">=======</div>
+<div class="conf-incoming">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/update-hero (Incoming Branch)
+&lt;h1 class="hero-title"&gt;Kuasai Web Development dari Nol hingga Mahir&lt;/h1&gt;</div>
+&lt;p class="subtitle"&gt;Kurikulum komprehensif HTML5, CSS3, JS & Git.&lt;/p&gt;
+        </div>
+
+        <div class="conflict-actions">
+          <button class="btn-resolve current" onclick="resolveConflict('current')"><i class="fa-solid fa-arrow-down"></i> Pilih Versi Main (HEAD)</button>
+          <button class="btn-resolve incoming" onclick="resolveConflict('incoming')"><i class="fa-solid fa-arrow-down"></i> Pilih Versi Feature</button>
+          <button class="btn-resolve both" onclick="resolveConflict('both')"><i class="fa-solid fa-code-merge"></i> Gabungkan Keduanya</button>
+          <button class="btn-resolve save" id="btnSaveConflict" onclick="commitConflictResolution()"><i class="fa-solid fa-check"></i> Selesaikan & Buat Commit</button>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top: 10px;">
+        <strong>Langkah Manual di VS Code:</strong> Edit file hingga tanda <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, dan <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> bersih, lalu jalankan <code>git add index.html</code> dan <code>git commit -m "fix: resolve merge conflict on hero title"</code>.
+      </div>
+    </section>
+
+    <!-- SLIDE 14: GIT STASH -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-inbox"></i> 13. Parkir Sementara</div>
+        <div class="slide-counter">14 / 20</div>
+      </div>
+      <h2>Git Stash: <span class="orange">Simpan Sementara Tanpa Commit</span></h2>
+      <p class="lead">Bayangkan kamu sedang di tengah-tengah menulis fitur baru (kode masih berantakan), tiba-tiba mentor/bos memintamu segera memperbaiki bug mendadak di branch lain.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <strong style="color: var(--git-orange); font-size: 14px; margin-bottom: 8px; display: block;">Konsep Laci Penyimpanan (Stash)</strong>
+          <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
+            <code>git stash</code> mengambil semua perubahan di working directory dan menyimpannya ke dalam "laci rahasia". Direktori kamu seketika kembali bersih seperti commit terakhir, sehingga kamu bisa berpindah branch dengan aman tanpa terhalang error.
+          </p>
+          <div class="callout success">
+            Setelah tugas darurat selesai, cukup jalankan <code>git stash pop</code> untuk mengembalikan semua pekerjaan yang sempat diparkir!
+          </div>
+        </div>
+
+        <div class="card">
+          <strong style="color: var(--primary); font-size: 14px; margin-bottom: 8px; display: block;">Perintah Esensial Stash</strong>
+          <div class="code-box" style="margin: 0;">
+            <div class="code-box-content"><span class="cmd-comment"># 1. Simpan perubahan dengan catatan deskripsi</span>
+<span class="cmd-prompt">$</span>git stash save <span class="cmd-str">"setengah jadi bikin form"</span>
+
+<span class="cmd-comment"># 2. Lihat daftar laci simpanan yang tersimpan</span>
+<span class="cmd-prompt">$</span>git stash list
+
+<span class="cmd-comment"># 3. Ambil kembali editan & buang dari laci</span>
+<span class="cmd-prompt">$</span>git stash pop
+
+<span class="cmd-comment"># 4. Hapus seluruh isi laci stash</span>
+<span class="cmd-prompt">$</span>git stash clear</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 15: BEKERJA DENGAN REMOTE (GITHUB) -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag blue"><i class="fa-brands fa-github"></i> 14. Remote Repository</div>
+        <div class="slide-counter">15 / 20</div>
+      </div>
+      <h2>Sinkronisasi Cloud: <span class="blue">Bekerja dengan GitHub</span></h2>
+      <p class="lead">Remote repository adalah salinan repositorimu yang tersimpan di internet (GitHub, GitLab) untuk tujuan pencadangan awan dan kolaborasi tim.</p>
+
+      <div class="code-box">
+        <div class="code-box-header">Alur Menghubungkan Repo Lokal ke GitHub</div>
+        <div class="code-box-content"><span class="cmd-comment"># 1. Daftarkan URL GitHub sebagai remote alias bernama 'origin'</span>
+<span class="cmd-prompt">$</span>git remote add origin https://github.com/USERNAME/web-portfolio.git
+
+<span class="cmd-comment"># 2. Verifikasi alamat remote yang sudah terdaftar</span>
+<span class="cmd-prompt">$</span>git remote -v
+
+<span class="cmd-comment"># 3. Unggah seluruh commit pertama ke GitHub (-u menetapkan upstream tracking)</span>
+<span class="cmd-prompt">$</span>git push -u origin main
+
+<span class="cmd-comment"># 4. Ambil pembaruan terbaru yang di-push oleh rekan tim</span>
+<span class="cmd-prompt">$</span>git pull origin main</div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 10px;">
+        <div class="card">
+          <strong style="color: var(--primary); font-size: 13px; display: block; margin-bottom: 4px;">Apa itu <code>origin</code>?</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Nama panggilan default (alias) untuk URL server remote utamamu agar tidak perlu mengetik URL panjang berulang-ulang.</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--git-orange); font-size: 13px; display: block; margin-bottom: 4px;">Opsi <code>-u (Upstream)</code></strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Menghubungkan branch lokal <code>main</code> dengan remote <code>origin/main</code>, sehingga pada push berikutnya cukup ketik <code>git push</code>.</p>
+        </div>
+        <div class="card">
+          <strong style="color: var(--success); font-size: 13px; display: block; margin-bottom: 4px;"><code>git pull</code> = Fetch + Merge</strong>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Mengunduh commit baru dari cloud sekaligus menggabungkannya secara otomatis ke branch lokal aktifmu.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 16: PULL REQUEST & CODE REVIEW -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag green"><i class="fa-solid fa-code-pull-request"></i> 15. Kolaborasi Tim</div>
+        <div class="slide-counter">16 / 20</div>
+      </div>
+      <h2>Kolaborasi Tim: <span class="green">Pull Request & Code Review</span></h2>
+      <p class="lead">Di perusahaan teknologi, developer tidak pernah langsung meng-push kode ke branch <code>main</code>. Semua perubahan wajib melewati proses <b>Pull Request (PR)</b> dan review oleh tim.</p>
+
+      <div class="grid-4" style="margin-bottom: 12px;">
+        <div class="card" style="text-align: center;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #eff6ff; color: #2563eb; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; margin-bottom: 6px;">1</div>
+          <strong style="display: block; font-size: 13px; margin-bottom: 4px;">Buat Branch</strong>
+          <p style="font-size: 11.5px; color: var(--text-muted);">Developer membuat feature branch lokal & push ke GitHub.</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #eff6ff; color: #2563eb; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; margin-bottom: 6px;">2</div>
+          <strong style="display: block; font-size: 13px; margin-bottom: 4px;">Buka PR di GitHub</strong>
+          <p style="font-size: 11.5px; color: var(--text-muted);">Jelaskan fitur apa yang dibuat, sertakan screenshot dan issue.</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #eff6ff; color: #2563eb; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; margin-bottom: 6px;">3</div>
+          <strong style="display: block; font-size: 13px; margin-bottom: 4px;">Code Review</strong>
+          <p style="font-size: 11.5px; color: var(--text-muted);">Senior/Rekan menguji baris kode, memberi komentar atau masukan.</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #ecfdf5; color: #059669; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; margin-bottom: 6px;"><i class="fa-solid fa-check"></i></div>
+          <strong style="display: block; font-size: 13px; margin-bottom: 4px;">Merge to Main</strong>
+          <p style="font-size: 11.5px; color: var(--text-muted);">Setelah disetujui (Approved), PR di-merge ke branch <code>main</code>.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <strong style="font-size: 13px; color: var(--text-main); display: block; margin-bottom: 6px;">Etika Menulis Pull Request yang Baik:</strong>
+          <ul style="font-size: 12px; color: var(--text-muted); line-height: 1.6; padding-left: 18px;">
+            <li>Gunakan judul yang jelas sesuai Conventional Commits.</li>
+            <li>Jelaskan masalah apa yang diselesaikan dan cara mengujinya.</li>
+            <li>Sertakan tangkapan layar jika ada perubahan visual antarmuka.</li>
+            <li>Jaga agar ukuran PR tidak terlalu besar (&lt; 300 baris kode).</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <strong style="font-size: 13px; color: var(--text-main); display: block; margin-bottom: 6px;">Opsi Merge di GitHub:</strong>
+          <ul style="font-size: 12px; color: var(--text-muted); line-height: 1.6; padding-left: 18px;">
+            <li><b>Create a merge commit:</b> Menyimpan seluruh commit riwayat cabang.</li>
+            <li><b>Squash and merge:</b> Menggabungkan 10 commit fitur menjadi 1 commit rapi di <code>main</code> (Sangat direkomendasikan!).</li>
+            <li><b>Rebase and merge:</b> Memindahkan commit secara linier.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 17: DEPLOYMENT WORKFLOW -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag green"><i class="fa-solid fa-cloud-arrow-up"></i> 16. Deployment Otomatis</div>
+        <div class="slide-counter">17 / 20</div>
+      </div>
+      <h2>Deployment Workflow: <span class="green">Website Live di Internet!</span></h2>
+      <p class="lead">Tujuan akhir seorang web developer adalah menerbitkan karyanya ke internet agar dapat diakses oleh siapapun dengan tautan publik.</p>
+
+      <div class="grid-2">
+        <!-- OPSI 1: GITHUB PAGES -->
+        <div class="card" style="border-top: 4px solid var(--primary);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <strong style="color: var(--primary); font-size: 15px;"><i class="fa-brands fa-github"></i> 1. GitHub Pages (Gratis)</strong>
+            <span class="badge-tag blue" style="font-size: 10px;">Untuk Website Statis</span>
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px;">
+            Sangat cocok untuk portofolio HTML, CSS, dan JavaScript tanpa perlu menyewa VPS.
+          </p>
+          <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 10px; font-size: 12px; line-height: 1.7; color: var(--text-main);">
+            1. Buka repo GitHub kamu &gt; klik tab <b>Settings</b>.<br>
+            2. Di menu kiri, pilih <b>Pages</b>.<br>
+            3. Pada <i>Source</i>, pilih <b>Deploy from a branch</b>.<br>
+            4. Pilih branch <code>main</code> dan folder <code>/ (root)</code> &gt; <b>Save</b>.<br>
+            5. Website kamu live di: <code>https://username.github.io/repo/</code>!
+          </div>
+        </div>
+
+        <!-- OPSI 2: VERCEL -->
+        <div class="card" style="border-top: 4px solid #000000;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <strong style="color: #000000; font-size: 15px;"><i class="fa-solid fa-triangle-circle-square"></i> 2. Vercel (Auto CI/CD)</strong>
+            <span class="badge-tag green" style="font-size: 10px;">Industri Standar</span>
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px;">
+            Platform cloud modern dengan fitur <b>Continuous Deployment</b> otomatis.
+          </p>
+          <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 10px; font-size: 12px; line-height: 1.7; color: var(--text-main);">
+            1. Login di <a href="https://vercel.com" target="_blank" style="color: var(--primary); font-weight: 700;">vercel.com</a> menggunakan akun GitHub.<br>
+            2. Klik <b>Add New... &gt; Project</b> &gt; pilih repositori portofoliomu.<br>
+            3. Klik tombol <b>Deploy</b> (langsung aktif dengan SSL HTTPS gratis!).<br>
+            4. <b>Keajaiban CI/CD:</b> Setiap kali kamu menjalankan <code>git push</code>, Vercel otomatis meng-update website dalam 10 detik!
+          </div>
+        </div>
+      </div>
+
+      <div class="callout success" style="margin-top: 14px;">
+        <strong>Hasil Akhir:</strong> Sertakan tautan live demo GitHub Pages / Vercel di CV atau profil LinkedIn kamu agar calon perekrut kerja dapat langsung mencoba karyamu!
+      </div>
+    </section>
+
+    <!-- SLIDE 18: CHEATSHEET & COMMAND FINDER -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag"><i class="fa-solid fa-book-bookmark"></i> 17. Cheatsheet</div>
+        <div class="slide-counter">18 / 20</div>
+      </div>
+      <h2>Git Pro Cheatsheet & <span class="orange">Command Finder</span></h2>
+      <p class="lead">Gunakan kotak pencarian di bawah untuk menemukan sintaks perintah Git harian yang kamu butuhkan dalam hitungan detik:</p>
+
+      <input type="text" id="cheatSearch" class="cmd-search-input" placeholder="Cari perintah Git (contoh: commit, branch, undo, remote, conflict, stash)..." oninput="filterCheatsheet()">
+
+      <div class="grid-3" id="cheatList" style="max-height: 330px; overflow-y: auto; padding-right: 4px;">
+        <div class="card cheat-item" data-keys="init setup awal buat repo baru">
+          <code style="color: var(--git-orange);">git init</code>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Membuat repositori Git lokal baru pada folder saat ini.</p>
+        </div>
+
+        <div class="card cheat-item" data-keys="status cek file modified untracked">
+          <code style="color: var(--git-orange);">git status</code>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Memeriksa status file (untracked, modified, staged).</p>
+        </div>
+
+        <div class="card cheat-item" data-keys="add stage masukkan staging antrean">
+          <code style="color: var(--git-orange);">git add .</code>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Memasukkan semua perubahan ke dalam Staging Area.</p>
+        </div>
+
+        <div class="card cheat-item" data-keys="commit simpan snapshot pesan">
+          <code style="color: var(--git-orange);">git commit -m "pesan"</code>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Menyimpan rekaman snapshot perubahan permanen.</p>
+        </div>
+
+        <div class="card cheat-item" data-keys="log riwayat jejak oneline graph">
+          <code style="color: var(--git-orange);">git log --oneline --graph</code>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Menampilkan visual jejak commit dan percabangan 1 baris.</p>
+        </div>
+
+        <div class="card cheat-item" data-keys="branch cabang buat cek daftar">
+          <code style="color: var(--git-orange);">git switch -c &lt;nama&gt;</code>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Membuat cabang fitur baru dan langsung berpindah ke sana.</p>
+        </div>
+
+        <div class="card cheat-item" data-keys="merge gabung satukan branch">
+          <code style="color: var(--git-orange);">git merge &lt;branch&gt;</code>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Menggabungkan perubahan dari branch lain ke branch aktif.</p>
+        </div>
+
+        <div class="card cheat-item" data-keys="push kirim upload github cloud remote">
+          <code style="color: var(--git-orange);">git push -u origin main</code>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Mengunggah commit lokal ke repositori GitHub.</p>
+        </div>
+
+        <div class="card cheat-item" data-keys="pull unduh ambil sync update">
+          <code style="color: var(--git-orange);">git pull</code>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Mengambil dan menggabungkan commit terbaru dari remote.</p>
+        </div>
+
+        <div class="card cheat-item" data-keys="restore batal undo buang editan working">
+          <code style="color: var(--git-orange);">git restore &lt;file&gt;</code>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Membatalkan editan file di working directory.</p>
+        </div>
+
+        <div class="card cheat-item" data-keys="stash simpan sementara parkir pop">
+          <code style="color: var(--git-orange);">git stash pop</code>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Mengambil kembali kode yang sempat diparkir di laci stash.</p>
+        </div>
+
+        <div class="card cheat-item" data-keys="diff selisih beda baris kode cek">
+          <code style="color: var(--git-orange);">git diff</code>
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">Melihat perbedaan baris kode sebelum di-stage.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 19: CHECKLIST & PRAKTIKUM MANDIRI -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag green"><i class="fa-solid fa-list-check"></i> 18. Kompetensi</div>
+        <div class="slide-counter">19 / 20</div>
+      </div>
+      <h2>Checklist Kelulusan <span class="green">Sprint 05: Git & GitHub</span></h2>
+      <p class="lead">Pastikan kamu telah menguasai kompetensi penting berikut sebelum menyelesaikan modul:</p>
+
+      <div class="checklist">
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Mengonfigurasi identitas Git global (<code>user.name</code> & <code>user.email</code>).</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Memahami perbedaan Working Directory, Staging Area, dan Local Repo.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Mampu menulis pesan commit terstandar Conventional Commits (<code>feat:</code>, <code>fix:</code>).</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Melindungi kredensial rahasia (<code>.env</code>, <code>node_modules/</code>) via <code>.gitignore</code>.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Menggunakan <code>git switch -c</code> untuk membuat branch fitur terisolasi.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Mampu menyelesaikan Merge Conflict secara sistematis dan rapi.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Menghubungkan repo lokal ke GitHub dan membuka Pull Request kolaboratif.</div>
+        <div class="check-item"><i class="fa-solid fa-circle-check"></i> Berhasil menerbitkan website portofolio ke internet via GitHub Pages / Vercel.</div>
+      </div>
+
+      <div class="callout git" style="margin-top: 14px;">
+        <strong>Tantangan Praktikum Mandiri:</strong> Buka folder template praktikum yang telah disediakan pada <code>Sprint-05/latihan-git/</code>. Ikuti panduan pada file <code>PANDUAN_PRAKTIKUM.md</code> untuk mempraktikkan inisialisasi, branching, commit, dan deploy langsung!
+      </div>
+    </section>
+
+    <!-- SLIDE 20: EVALUASI & FEEDBACK -->
+    <section class="slide">
+      <div class="header-bar">
+        <div class="badge-tag blue"><i class="fa-solid fa-clipboard-question"></i> 19. Evaluasi & Feedback</div>
+        <div class="slide-counter">20 / 20</div>
+      </div>
+      <h2>Evaluasi Pemahaman & <span class="blue">Feedback Sesi Mentor</span></h2>
+      <p class="lead">Akses tautan di bawah ini untuk menguji pemahamanmu seputar Git & GitHub serta memberikan ulasan evaluasi cara mengajar mentor:</p>
+
+      <div class="link-showcase">
+        <!-- CARD 1: MCQ -->
+        <div class="link-card primary">
+          <div class="link-header">
+            <div class="link-icon-wrap">
+              <i class="fa-solid fa-file-pen"></i>
+            </div>
+            <div>
+              <div class="link-title">Kuis Evaluasi Materi (MCQ)</div>
+              <small style="color: var(--text-sub); font-family: var(--font-mono); font-weight: 600;">https://s.id/MKb5O</small>
+            </div>
+          </div>
+          <p class="link-desc">
+            Uji pemahamanmu seputar konsep Version Control, 3-Stage Git, Conventional Commits, Branching, dan Deployment Workflow.
+          </p>
+          <div class="link-actions">
+            <a href="https://s.id/MKb5O" target="_blank" class="btn-action-link primary">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Kuis MCQ
+            </a>
+            <button class="btn-copy" onclick="copyToClipboard('https://s.id/MKb5O', this)">
+              <i class="fa-regular fa-copy"></i> Salin Link
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 2: SURVEY -->
+        <div class="link-card success">
+          <div class="link-header">
+            <div class="link-icon-wrap">
+              <i class="fa-solid fa-comment-dots"></i>
+            </div>
+            <div>
+              <div class="link-title">Survei Cara Mengajar Mentor</div>
+              <small style="color: var(--text-sub); font-family: var(--font-mono); font-weight: 600;">https://s.id/dqeBo</small>
+            </div>
+          </div>
+          <p class="link-desc">
+            Berikan ulasan objektif, kritik, dan saran konstruktif agar metode penyampaian sesi pembelajaran berikutnya semakin optimal.
+          </p>
+          <div class="link-actions">
+            <a href="https://s.id/dqeBo" target="_blank" class="btn-action-link success">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Survei
+            </a>
+            <button class="btn-copy" onclick="copyToClipboard('https://s.id/dqeBo', this)">
+              <i class="fa-regular fa-copy"></i> Salin Link
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top: 18px;">
+        <strong>Selamat!</strong> Kamu telah menyelesaikan seluruh rangkaian kurikulum Sprint 01 hingga Sprint 05 di Bootcamp Web Development ITSENJA. Terus bangun proyek nyata dan bagikan portofoliomu ke dunia!
+      </div>
+    </section>
+
+  </div> <!-- End Slide Deck -->
+
+  <!-- NAVIGATION BAR -->
+  <div class="navigation-bar">
+    <div class="nav-info">
+      <a href="../index.html" class="nav-hub-link"><i class="fa-solid fa-house"></i> Pusat Belajar</a>
+      <span>SPRINT 05 · GIT, GITHUB & DEPLOYMENT</span>
+      <span class="nav-shortcuts">[←] [→] Navigasi Slide</span>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prev-btn" title="Slide Sebelumnya (Left Arrow)"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="nav-btn" id="next-btn" title="Slide Berikutnya (Right Arrow)"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    <div class="progress-line" id="progress-bar"></div>
+  </div>
+</div>
+
+<script>
+  // SLIDE PRESENTATION LOGIC
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const progressBar = document.getElementById('progress-bar');
+  let currentIndex = 0;
+
+  function updateSlideDisplay(index) {
+    currentIndex = Math.max(0, Math.min(slides.length - 1, index));
+
+    slides.forEach((slide, idx) => {
+      slide.classList.toggle('active', idx === currentIndex);
+    });
+
+    const progressPercent = ((currentIndex + 1) / slides.length) * 100;
+    progressBar.style.width = progressPercent + '%';
+  }
+
+  nextBtn.addEventListener('click', () => updateSlideDisplay(currentIndex + 1));
+  prevBtn.addEventListener('click', () => updateSlideDisplay(currentIndex - 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (['TEXTAREA', 'INPUT'].includes(document.activeElement?.tagName)) return;
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) {
+      e.preventDefault();
+      updateSlideDisplay(currentIndex + 1);
+    }
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) {
+      e.preventDefault();
+      updateSlideDisplay(currentIndex - 1);
+    }
+  });
+
+  // COPY TO CLIPBOARD HELPER
+  function copyToClipboard(text, btnElement) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        const originalHtml = btnElement.innerHTML;
+        btnElement.innerHTML = '<i class="fa-solid fa-check"></i> Tersalin!';
+        btnElement.style.background = '#dcfce7';
+        btnElement.style.color = '#15803d';
+        setTimeout(() => {
+          btnElement.innerHTML = originalHtml;
+          btnElement.style.background = '';
+          btnElement.style.color = '';
+        }, 2000);
+      }).catch(() => prompt('Salin tautan:', text));
+    } else {
+      prompt('Salin tautan:', text);
+    }
+  }
+
+  // CHEATSHEET FILTER
+  function filterCheatsheet() {
+    const query = document.getElementById('cheatSearch').value.toLowerCase().trim();
+    const items = document.querySelectorAll('.cheat-item');
+    items.forEach(item => {
+      const text = (item.innerText + ' ' + (item.dataset.keys || '')).toLowerCase();
+      item.style.display = text.includes(query) ? 'block' : 'none';
+    });
+  }
+
+  // INTERACTIVE MERGE CONFLICT RESOLVER
+  function resolveConflict(type) {
+    const box = document.getElementById('conflictBox');
+    const status = document.getElementById('conflictStatus');
+    if (type === 'current') {
+      box.innerHTML = `&lt;!-- RESOLVED WITH MAIN --&gt;\n&lt;h1 class="hero-title"&gt;Belajar Web Modern dengan Bootcamp ITSENJA&lt;/h1&gt;\n&lt;p class="subtitle"&gt;Kurikulum komprehensif HTML5, CSS3, JS & Git.&lt;/p&gt;`;
+    } else if (type === 'incoming') {
+      box.innerHTML = `&lt;!-- RESOLVED WITH FEATURE --&gt;\n&lt;h1 class="hero-title"&gt;Kuasai Web Development dari Nol hingga Mahir&lt;/h1&gt;\n&lt;p class="subtitle"&gt;Kurikulum komprehensif HTML5, CSS3, JS & Git.&lt;/p&gt;`;
+    } else if (type === 'both') {
+      box.innerHTML = `&lt;!-- RESOLVED BOTH COMBINED --&gt;\n&lt;h1 class="hero-title"&gt;Kuasai Web Development dari Nol hingga Mahir bersama Bootcamp ITSENJA&lt;/h1&gt;\n&lt;p class="subtitle"&gt;Kurikulum komprehensif HTML5, CSS3, JS & Git.&lt;/p&gt;`;
+    }
+    status.innerHTML = `<i class="fa-solid fa-circle-check"></i> Konflik Terselesaikan (Belum di-commit)`;
+    status.style.color = '#059669';
+  }
+
+  function commitConflictResolution() {
+    const status = document.getElementById('conflictStatus');
+    status.innerHTML = `<i class="fa-solid fa-lock"></i> Selesai di-commit via git commit!`;
+    status.style.color = '#2563eb';
+    alert('Bagus sekali! Perubahan telah terselesaikan dan commit merge berhasil dibuat!');
+  }
+
+  // INTERACTIVE GIT TERMINAL SIMULATOR STATE
+  const simState = {
+    branch: 'main',
+    workingFiles: ['index.html (Modified)', 'style.css (Untracked)'],
+    stagingFiles: [],
+    commits: [
+      { hash: 'e1a42b0', msg: 'feat: initial project setup' }
+    ]
+  };
+
+  const termScreen = document.getElementById('termScreen');
+  const termInput = document.getElementById('termInput');
+  const termPrompt = document.getElementById('termPrompt');
+
+  function updateVis() {
+    document.getElementById('visBranch').textContent = `branch: ${simState.branch}`;
+    termPrompt.textContent = `user@itsenja:~/portfolio (${simState.branch})$`;
+
+    const visWorking = document.getElementById('visWorking');
+    visWorking.innerHTML = simState.workingFiles.length > 0
+      ? simState.workingFiles.map(f => `• ${f}`).join('<br>')
+      : '<span style="color: #64748b;">(bersih / working tree clean)</span>';
+
+    const visStaging = document.getElementById('visStaging');
+    visStaging.innerHTML = simState.stagingFiles.length > 0
+      ? simState.stagingFiles.map(f => `• ${f}`).join('<br>')
+      : '<span style="color: #64748b;">(kosong)</span>';
+
+    const visCommits = document.getElementById('visCommits');
+    visCommits.innerHTML = simState.commits.map(c => `• <span style="color: #f59e0b;">${c.hash}</span> ${c.msg}`).join('<br>');
+  }
+
+  function printTerm(text, isCmd = false) {
+    const div = document.createElement('div');
+    if (isCmd) {
+      div.innerHTML = `<span style="color: #38bdf8;">user@itsenja:~/portfolio (${simState.branch})$</span> ${text}`;
+    } else {
+      div.innerHTML = text;
+    }
+    termScreen.appendChild(div);
+    termScreen.scrollTop = termScreen.scrollHeight;
+  }
+
+  function execSimCmd(rawCmd) {
+    const cmd = rawCmd.trim();
+    if (!cmd) return;
+    printTerm(cmd, true);
+
+    const parts = cmd.split(' ');
+    const mainCmd = parts[0];
+
+    if (mainCmd === 'clear' || cmd === 'git clear') {
+      termScreen.innerHTML = '';
+      return;
+    }
+
+    if (mainCmd === 'help') {
+      printTerm(`Perintah yang didukung di simulator:\n• <span style="color: #f59e0b;">git status</span> : cek status file\n• <span style="color: #f59e0b;">git add .</span> : masukkan semua file ke staging\n• <span style="color: #f59e0b;">git commit -m "pesan"</span> : simpan snapshot\n• <span style="color: #f59e0b;">git log --oneline</span> : lihat riwayat commit\n• <span style="color: #f59e0b;">git branch [nama]</span> : buat / lihat cabang\n• <span style="color: #f59e0b;">git checkout / git switch</span> : pindah cabang\n• <span style="color: #f59e0b;">clear</span> : bersihkan layar`);
+      return;
+    }
+
+    if (mainCmd !== 'git') {
+      printTerm(`<span style="color: #ef4444;">Command '${mainCmd}' tidak dikenali. Ketik 'help' untuk panduan.</span>`);
+      return;
+    }
+
+    const sub = parts[1];
+
+    if (sub === 'status') {
+      let out = `On branch ${simState.branch}\n`;
+      if (simState.stagingFiles.length > 0) {
+        out += `<span style="color: #10b981;">Changes to be committed:</span>\n`;
+        simState.stagingFiles.forEach(f => out += `  <span style="color: #10b981;">new file / modified:   ${f}</span>\n`);
+      }
+      if (simState.workingFiles.length > 0) {
+        out += `<span style="color: #ef4444;">Untracked / modified files:</span>\n`;
+        simState.workingFiles.forEach(f => out += `  <span style="color: #ef4444;">${f}</span>\n`);
+        out += `(use "git add &lt;file&gt;..." to include in what will be committed)\n`;
+      }
+      if (simState.stagingFiles.length === 0 && simState.workingFiles.length === 0) {
+        out += `nothing to commit, working tree clean\n`;
+      }
+      printTerm(out);
+    } else if (sub === 'add') {
+      const target = parts[2] || '.';
+      if (simState.workingFiles.length === 0) {
+        printTerm(`Tidak ada perubahan baru di working directory.`);
+      } else {
+        simState.stagingFiles = ['index.html', 'style.css'];
+        simState.workingFiles = [];
+        printTerm(`<span style="color: #10b981;">Semua perubahan (${target}) telah dimasukkan ke Staging Area.</span>\nJalankan <span style="color: #f59e0b;">git commit -m "pesan"</span> untuk menyimpan.`);
+      }
+    } else if (sub === 'commit') {
+      if (simState.stagingFiles.length === 0) {
+        printTerm(`<span style="color: #ef4444;">no changes added to commit (use "git add")</span>`);
+        return;
+      }
+      const match = cmd.match(/-m\s+["'](.+?)["']/);
+      const msg = match ? match[1] : 'feat: update portfolio components';
+      const hash = Math.random().toString(16).substring(2, 9);
+      simState.commits.unshift({ hash, msg });
+      simState.stagingFiles = [];
+      printTerm(`[${simState.branch} ${hash}] ${msg}\n 2 files changed, 48 insertions(+)`);
+    } else if (sub === 'log') {
+      let out = '';
+      simState.commits.forEach(c => {
+        out += `<span style="color: #f59e0b;">${c.hash}</span> (HEAD -&gt; <span style="color: #38bdf8;">${simState.branch}</span>) ${c.msg}\n`;
+      });
+      printTerm(out);
+    } else if (sub === 'branch') {
+      const newB = parts[2];
+      if (newB) {
+        printTerm(`Branch baru '<span style="color: #38bdf8;">${newB}</span>' dibuat.`);
+      } else {
+        printTerm(`* <span style="color: #10b981;">${simState.branch}</span>\n  main\n  feature/navbar`);
+      }
+    } else if (sub === 'checkout' || sub === 'switch') {
+      const targetB = parts[2] === '-b' || parts[2] === '-c' ? parts[3] : parts[2];
+      if (targetB) {
+        simState.branch = targetB;
+        printTerm(`Berpindah ke cabang '<span style="color: #38bdf8;">${simState.branch}</span>'.`);
+      } else {
+        printTerm(`Harap tentukan nama branch target.`);
+      }
+    } else if (sub === 'push') {
+      printTerm(`Enumerating objects: 5, done.\nWriting objects: 100% (5/5), 1.2 KiB | done.\nTo https://github.com/itsenja/portfolio.git\n * [new branch]      ${simState.branch} -&gt; ${simState.branch}`);
+    } else {
+      printTerm(`<span style="color: #f59e0b;">Perintah 'git ${sub}' dieksekusi.</span>`);
+    }
+
+    updateVis();
+  }
+
+  termInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const val = termInput.value;
+      termInput.value = '';
+      execSimCmd(val);
+    }
+  });
+
+  // Initialize
+  updateSlideDisplay(0);
+  updateVis();
+</script>
+
+</body>
+</html>

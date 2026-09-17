@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Environment Variables
+.env
+.env.*
+
+# Backups & Archives
+backups/
+*.tar.gz
+*.zip
+*.sha256
+
+# OS & Temp files
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+
+# Editor Settings
+.vscode/
+.idea/
