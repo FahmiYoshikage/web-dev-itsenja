@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: itsenja_web_dev_hub
+    ports:
+      - "0.0.0.0:${PORT:-8080}:80"
     volumes:
       # Live hot reload: changes to HTML/CSS files are immediately reflected
       - ./:/usr/share/nginx/html:ro
